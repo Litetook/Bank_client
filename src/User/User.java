@@ -3,6 +3,7 @@ package User;
 import Account.Account;
 
 public class User {
+
     Integer id;
     String name ;
     String email;
@@ -16,6 +17,7 @@ public class User {
         this.email= email;
         this.id = id;
         this.setPassword(password);
+
 
     }
 
@@ -33,3 +35,4 @@ public class User {
 
     }
 }
+

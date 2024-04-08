@@ -74,16 +74,15 @@ public class FileDataProvider {
     }
 
     public  String readLine(Integer lineNumber) {
-        try (Stream<String> lines = Files.lines(Paths.get(this.filePath))) {
-            return lines.skip(lineNumber - 1 ).findFirst().get();
-            }
-        catch (Exception e) {
-            System.out.println("Read file exception.");
+        if (lineNumber >= 1) {
+            try (Stream<String> lines = Files.lines(Paths.get(this.filePath))) {
+                return lines.skip(lineNumber - 1).findFirst().get();
+            } catch (Exception e) {
+                System.out.println("Read file exception.");
 
+            }
         }
         return "";
     }
-
-
 
 }
