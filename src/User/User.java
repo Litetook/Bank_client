@@ -21,8 +21,21 @@ public class User {
 
     }
 
+
+    public String[] getSchema() {
+        return this.schema;
+    }
+
     public String getName() {
         return  this.name;
+    }
+
+    public  Integer getId() {
+        return this.id;
+    }
+
+    public String getPassword() {
+        return  this.password;
     }
 
     public String getEmail() {

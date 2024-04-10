@@ -10,9 +10,20 @@ public class Main {
 
 //        dataProvider.writeFile("user test write");
 
-        dataProvider.readFile();
+//        dataProvider.readFile();
 
-        System.out.println(dataProvider.readLine(10));
+//        String line = dataProvider.readLine(-10);
+//
+//        if(line.isEmpty()) {
+//            // logic
+//            System.out.println("ERROR: bad line number");
+//        }
+//
+//        System.out.println("Line:" + line);
+
+        User cli = new User("John", "jo@mail.com", "12345", 2);
+
+        Converter.<User>toCsvLine(cli);
 
 
     }

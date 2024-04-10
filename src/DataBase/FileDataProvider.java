@@ -1,5 +1,7 @@
 package DataBase;
 
+import jdk.jshell.execution.Util;
+
 import java.io.BufferedWriter;
 import java.io.File;
 
@@ -10,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.stream.Stream;
+import Utils.Converter;
 
 public class FileDataProvider {
     private final String filePath;
@@ -42,10 +45,26 @@ public class FileDataProvider {
         this.file = f;
     }
 
-    public void  readFile() {
+
+    public void  initData() {
+
+//         у конвертер ми передаємо рядок шапки.
+
         try (Scanner reader = new Scanner(this.file)) {
+//            пропускаємо перший рядок, бо це шапка
+            if (reader.hasNextLine()) {
+                reader.nextLine();
+            }
+
             while (reader.hasNextLine()) {
                 String data = reader.nextLine();
+
+//                System.out.println( Utils.Converter.fromCsvLine(data) );
+
+//                    написати метод фром csv щоб створити клас з таблиці
+
+
+
                 System.out.println(data);
             }
         }
@@ -53,6 +72,7 @@ public class FileDataProvider {
             System.out.println("Scanner file reader exception. File not found");
         }
     }
+
 
     public Boolean writeFile(String content) {
         try {
