@@ -1,16 +1,19 @@
 package Utils;
 
 import java.awt.desktop.SystemEventListener;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.SQLOutput;
 import java.util.*;
 
 
 public class Converter {
-    public static <T> String toCsvLine(T object) {
+    public static <T> String toCsvLine(T object) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 //        Це загальний метод для того щоб конвертувати об'єкт в csv лінію
 //         T - це типу як клас, який може бути будь-яким, щоб на його основі зробити csv.
 //        Наприклад каренсі або юзеh
-
+//       Вкинуті сюди інстанси мають мати метод getSchema
         // schema
         // id,name,email,password
 
@@ -20,51 +23,42 @@ public class Converter {
         // out
         // 12,John,jo@mail.com,12345
 
-
-        Method[] methods = object.getClass().getDeclaredMethods();
-
-        for (Method method: methods) {
-//            String method_name = method.getName();
-
-            if (method.getName().equals("getSchema")) {
-                try {
-//                   список ключів
-                    String[] result = (String[]) method.invoke(object);
-//                    System.out.println(result[0]);
+//        Визначаємо схему, яка має бути в csv. І це має бути інтерфейс в майбутньому
+//        Method[] methods = object.getClass().getDeclaredMethods();
 
 
-                    String csvString = "";
-                    for (String key: result) {
-                        try {
-                            String value =  object.getClass().getMethod(
-                                    "get" + Character.toUpperCase(key.charAt(0)) + key.substring(1)
-                            ).invoke(object).toString();
+        Field[] fields = object.getClass().getDeclaredFields();
 
-                            System.out.println(key + " : " + value);
+        Integer fieldsNumber = fields.length;
 
-                            csvString += value+",";
+        String csvString = "";
 
 
-                        }
-                        catch (Exception e) {
-                            System.out.println(e.toString());
-                        }
-                    }
 
-                    csvString = csvString.substring(0, csvString.length() -1);
+        for (Integer i =0; i < fieldsNumber; i++) {
+//            System.out.println(field);
+//           Витягую значення філда
 
-                    System.out.println(csvString);
+            System.out.println(fieldsNumber + " " + " index "+ i);
 
-                    return csvString;
+            Field field = fields[i];
 
+            fields[i].setAccessible(true);
 
-                }
-                catch (Exception e) {
-                    System.out.println("method getSchema dynamic execution error");
-                }
+            System.out.println( field.get(object).toString());
+
+            csvString+= field.get(object).toString();
+            if (i+1 != fieldsNumber ) {
+                csvString+= ",";
             }
 
+            fields[i].setAccessible(false);
+
         }
+        System.out.println(csvString);
+        return  csvString;
+
+
 
 
 
@@ -106,6 +100,13 @@ public class Converter {
 
 
 
-        return "";
+//        return "";
     }
 }
+
+//    public  static <T> String fromCsvLine(String line, ArrayList<String> header) {
+//   Отримує на прийом стрінгу, яку має обробити і віддати назад об'єкт вхідний
+//        Тут мають бути можливі варіанти того, які мені об'єкти створювати. Давай почнемо з юзера
+//        Не знаю точно, як приймати хедер. І де його описувати.
+//        Нам треба розуміти ім'я класа і його дані, формат в яких воно все буде лежати. Наприклад це може бути
+//    }

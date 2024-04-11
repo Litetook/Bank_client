@@ -4,10 +4,12 @@ import Account.Account;
 
 public class User {
 
-    Integer id;
-    String name ;
-    String email;
-    String password;
+    private Integer id;
+    private String name ;
+    private String email;
+    private String password;
+
+//    private final String[] schema = {"id", "name", "email", "password"}; // should be hash map
 
     //    Account[] accounts
 
@@ -22,9 +24,9 @@ public class User {
     }
 
 
-    public String[] getSchema() {
-        return this.schema;
-    }
+//    public String[] getSchema() {
+//        return this.schema;
+//    }
 
     public String getName() {
         return  this.name;

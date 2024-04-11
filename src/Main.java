@@ -1,27 +1,19 @@
 //import User.User;
 
 
+import Currency.Currency;
 import DataBase.FileDataProvider;
+import Utils.Converter;
+import User.User;
+
+import java.lang.reflect.InvocationTargetException;
 
 public class Main {
-    public  static void main(String[] args) {
+    public  static void main(String[] args) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 
         FileDataProvider dataProvider = new FileDataProvider("users.csv");
 
-//        dataProvider.writeFile("user test write");
-
-//        dataProvider.readFile();
-
-//        String line = dataProvider.readLine(-10);
-//
-//        if(line.isEmpty()) {
-//            // logic
-//            System.out.println("ERROR: bad line number");
-//        }
-//
-//        System.out.println("Line:" + line);
-
-        User cli = new User("John", "jo@mail.com", "12345", 2);
+        User cli = new User("John", "jo@mail.com", "password", 2);
 
         Converter.<User>toCsvLine(cli);
 

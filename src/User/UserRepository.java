@@ -11,7 +11,8 @@ public class UserRepository {
 
     private Integer lastId;
 
-    public UserRepository(DataProvider) {
+    public UserRepository() {
+//        запихнути в юзера дані з дата провайдера
 //        data provider
 //        load users
         this.users = new HashMap<>();
