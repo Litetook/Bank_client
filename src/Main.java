@@ -15,22 +15,10 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 
-//        тут список файлів. Для кожного файла дьоргаємо його ініт.
-//        тільки по юзеру поки роблю
-//        Переписати щоб по юзер репозиторію в конструкторі дьоргало файл
+        //      Викликаю юзер репозиторій, який парсить файл одразу і створює в ньому об'єкти юзера по cs
         UserRepository userRepo = new UserRepository();
-
-        FileDataProvider userDataProvider = new FileDataProvider("users.csv");
-        userDataProvider.initData(userRepo);
         System.out.println(userRepo.getUserList());
 
-
-
-
-        //        User cli = new User("John", "jo@mail.com", "password", 2);
-
-//        System.out.println(Converter.fromCsvLine("", cli));
-//        cli.getSchema();
 
 
     }

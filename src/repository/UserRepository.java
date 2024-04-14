@@ -1,21 +1,20 @@
 package repository;
 
-//import dao.DataProvider;
-
+import dao.FileDataProvider;
 import model.User;
 
 import java.util.HashMap;
 import java.util.List;
 
 public class UserRepository {
+    private static String tableImportName = "users.csv";
     private Integer lastId = 0;
     private HashMap<Integer,User> users;
 
     public UserRepository() {
-//        запихнути в юзера дані з дата провайдера
-//        data provider
-//        load users
         this.users = new HashMap<>();
+//        Init даних з файлу
+        new FileDataProvider(tableImportName).initData(this);
 
     }
 
