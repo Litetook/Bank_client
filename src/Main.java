@@ -1,21 +1,36 @@
-//import User.User;
+//import model.User;
 
 
-import Currency.Currency;
-import DataBase.FileDataProvider;
-import Utils.Converter;
-import User.User;
+import dao.FileDataProvider;
+import dao.Converter;
+import model.User;
+import repository.UserRepository;
 
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDate;
+import java.util.Locale;
+import java.util.Random;
+import java.util.Scanner;
 
 public class Main {
-    public  static void main(String[] args) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+    public static void main(String[] args) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 
-        FileDataProvider dataProvider = new FileDataProvider("users.csv");
+//        тут список файлів. Для кожного файла дьоргаємо його ініт.
+//        тільки по юзеру поки роблю
+//        Переписати щоб по юзер репозиторію в конструкторі дьоргало файл
+        UserRepository userRepo = new UserRepository();
 
-        User cli = new User("John", "jo@mail.com", "password", 2);
+        FileDataProvider userDataProvider = new FileDataProvider("users.csv");
+        userDataProvider.initData(userRepo);
+        System.out.println(userRepo.getUserList());
 
-        Converter.<User>toCsvLine(cli);
+
+
+
+        //        User cli = new User("John", "jo@mail.com", "password", 2);
+
+//        System.out.println(Converter.fromCsvLine("", cli));
+//        cli.getSchema();
 
 
     }
