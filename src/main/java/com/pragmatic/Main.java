@@ -1,16 +1,10 @@
-//import model.User;
+package com.pragmatic;//import main.java.com.pragmatic.model.User;
 
 
-import dao.FileDataProvider;
-import dao.Converter;
-import model.User;
-import repository.UserRepository;
+
+import com.pragmatic.repository.UserRepository;
 
 import java.lang.reflect.InvocationTargetException;
-import java.time.LocalDate;
-import java.util.Locale;
-import java.util.Random;
-import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {

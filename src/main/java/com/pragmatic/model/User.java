@@ -1,11 +1,7 @@
-package model;
+package com.pragmatic.model;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 public class User extends BaseModel {

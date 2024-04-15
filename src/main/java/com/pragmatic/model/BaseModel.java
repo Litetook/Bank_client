@@ -1,4 +1,4 @@
-package model;
+package com.pragmatic.model;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

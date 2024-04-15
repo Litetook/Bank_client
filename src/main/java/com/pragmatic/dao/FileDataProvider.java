@@ -1,4 +1,4 @@
-package dao;
+package com.pragmatic.dao;
 
 import java.io.File;
 
@@ -17,7 +17,8 @@ public class FileDataProvider {
 
     public FileDataProvider(String table) {
 //        load file
-        Path path = Paths.get(System.getProperty("user.dir"), "src", "dao", "tables", table.toLowerCase());
+        Path path = Paths.get(System.getProperty("user.dir"), "src", "main" , "java", "com", "pragmatic", "dao", "tables", table.toLowerCase());
+//        C:\Users\vitalii.tsomyk\Desktop\Bank_client\src\main\java\com\pragmatic\dao\tables
         this.filePath = path.toString();
         System.out.println(this.filePath);
         File f = new File(this.filePath);

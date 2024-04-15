@@ -1,7 +1,7 @@
-package repository;
+package com.pragmatic.repository;
 
-import dao.FileDataProvider;
-import model.User;
+import com.pragmatic.dao.FileDataProvider;
+import com.pragmatic.model.User;
 
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
 public class UserRepository {
     private static String tableImportName = "users.csv";
     private Integer lastId = 0;
-    private HashMap<Integer,User> users;
+    private HashMap<Integer, User> users;
 
     public UserRepository() {
         this.users = new HashMap<>();

@@ -1,4 +1,4 @@
-package model;
+package com.pragmatic.model;
 
 public class Account extends BaseModel {
 

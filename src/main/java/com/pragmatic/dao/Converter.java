@@ -1,15 +1,8 @@
-package dao;
-
-import model.User;
-import repository.UserRepository;
+package com.pragmatic.dao;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.time.LocalDate;
 import java.util.*;
-import java.util.function.Function;
-
 
 
 public class Converter {
