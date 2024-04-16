@@ -1,4 +1,4 @@
-package com.pragmatic.dao;
+package main.java.com.pragmatic.dao;
 
 public class DataProvider {
 

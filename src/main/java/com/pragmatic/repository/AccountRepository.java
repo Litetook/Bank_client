@@ -1,4 +1,4 @@
-package com.pragmatic.repository;
+package main.java.com.pragmatic.repository;
 
 public class AccountRepository {
 }

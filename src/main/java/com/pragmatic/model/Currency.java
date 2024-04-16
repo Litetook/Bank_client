@@ -1,4 +1,4 @@
-package com.pragmatic.model;
+package main.java.com.pragmatic.model;
 
 public class Currency extends BaseModel {
     String symbol;

@@ -1,39 +1,45 @@
-package com.pragmatic.repository;
+package main.java.com.pragmatic.repository;
 
-import com.pragmatic.dao.FileDataProvider;
-import com.pragmatic.model.User;
+
+import main.java.com.pragmatic.dao.FileDataProvider;
+import main.java.com.pragmatic.model.User;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserRepository {
     private static String tableImportName = "users.csv";
     private Integer lastId = 0;
-    private HashMap<Integer, User> users;
+    private Map<Integer, User> users;
 
     public UserRepository() {
         this.users = new HashMap<>();
 //        Init даних з файлу
-        new FileDataProvider(tableImportName).initData(this);
+        List<User> userList = new FileDataProvider(tableImportName).initUserData();
+        userList.forEach(user -> {
+                    this.users.put(user.getId(), user);
+                    this.lastId++;
+                }
+        );
 
     }
 
-    public User updateRepo(List<String> csvLine) {
-        this.lastId ++;
-        User newUser = new User(csvLine);
-        this.users.put(this.lastId, newUser);
-        return newUser;
-    }
-
+    //   Подумати чи ок зроблено.
     public User createUser(String name, String email, String password) {
-        this.lastId++;
-        User newUser  = new User(name, email, password, this.lastId );
-        this.users.put(this.lastId, newUser); //передаю ключ як порядковий номер, і значення як еземляр класа ( об'єкт)
+        Integer userId = ++this.lastId;
+        User newUser = new User();
+        newUser.setName(name);
+        newUser.setId(userId);
+        newUser.setEmail(email);
+        newUser.setPassword(password);
+
+        this.users.put(userId, newUser); //передаю ключ як порядковий номер, і значення як еземляр класа ( об'єкт)
 //        write to file
         return newUser;
     }
 
-    public HashMap<Integer, User> getUserList (){
-        return  this.users;
+    public Map<Integer, User> getUserList() {
+        return this.users;
     }
 }

@@ -1,4 +1,4 @@
-package com.pragmatic.model;
+package main.java.com.pragmatic.model;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -11,9 +11,8 @@ public class User extends BaseModel {
     private String email;
     private String password;
 
-//    private final String[] schema = {"id", "name", "email", "password"}; // should be hash map
+    private List<Account> accounts;
 
-    //    Account[] accounts
 
 
     public User(String name, String email, String password, Integer id) {
@@ -24,11 +23,7 @@ public class User extends BaseModel {
 
     }
 
-    public User(List<String> attributes) {
-        this.id = Integer.parseInt(attributes.get(0));
-        this.name = attributes.get(1);
-        this.email = attributes.get(2);
-        this.password = attributes.get(3);
+    public User() {
     }
 
 
@@ -39,16 +34,16 @@ public class User extends BaseModel {
 //                .toArray(String[]::new);
 //    }
 
-    public List<String> getSchema() {
-
-        List<String> resultList = new ArrayList<String>();
-
-        for (Field declaredField : this.getClass().getDeclaredFields()) {
-            resultList.add(declaredField.getName());
-        }
-        return resultList;
-
-    }
+//    public List<String> getSchema() {
+//
+//        List<String> resultList = new ArrayList<String>();
+//
+//        for (Field declaredField : this.getClass().getDeclaredFields()) {
+//            resultList.add(declaredField.getName());
+//        }
+//        return resultList;
+//
+//    }
 
 
 
@@ -68,10 +63,32 @@ public class User extends BaseModel {
         return this.email;
     }
 
-    private void setPassword(String password) {
+    public void setPassword(String password) {
 //        hash user
         this.password = password;
 
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }
 

@@ -1,4 +1,6 @@
-package com.pragmatic.dao;
+package main.java.com.pragmatic.dao;
+
+import main.java.com.pragmatic.model.User;
 
 import java.io.File;
 
@@ -7,12 +9,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
 public class FileDataProvider {
     private final String filePath;
-
+    private final String table;
     private final File file;
 
     public FileDataProvider(String table) {
@@ -39,31 +43,36 @@ public class FileDataProvider {
             System.out.println("Input table exists");
         }
 
+        this.table = table;
+
         this.file = f;
     }
 
-
-    public void  initData(Object repoInstance) {
+    public List<User>  initUserData() {
 //         у конвертер ми передаємо рядок шапки.
         try (Scanner reader = new Scanner(this.file)) {
 //            пропускаємо перший рядок, бо це шапка
             if (reader.hasNextLine()) {
                 reader.nextLine();
             }
+
+            List<User> users = new ArrayList<>();
             while (reader.hasNextLine()) {
                 String data = reader.nextLine();
-//                Converter.createObjFromCsvLine(this.file.getName(), data);
-                  Converter.createRepoObjFromCsvLine(data, repoInstance);
-//                System.out.println(this.file.getName());
+                users.add(UserConverter.parseUser(data));
+
                 System.out.println("row");
                 System.out.println(data);
             }
+            return users;
         }
         catch (Exception e) {
             System.out.println(e.toString());
             System.out.println("Scanner file reader exception. File not found");
         }
+        return null;
     }
+
 
 
     public Boolean writeFile(String content) {

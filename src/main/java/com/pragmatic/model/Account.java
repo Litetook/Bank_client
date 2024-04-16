@@ -1,6 +1,7 @@
-package com.pragmatic.model;
+package main.java.com.pragmatic.model;
 
-public class Account extends BaseModel {
+
+public class Account {
 
     Integer id;
 
@@ -17,7 +18,7 @@ public class Account extends BaseModel {
 
     public  Integer getId() { return  this.id; }
 
-    public  Currency getCurrency () { return  this.currency; }
+    public Currency getCurrency () { return  this.currency; }
 
     public Double getBalance() { return  this.balance; }
 
