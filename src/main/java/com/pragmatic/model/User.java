@@ -27,25 +27,6 @@ public class User extends BaseModel {
     }
 
 
-// new version, перепитати як краще
-//    public String[] getSchema2() {
-//        return Arrays.stream(this.getClass().getDeclaredFields())
-//                .map(Field::getName)
-//                .toArray(String[]::new);
-//    }
-
-//    public List<String> getSchema() {
-//
-//        List<String> resultList = new ArrayList<String>();
-//
-//        for (Field declaredField : this.getClass().getDeclaredFields()) {
-//            resultList.add(declaredField.getName());
-//        }
-//        return resultList;
-//
-//    }
-
-
 
     public String getName() {
         return  this.name;

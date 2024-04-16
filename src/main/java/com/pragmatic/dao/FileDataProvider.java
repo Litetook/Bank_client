@@ -1,5 +1,6 @@
 package main.java.com.pragmatic.dao;
 
+import main.java.com.pragmatic.model.Currency;
 import main.java.com.pragmatic.model.User;
 
 import java.io.File;
@@ -49,9 +50,7 @@ public class FileDataProvider {
     }
 
     public List<User>  initUserData() {
-//         у конвертер ми передаємо рядок шапки.
         try (Scanner reader = new Scanner(this.file)) {
-//            пропускаємо перший рядок, бо це шапка
             if (reader.hasNextLine()) {
                 reader.nextLine();
             }
@@ -65,6 +64,29 @@ public class FileDataProvider {
                 System.out.println(data);
             }
             return users;
+        }
+        catch (Exception e) {
+            System.out.println(e.toString());
+            System.out.println("Scanner file reader exception. File not found");
+        }
+        return null;
+    }
+
+    public List<Currency>  initCurrencyData() {
+        try (Scanner reader = new Scanner(this.file)) {
+            if (reader.hasNextLine()) {
+                reader.nextLine();
+            }
+
+            List<Currency> currencies = new ArrayList<>();
+            while (reader.hasNextLine()) {
+                String data = reader.nextLine();
+                currencies.add(CurrencyConverter.parseCurrency(data));
+
+                System.out.println("row");
+                System.out.println(data);
+            }
+            return currencies;
         }
         catch (Exception e) {
             System.out.println(e.toString());
