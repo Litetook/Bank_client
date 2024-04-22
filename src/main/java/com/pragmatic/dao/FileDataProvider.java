@@ -1,7 +1,10 @@
 package main.java.com.pragmatic.dao;
 
+import main.java.com.pragmatic.model.Account;
 import main.java.com.pragmatic.model.Currency;
+import main.java.com.pragmatic.model.Transaction;
 import main.java.com.pragmatic.model.User;
+import main.java.com.pragmatic.repository.CurrencyRepository;
 
 import java.io.File;
 
@@ -15,6 +18,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
+
 public class FileDataProvider {
     private final String filePath;
     private final String table;
@@ -25,6 +29,7 @@ public class FileDataProvider {
         Path path = Paths.get(System.getProperty("user.dir"), "src", "main" , "java", "com", "pragmatic", "dao", "tables", table.toLowerCase());
 //        C:\Users\vitalii.tsomyk\Desktop\Bank_client\src\main\java\com\pragmatic\dao\tables
         this.filePath = path.toString();
+        System.out.println("Initiated: ");
         System.out.println(this.filePath);
         File f = new File(this.filePath);
 
@@ -41,7 +46,7 @@ public class FileDataProvider {
             System.out.println("table has been created with name: " + table.toLowerCase());
         }
         else  {
-            System.out.println("Input table exists");
+            //If file exists, no comments to output
         }
 
         this.table = table;
@@ -59,15 +64,12 @@ public class FileDataProvider {
             while (reader.hasNextLine()) {
                 String data = reader.nextLine();
                 users.add(UserConverter.parseUser(data));
-
-                System.out.println("row");
-                System.out.println(data);
             }
             return users;
         }
         catch (Exception e) {
             System.out.println(e.toString());
-            System.out.println("Scanner file reader exception. File not found");
+            System.out.println("User parse exception. " + e.toString());
         }
         return null;
     }
@@ -83,18 +85,59 @@ public class FileDataProvider {
                 String data = reader.nextLine();
                 currencies.add(CurrencyConverter.parseCurrency(data));
 
-                System.out.println("row");
-                System.out.println(data);
+
             }
             return currencies;
         }
         catch (Exception e) {
             System.out.println(e.toString());
-            System.out.println("Scanner file reader exception. File not found");
+            System.out.println("Currency parse exception. " + e.toString());
         }
         return null;
     }
 
+
+    public List<Account> initAccountData(){
+        try (Scanner reader = new Scanner(this.file)) {
+            if (reader.hasNextLine()) {
+                reader.nextLine();
+            }
+
+            List<Account> accounts = new ArrayList<>();
+            while (reader.hasNextLine()) {
+                String data = reader.nextLine();
+                accounts.add(AccountConverter.parseAccount(data));
+            }
+            return accounts;
+        }
+        catch (Exception e) {
+            System.out.println(e.toString());
+            System.out.println("Account parse exception. " + e.toString());
+        }
+        return null;
+    }
+
+    public List<Transaction> initTransactionData() {
+
+        try (Scanner reader = new Scanner(this.file)) {
+            if (reader.hasNextLine()) {
+                reader.nextLine();
+            }
+
+            List<Transaction> transactions = new ArrayList<>();
+            while (reader.hasNextLine()) {
+                String data = reader.nextLine();
+                transactions.add(TransactionConverter.parseTransaction(data));
+            }
+            return transactions;
+        }
+        catch (Exception e) {
+            System.out.println(e.toString());
+            System.out.println("Transaction parse exception. " + e.toString());
+        }
+        return null;
+
+    }
 
 
     public Boolean writeFile(String content) {

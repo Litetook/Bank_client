@@ -22,7 +22,17 @@ public class CurrencyRepository {
         });
     }
 
-    public Map<Integer, Currency> getCurrencyList() {
+    public Map<Integer, Currency> getRepoList() {
         return this.currencies;
+    }
+
+    public Currency getCurrencyById(Integer id) {
+        try {
+            return this.currencies.get(id);
+        }
+        catch (Exception e) {
+            System.out.println("There is no currency with id" + id + " Request failed" + e.toString());
+        }
+        return null;
     }
 }

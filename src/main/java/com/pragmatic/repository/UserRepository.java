@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class UserRepository {
+public class UserRepository implements IRepository {
     private static String tableImportName = "users.csv";
     private Integer lastId = 0;
     private Map<Integer, User> users;
@@ -18,8 +18,16 @@ public class UserRepository {
 //        Init даних з файлу
         List<User> userList = new FileDataProvider(tableImportName).initUserData();
         userList.forEach(user -> {
-                    this.users.put(user.getId(), user);
-                    this.lastId++;
+                    if ( this.users.keySet().contains(user.getId()) ) {
+                        new Exception(user.getId() + "this user id already exists in repo");
+                    }
+                    else {
+                        this.users.put(user.getId(), user);
+                        if  (lastId < user.getId()) {
+                            lastId = user.getId();
+                        }
+                    }
+
                 }
         );
 
@@ -39,7 +47,11 @@ public class UserRepository {
         return newUser;
     }
 
-    public Map<Integer, User> getUserList() {
+    public Map<Integer, User> getRepoList() {
         return this.users;
+    }
+
+    public User getUserById(Integer userId) {
+        return this.users.get(userId);
     }
 }

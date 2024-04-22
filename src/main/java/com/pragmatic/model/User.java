@@ -10,8 +10,7 @@ public class User extends BaseModel {
     private String name ;
     private String email;
     private String password;
-
-    private List<Account> accounts;
+    private List<Account> accounts = new ArrayList<>();
 
 
 
@@ -60,6 +59,14 @@ public class User extends BaseModel {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void addAccount(Account account) {
+        this.accounts.add(account);
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
     }
 
     @Override
