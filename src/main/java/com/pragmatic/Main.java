@@ -15,6 +15,7 @@ public class Main {
 
         //      Викликаю юзер репозиторій, який парсить файл одразу і створює в ньому об'єкти юзера по cs
         UserRepository userRepo = new UserRepository();
+        System.out.println(userRepo.getRepoList());
         CurrencyRepository currencyRepo = new CurrencyRepository();
 
         AccountRepository accountRepo = new AccountRepository(userRepo);

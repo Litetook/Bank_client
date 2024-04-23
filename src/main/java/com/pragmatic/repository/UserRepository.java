@@ -18,8 +18,8 @@ public class UserRepository implements IRepository {
 //        Init даних з файлу
         List<User> userList = new FileDataProvider(tableImportName).initUserData();
         userList.forEach(user -> {
-                    if ( this.users.keySet().contains(user.getId()) ) {
-                        new Exception(user.getId() + "this user id already exists in repo");
+                    if ( this.users.containsKey(user.getId()) ) {
+                        throw new IllegalStateException(user.getId() + "this user id already exists in repo");
                     }
                     else {
                         this.users.put(user.getId(), user);
@@ -43,10 +43,10 @@ public class UserRepository implements IRepository {
         newUser.setPassword(password);
 
         this.users.put(userId, newUser); //передаю ключ як порядковий номер, і значення як еземляр класа ( об'єкт)
-//        write to file
+//      TODO write to file
         return newUser;
     }
-
+//      TODO метод method should return list
     public Map<Integer, User> getRepoList() {
         return this.users;
     }

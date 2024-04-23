@@ -7,7 +7,7 @@ import main.java.com.pragmatic.model.User;
 public class AccountService {
     public AccountService() {
     }
-
+//    TODO add currency converter
     public static Transaction moneyTransfer(Account accountFrom, Account accountTo, Double amount ) {
         if (accountFrom.getBalance() >= amount ) {
             accountFrom.setBalance(accountFrom.getBalance() - amount);

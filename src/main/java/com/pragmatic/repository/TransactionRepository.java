@@ -38,6 +38,8 @@ public class TransactionRepository implements IRepository{
     }
 
     public List<Transaction> getAccountTransactionsByDateRange(Integer accountId, String dateFrom, String dateTo) {
+//      TODO date to timestamp
+//      TODO винести логіку форматерра у main, і переробити в Date
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate dateFromInstance = LocalDate.parse(dateFrom, dateFormatter);
         LocalDate dateToInstance = LocalDate.parse(dateTo, dateFormatter);
