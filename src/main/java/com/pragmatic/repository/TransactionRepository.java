@@ -1,22 +1,15 @@
 package main.java.com.pragmatic.repository;
 
 import main.java.com.pragmatic.dao.FileDataProvider;
-import main.java.com.pragmatic.dao.TransactionConverter;
 import main.java.com.pragmatic.model.Transaction;
-
-import java.io.File;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TransactionRepository implements IRepository{
     private static String tableImportName = "transactions.csv";
     private Integer lastId = 0;
     private Map<Integer, Transaction> transactions;
+    private List<String> csvSchema = new ArrayList<>(Arrays.asList("id", "name", "email","password"));
 
 
     public TransactionRepository() {
@@ -37,18 +30,16 @@ public class TransactionRepository implements IRepository{
         return this.transactions.get(transactionId);
     }
 
-    public List<Transaction> getAccountTransactionsByDateRange(Integer accountId, String dateFrom, String dateTo) {
-//      TODO date to timestamp
-//      TODO винести логіку форматерра у main, і переробити в Date
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate dateFromInstance = LocalDate.parse(dateFrom, dateFormatter);
-        LocalDate dateToInstance = LocalDate.parse(dateTo, dateFormatter);
+    public List<Transaction> getAccountTransactionsByDateRange(Integer accountId, Integer timestampFrom, Integer timeStampTo) {
+        System.out.println("initiated method to find transaction by date range");
+        Date dateFromInstance = new Date(timestampFrom.longValue() * 1000); // перетворюємо секунди в мілісекунди
+        Date dateToInstance = new Date(timeStampTo.longValue() * 1000); // перетворюємо секунди в мілісекунди
 
         return transactions.values().stream()
                 .filter(transaction -> (transaction.getAccountToId() == accountId
                         || transaction.getAccountFromId() == accountId))
-                .filter(transaction -> (transaction.getActionDate().isAfter(dateFromInstance)))
-                .filter(transaction -> (transaction.getActionDate().isBefore(dateToInstance)))
+                .filter(transaction -> (transaction.getActionDate().after(dateFromInstance)))
+                .filter(transaction -> (transaction.getActionDate().before(dateToInstance)))
                 .collect(Collectors.toList());
 
     }

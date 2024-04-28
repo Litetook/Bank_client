@@ -4,14 +4,15 @@ import main.java.com.pragmatic.dao.FileDataProvider;
 import main.java.com.pragmatic.model.Currency;
 import main.java.com.pragmatic.model.User;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 
 public class CurrencyRepository {
     private static String tableImportName = "currency.csv";
     private Integer lastid = 0;
     private Map<Integer, Currency> currencies;
+    private List<String> csvSchema = new ArrayList<>(Arrays.asList("id", "symbol"));
+
 
     public CurrencyRepository() {
         this.currencies = new HashMap<>();

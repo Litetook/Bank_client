@@ -19,7 +19,7 @@ import java.util.Scanner;
 import java.util.stream.Stream;
 
 
-public class FileDataProvider {
+public class FileDataProvider implements Idao {
     private final String filePath;
     private final String table;
     private final File file;
@@ -56,14 +56,17 @@ public class FileDataProvider {
 
     public List<User>  initUserData() {
         try (Scanner reader = new Scanner(this.file)) {
+            Integer lineNumber = 0;
             if (reader.hasNextLine()) {
+                ++lineNumber;
                 reader.nextLine();
             }
 
             List<User> users = new ArrayList<>();
             while (reader.hasNextLine()) {
+                ++lineNumber;
                 String data = reader.nextLine();
-                users.add(UserConverter.parseUser(data));
+                users.add(UserConverter.parseUser(data, lineNumber));
             }
             return users;
         }
@@ -73,6 +76,8 @@ public class FileDataProvider {
         }
         return null;
     }
+
+
 
     public List<Currency>  initCurrencyData() {
         try (Scanner reader = new Scanner(this.file)) {
@@ -140,7 +145,7 @@ public class FileDataProvider {
     }
 
 
-    public Boolean writeFile(String content) {
+    public Boolean appendLine(String content) {
         try {
             FileWriter writer = new FileWriter(this.file, true);
             writer.write("\n" + content);
@@ -170,5 +175,7 @@ public class FileDataProvider {
         }
         return "";
     }
+
+
 
 }

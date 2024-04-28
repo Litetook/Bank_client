@@ -3,7 +3,7 @@ package main.java.com.pragmatic.dao;
 import main.java.com.pragmatic.model.User;
 
 public class UserConverter {
-    public static User parseUser(String data) {
+    public static User parseUser(String data, Integer lineId) {
         String[] values = data.split(",");
 
         if (values.length != 4) {
@@ -15,6 +15,7 @@ public class UserConverter {
         user.setName(values[1]);
         user.setEmail(values[2]);
         user.setPassword(values[3]);
+        user.setLineId(lineId);
 
         return  user;
     }

@@ -1,13 +1,15 @@
 package main.java.com.pragmatic.model;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Date;
 
-public class Transaction {
+public class Transaction extends BaseModel {
     private Integer transactionId = 0;
     private Integer accountFromId;
     private Integer accountToId;
     private Double amount;
-    private LocalDate actionDate;
+    private Date actionDate;
 
 
     @Override
@@ -35,7 +37,7 @@ public class Transaction {
         this.accountFromId = accountFromId;
         this.accountToId =  accountToId;
         this.amount = amount;
-        this.actionDate = LocalDate.now();
+        this.actionDate = Date.from(Instant.now());
     }
 
     public Transaction() {
@@ -55,7 +57,7 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public void setActionDate(LocalDate actionDate) {
+    public void setActionDate(Date actionDate) {
         this.actionDate = actionDate;
     }
 
@@ -67,7 +69,7 @@ public class Transaction {
         this.accountToId = accountToId;
     }
 
-    public LocalDate getActionDate() {
+    public Date getActionDate() {
         return actionDate;
     }
 }

@@ -9,6 +9,8 @@ import main.java.com.pragmatic.repository.UserRepository;
 import main.java.com.pragmatic.service.AccountService;
 
 import java.lang.reflect.InvocationTargetException;
+import java.time.Instant;
+import java.util.Date;
 
 public class Main {
     public static void main(String[] args) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
@@ -17,25 +19,30 @@ public class Main {
         UserRepository userRepo = new UserRepository();
         System.out.println(userRepo.getRepoList());
         CurrencyRepository currencyRepo = new CurrencyRepository();
-
         AccountRepository accountRepo = new AccountRepository(userRepo);
 
+//        USER TEST
+        userRepo.getRepoList();
+        System.out.println(userRepo.getUserById(1));
+
         userRepo.createUser("manual", "blabla", "pass");
-        System.out.println(accountRepo.getRepoList());
-        accountRepo.getAccountById(1).setBalance(2.0);
-        AccountService.moneyTransfer(accountRepo.getAccountById(1), accountRepo.getAccountById(2), 2.0);
+//        System.out.println(accountRepo.getRepoList());
+//        accountRepo.getAccountById(1).setBalance(2.0);
+//        AccountService.moneyTransfer(accountRepo.getAccountById(1), accountRepo.getAccountById(2), 2.0);
+//
+//        TransactionRepository transRepo = new TransactionRepository();
+//        System.out.println(transRepo.getRepoList());
+//
+//        System.out.println("Acc from");
+//        System.out.println(accountRepo.getAccountById(1));
+//        System.out.println("Acc to");
+//        System.out.println(accountRepo.getAccountById(2));
+//        System.out.println(transRepo.getRepoList());
+//
+//        System.out.println("Trying to get transactions by range of dates and acc id");
+//        System.out.println(transRepo.getAccountTransactionsByDateRange(1, 1710945474, 1714229665 ));
 
-        TransactionRepository transRepo = new TransactionRepository();
-        System.out.println(transRepo.getRepoList());
 
-        System.out.println("Acc from");
-        System.out.println(accountRepo.getAccountById(1));
-        System.out.println("Acc to");
-        System.out.println(accountRepo.getAccountById(2));
-
-        System.out.println(transRepo.getRepoList());
-        System.out.println("Trying to get transactions by range of dates and acc id");
-        System.out.println(transRepo.getAccountTransactionsByDateRange(1, "2024-03-22", "2024-03-25"));
 
     }
 }

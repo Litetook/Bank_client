@@ -4,14 +4,14 @@ import main.java.com.pragmatic.dao.FileDataProvider;
 import main.java.com.pragmatic.model.Account;
 import main.java.com.pragmatic.model.User;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AccountRepository implements IRepository {
     private static String tableImportName = "accounts.csv";
     private Integer lastId = 0;
     private Map<Integer, Account> accounts;
+    private List<String> csvSchema = new ArrayList<>(Arrays.asList("id", "name", "email","password"));
+
 
     public AccountRepository( UserRepository userRepo) {
         this.accounts = new HashMap<>();

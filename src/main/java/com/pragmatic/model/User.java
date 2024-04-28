@@ -4,8 +4,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class User extends BaseModel {
-
+public class User extends BaseModel{
     private Integer id;
     private String name ;
     private String email;
@@ -69,13 +68,16 @@ public class User extends BaseModel {
         return accounts;
     }
 
+
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
+                "accounts=" + accounts +
                 ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", id=" + id +
+                ", name='" + name + '\'' +
+                ", lineId=" + lineId +
                 '}';
     }
 }

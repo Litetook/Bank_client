@@ -1,7 +1,7 @@
 package main.java.com.pragmatic.model;
 
 
-public class Account {
+public class Account extends BaseModel implements IModel {
     Integer accountid;
     Integer userId;
     Integer currencyId;
@@ -47,8 +47,6 @@ public class Account {
     }
 
 
-
-
     @Override
     public String toString() {
         return "Account{" +
@@ -56,7 +54,7 @@ public class Account {
                 ", userId=" + userId +
                 ", currencyId=" + currencyId +
                 ", balance=" + balance +
+                ", lineId=" + lineId +
                 '}';
     }
-
 }
