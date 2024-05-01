@@ -6,14 +6,16 @@ import main.java.com.pragmatic.model.User;
 
 import java.util.*;
 
-public class AccountRepository implements IRepository {
-    private static String tableImportName = "accounts.csv";
+public class AccountRepository extends BaseRepository  implements IRepository {
+    private static final String tableImportName = "accounts.csv";
+    private FileDataProvider file= new FileDataProvider(tableImportName);
     private Integer lastId = 0;
     private Map<Integer, Account> accounts;
     private List<String> csvSchema = new ArrayList<>(Arrays.asList("id", "name", "email","password"));
 
 
     public AccountRepository( UserRepository userRepo) {
+        super();
         this.accounts = new HashMap<>();
         List<Account> accountList = new FileDataProvider(tableImportName).initAccountData();
         accountList.forEach(account -> {
@@ -24,8 +26,13 @@ public class AccountRepository implements IRepository {
             userRepo.getUserById(account.getUserId()).addAccount(account);
         });
     }
-    public Map<Integer, Account>  getRepoList() {
-        return  this.accounts;
+    public List getRepoList() {
+        List<Account> accountList = new ArrayList<Account>();
+        this.accounts.values().stream().forEach(account -> {
+            accountList.add(account);
+        });
+
+        return  accountList;
     }
 
     public Account getAccountById(Integer id) {

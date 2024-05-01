@@ -9,6 +9,7 @@ public class TransactionRepository implements IRepository{
     private static String tableImportName = "transactions.csv";
     private Integer lastId = 0;
     private Map<Integer, Transaction> transactions;
+    private FileDataProvider file= new FileDataProvider(tableImportName);
     private List<String> csvSchema = new ArrayList<>(Arrays.asList("id", "name", "email","password"));
 
 
@@ -21,8 +22,8 @@ public class TransactionRepository implements IRepository{
         });
     }
 
-    public Map<Integer, Transaction> getRepoList() {
-        return this.transactions;
+    public List getRepoList() {
+        return  this.transactions.values().stream().toList();
     }
 
 

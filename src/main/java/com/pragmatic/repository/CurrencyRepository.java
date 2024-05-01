@@ -10,6 +10,7 @@ import java.util.*;
 public class CurrencyRepository {
     private static String tableImportName = "currency.csv";
     private Integer lastid = 0;
+    private FileDataProvider file= new FileDataProvider(tableImportName);
     private Map<Integer, Currency> currencies;
     private List<String> csvSchema = new ArrayList<>(Arrays.asList("id", "symbol"));
 
@@ -23,8 +24,8 @@ public class CurrencyRepository {
         });
     }
 
-    public Map<Integer, Currency> getRepoList() {
-        return this.currencies;
+    public List<Currency> getRepoList() {
+        return this.currencies.values().stream().toList();
     }
 
     public Currency getCurrencyById(Integer id) {

@@ -7,12 +7,12 @@ import main.java.com.pragmatic.model.User;
 import java.util.*;
 
 public class UserRepository implements IRepository {
-    private static String tableImportName = "users.csv";
+    public static List<String> csvSchema = new ArrayList<>(Arrays.asList("id", "name", "email","password"));
+    public static String tableImportName = "users.csv";
     private Integer lastId = 0;
     private Map<Integer, User> users;
-    private Map<Integer, User> userLinesMap;
+    private Map<Integer, User> userLinesMap; // до якого рядка який юзер відноситься.
     private FileDataProvider file= new FileDataProvider(tableImportName);
-    private List<String> csvSchema = new ArrayList<>(Arrays.asList("id", "name", "email","password"));
 
     public UserRepository() {
         this.users = new HashMap<>();
@@ -47,9 +47,8 @@ public class UserRepository implements IRepository {
         this.file.appendLine(userId.toString() +","+name+","+email+","+password);
         return newUser;
     }
-//      TODO метод method should return list
-    public Map<Integer, User> getRepoList() {
-        return this.users;
+    public List getRepoList() {
+        return  this.users.values().stream().toList();
     }
 
     public User getUserById(Integer userId) {

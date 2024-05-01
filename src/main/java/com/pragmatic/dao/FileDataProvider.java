@@ -1,15 +1,14 @@
 package main.java.com.pragmatic.dao;
 
+import com.sun.source.tree.WhileLoopTree;
 import main.java.com.pragmatic.model.Account;
 import main.java.com.pragmatic.model.Currency;
 import main.java.com.pragmatic.model.Transaction;
 import main.java.com.pragmatic.model.User;
 import main.java.com.pragmatic.repository.CurrencyRepository;
 
-import java.io.File;
+import java.io.*;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -66,7 +65,9 @@ public class FileDataProvider implements Idao {
             while (reader.hasNextLine()) {
                 ++lineNumber;
                 String data = reader.nextLine();
-                users.add(UserConverter.parseUser(data, lineNumber));
+                if (!data.startsWith("#")) {
+                    users.add(UserConverter.parseUser(data, lineNumber));
+                }
             }
             return users;
         }
@@ -144,11 +145,26 @@ public class FileDataProvider implements Idao {
 
     }
 
+//    TODO rewtire line implementation to ask about.
+    public void rewriteLine(String content, Integer lineNumber) throws IOException {
+        RandomAccessFile raf = new RandomAccessFile(this.file, "rw");
+        Integer lineNumReaded = 0;
+        String line;
+        while ((line = raf.readLine()) != null) {
+            raf.seek(raf.getFilePointer() - line.length() - 2);
+            raf.writeBytes(content);
+        }
+
+        raf.close();
+        System.out.println("Successfull replaced " +  this.file.getName() + "Line: "+  lineNumber + "with data "+ content);
+
+    }
 
     public Boolean appendLine(String content) {
         try {
             FileWriter writer = new FileWriter(this.file, true);
             writer.write("\n" + content);
+
 
             System.out.println("Success file write");
 

@@ -22,16 +22,16 @@ public class Main {
         AccountRepository accountRepo = new AccountRepository(userRepo);
 
 //        USER TEST
-        userRepo.getRepoList();
+        System.out.println(userRepo.getRepoList());
         System.out.println(userRepo.getUserById(1));
 
         userRepo.createUser("manual", "blabla", "pass");
-//        System.out.println(accountRepo.getRepoList());
-//        accountRepo.getAccountById(1).setBalance(2.0);
-//        AccountService.moneyTransfer(accountRepo.getAccountById(1), accountRepo.getAccountById(2), 2.0);
-//
-//        TransactionRepository transRepo = new TransactionRepository();
-//        System.out.println(transRepo.getRepoList());
+        System.out.println(accountRepo.getRepoList());
+        accountRepo.getAccountById(1).setBalance(2.0);
+        AccountService.moneyTransfer(accountRepo.getAccountById(1), accountRepo.getAccountById(2), 2.0);
+        TransactionRepository transRepo = new TransactionRepository();
+        System.out.println(transRepo.getRepoList());
+
 //
 //        System.out.println("Acc from");
 //        System.out.println(accountRepo.getAccountById(1));

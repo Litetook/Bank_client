@@ -2,5 +2,8 @@ id,name,email,password
 1,user1,blabla@com,pass1
 2,user2,blabla@com,pass2
 3,user3,blabla@com,pass3
-4,user4,blabla@com,pass3
+#4,user4,blabla@com,pass3
 5,user3,blabla@com,pass3
+6,manual,blabla,pass
+7,manual,blabla,pass
+8,manual,blabla,pass
