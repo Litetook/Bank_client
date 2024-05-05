@@ -10,6 +10,7 @@ import java.util.*;
 public class CurrencyRepository {
     private static String tableImportName = "currency.csv";
     private Integer lastid = 0;
+    private FileDataProvider file= new FileDataProvider(tableImportName);
     private Map<Integer, Currency> currencies;
 
 
