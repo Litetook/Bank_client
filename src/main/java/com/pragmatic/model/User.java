@@ -4,13 +4,12 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class User extends BaseModel{
+public class User {
     private Integer id;
     private String name ;
     private String email;
     private String password;
     private List<Account> accounts = new ArrayList<>();
-
 
 
     public User(String name, String email, String password, Integer id) {
@@ -61,7 +60,12 @@ public class User extends BaseModel{
     }
 
     public void addAccount(Account account) {
-        this.accounts.add(account);
+        try {
+            this.accounts.add(account);
+        }
+        catch (Exception e) {
+            System.out.println("user add account error. Userid: " + this.getId());
+        }
     }
 
     public List<Account> getAccounts() {
@@ -76,8 +80,7 @@ public class User extends BaseModel{
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", id=" + id +
-                ", name='" + name + '\'' +
-                ", lineId=" + lineId +
+                ", name='" + name +
                 '}';
     }
 }

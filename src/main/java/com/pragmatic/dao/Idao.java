@@ -7,6 +7,3 @@ package main.java.com.pragmatic.dao;
 
 
 
-public interface Idao {
-    public Boolean appendLine(String tableName);
-}

@@ -1,17 +1,15 @@
 package main.java.com.pragmatic.model;
 
 
-public class Account extends BaseModel implements IModel {
-    Integer accountid;
+public class Account implements IModel {
+    Integer id;
     Integer userId;
     Integer currencyId;
     Double balance ;
 
 
-
-
     public Account (Currency currency, Integer id, User user) {
-        this.accountid = id;
+        this.id = id;
         this.currencyId = currency.getId();
         this.balance = 0.0;
         this.userId = user.getId();
@@ -26,8 +24,8 @@ public class Account extends BaseModel implements IModel {
         return userId;
     }
 
-    public void setAccountid(Integer accountid) {
-        this.accountid = accountid;
+    public void setId(Integer accountid) {
+        this.id = accountid;
     }
 
     public void setCurrencyId(Integer currencyId) {
@@ -42,19 +40,22 @@ public class Account extends BaseModel implements IModel {
         this.userId = userid;
     }
 
-    public Integer getAccountid() {
-        return this.accountid;
+    public Integer getId() {
+        return this.id;
+    }
+
+    public Integer getCurrencyId() {
+        return this.currencyId;
     }
 
 
     @Override
     public String toString() {
         return "Account{" +
-                "accountid=" + accountid +
+                "accountid=" + id +
                 ", userId=" + userId +
                 ", currencyId=" + currencyId +
                 ", balance=" + balance +
-                ", lineId=" + lineId +
                 '}';
     }
 }

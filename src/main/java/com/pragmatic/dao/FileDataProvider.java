@@ -4,22 +4,19 @@ import main.java.com.pragmatic.model.Account;
 import main.java.com.pragmatic.model.Currency;
 import main.java.com.pragmatic.model.Transaction;
 import main.java.com.pragmatic.model.User;
-import main.java.com.pragmatic.repository.CurrencyRepository;
 
 import java.io.File;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
+import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Stream;
+import java.util.function.Function;
 
 
-public class FileDataProvider implements Idao {
+public class FileDataProvider  {
     private final String filePath;
     private final String table;
     private final File file;
@@ -54,127 +51,62 @@ public class FileDataProvider implements Idao {
         this.file = f;
     }
 
-    public List<User>  initUserData() {
-        try (Scanner reader = new Scanner(this.file)) {
-            Integer lineNumber = 0;
-            if (reader.hasNextLine()) {
-                ++lineNumber;
-                reader.nextLine();
-            }
 
-            List<User> users = new ArrayList<>();
-            while (reader.hasNextLine()) {
-                ++lineNumber;
-                String data = reader.nextLine();
-                users.add(UserConverter.parseUser(data, lineNumber));
+    public <T> List<T> readData(File file, Function<String, T> parseFunction) throws FileNotFoundException {
+        List<T> dataList = new ArrayList<>();
+        try (Scanner scanner = new Scanner(file)) {
+            if (scanner.hasNextLine()) {
+                scanner.nextLine(); // Skip header line
             }
-            return users;
+            while (scanner.hasNextLine()) {
+                String data = scanner.nextLine();
+                dataList.add(parseFunction.apply(data));
+            }
         }
-        catch (Exception e) {
-            System.out.println(e.toString());
-            System.out.println("User parse exception. " + e.toString());
-        }
-        return null;
+        return dataList;
     }
 
-
-
-    public List<Currency>  initCurrencyData() {
-        try (Scanner reader = new Scanner(this.file)) {
-            if (reader.hasNextLine()) {
-                reader.nextLine();
-            }
-
-            List<Currency> currencies = new ArrayList<>();
-            while (reader.hasNextLine()) {
-                String data = reader.nextLine();
-                currencies.add(CurrencyConverter.parseCurrency(data));
-
-
-            }
-            return currencies;
+    public List<User> initUserData() {
+        try {
+            return readData(this.file, UserConverter::parseUser);
+        } catch (Exception e) {
+            System.out.println("User parse exception: " + e.getMessage());
+            return null;
         }
-        catch (Exception e) {
-            System.out.println(e.toString());
-            System.out.println("Currency parse exception. " + e.toString());
-        }
-        return null;
     }
 
-
-    public List<Account> initAccountData(){
-        try (Scanner reader = new Scanner(this.file)) {
-            if (reader.hasNextLine()) {
-                reader.nextLine();
-            }
-
-            List<Account> accounts = new ArrayList<>();
-            while (reader.hasNextLine()) {
-                String data = reader.nextLine();
-                accounts.add(AccountConverter.parseAccount(data));
-            }
-            return accounts;
+    public List<Currency> initCurrencyData() {
+        try {
+            return readData(this.file, CurrencyConverter::parseCurrency);
+        } catch (Exception e) {
+            System.out.println("Currency parse exception: " + e.getMessage());
+            return null;
         }
-        catch (Exception e) {
-            System.out.println(e.toString());
-            System.out.println("Account parse exception. " + e.toString());
+    }
+
+    public List<Account> initAccountData() {
+        try {
+            return readData(this.file, AccountConverter::parseAccount);
+        } catch (Exception e) {
+            System.out.println("Account parse exception: " + e.getMessage());
+            return null;
         }
-        return null;
     }
 
     public List<Transaction> initTransactionData() {
-
-        try (Scanner reader = new Scanner(this.file)) {
-            if (reader.hasNextLine()) {
-                reader.nextLine();
-            }
-
-            List<Transaction> transactions = new ArrayList<>();
-            while (reader.hasNextLine()) {
-                String data = reader.nextLine();
-                transactions.add(TransactionConverter.parseTransaction(data));
-            }
-            return transactions;
-        }
-        catch (Exception e) {
-            System.out.println(e.toString());
-            System.out.println("Transaction parse exception. " + e.toString());
-        }
-        return null;
-
-    }
-
-
-    public Boolean appendLine(String content) {
         try {
-            FileWriter writer = new FileWriter(this.file, true);
-            writer.write("\n" + content);
-
-            System.out.println("Success file write");
-
-            writer.close();
-
-
-//           результат успнішного закінчення методу і запису в файл
-            return true;
+            return readData(this.file, TransactionConverter::parseTransaction);
+        } catch (Exception e) {
+            System.out.println("Transaction parse exception: " + e.getMessage());
+            return null;
         }
-        catch (IOException e) {
-            System.out.println("There is no output file created");
-        }
-        return  false;
     }
 
-    public  String readLine(Integer lineNumber) {
-        if (lineNumber >= 1) {
-            try (Stream<String> lines = Files.lines(Paths.get(this.filePath))) {
-                return lines.skip(lineNumber - 1).findFirst().get();
-            } catch (Exception e) {
-                System.out.println("Read file exception.");
-
-            }
-        }
-        return "";
+    public File getFileObj() {
+        return this.file;
     }
+
+
 
 
 

@@ -1,0 +1,16 @@
+У чому різниця між list<Object> та Object[], детально
+інкапсуляція
+розібрати equals та hashvalue
+
+
+Дописати репозиторії і оновлення файлу в них
+Продумати, які дії мені прописувати, що може змінювати в тих даних, які я ввожу
+
+Перевод валют продумати, де його б брати
+
+1.	Java Syntax
+2.	Comparison of objects in java. Like: !=, ==, >, <, >=, <=, equals(), hashCode(), comparators.
+3.	Collections knowledge (Medium knowledge required: must know which collection is sortable and which is not, and which collection is used for which purposes)
+4.	Exceptions (What kind of exceptions are used in java. Exception hierarchy)
+5.	Practical application of the principles of OOP. Inheritance, polymorphism and encapsulation
+6.	Input/Output stream – it is commonly used in Java. It can be called an interface between the foreign world and Java application.

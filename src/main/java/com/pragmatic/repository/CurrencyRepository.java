@@ -11,20 +11,28 @@ public class CurrencyRepository {
     private static String tableImportName = "currency.csv";
     private Integer lastid = 0;
     private Map<Integer, Currency> currencies;
-    private List<String> csvSchema = new ArrayList<>(Arrays.asList("id", "symbol"));
 
 
     public CurrencyRepository() {
         this.currencies = new HashMap<>();
         List<Currency> currencyList = new FileDataProvider(tableImportName).initCurrencyData();
         currencyList.forEach(currency -> {
-            this.currencies.put(currency.getId(), currency);
-            this.lastid++;
+            if (!this.currencies.containsKey(currency.getId())) {
+                this.currencies.put(currency.getId(), currency);
+                if (this.lastid < currency.getId()) {
+                    this.lastid = currency.getId();
+                }
+
+            }
+            else {
+                throw new IllegalStateException(currency.getId() + "this currencyid exists in repo");
+            }
+
         });
     }
 
-    public Map<Integer, Currency> getRepoList() {
-        return this.currencies;
+    public List<Currency> getRepoList() {
+        return this.currencies.values().stream().toList();
     }
 
     public Currency getCurrencyById(Integer id) {

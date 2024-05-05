@@ -8,25 +8,23 @@ import main.java.com.pragmatic.repository.TransactionRepository;
 import main.java.com.pragmatic.repository.UserRepository;
 import main.java.com.pragmatic.service.AccountService;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.time.Instant;
 import java.util.Date;
 
 public class Main {
-    public static void main(String[] args) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+    public static void main(String[] args) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException {
 
         //      Викликаю юзер репозиторій, який парсить файл одразу і створює в ньому об'єкти юзера по cs
         UserRepository userRepo = new UserRepository();
         System.out.println(userRepo.getRepoList());
+
         CurrencyRepository currencyRepo = new CurrencyRepository();
+        userRepo.getUserById(1);
         AccountRepository accountRepo = new AccountRepository(userRepo);
-
-//        USER TEST
-        userRepo.getRepoList();
-        System.out.println(userRepo.getUserById(1));
-
         userRepo.createUser("manual", "blabla", "pass");
-//        System.out.println(accountRepo.getRepoList());
+//        System.out.println(userRepo.getUserById(1));
 //        accountRepo.getAccountById(1).setBalance(2.0);
 //        AccountService.moneyTransfer(accountRepo.getAccountById(1), accountRepo.getAccountById(2), 2.0);
 //

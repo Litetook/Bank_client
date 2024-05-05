@@ -1,11 +1,10 @@
 package main.java.com.pragmatic.model;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.Date;
 
-public class Transaction extends BaseModel {
-    private Integer transactionId = 0;
+public class Transaction  {
+    private Integer id = 0;
     private Integer accountFromId;
     private Integer accountToId;
     private Double amount;
@@ -15,7 +14,7 @@ public class Transaction extends BaseModel {
     @Override
     public String toString() {
         return "Transaction{" +
-                "transactionId=" + transactionId +
+                "transactionId=" + id +
                 ", accountFromId=" + accountFromId +
                 ", accountToId=" + accountToId +
                 ", amount=" + amount +
@@ -33,7 +32,7 @@ public class Transaction extends BaseModel {
 
     public Transaction (Integer accountToId, Integer accountFromId, Double amount) {
 //        manual initiation, so needed write to file
-        this.transactionId = ++this.transactionId;
+        this.id = ++this.id;
         this.accountFromId = accountFromId;
         this.accountToId =  accountToId;
         this.amount = amount;
@@ -45,16 +44,23 @@ public class Transaction extends BaseModel {
     }
 
     public Integer getId() {
-        return transactionId;
+        return id;
     }
 
-    public void setTransactionId(Integer transactionId) {
-        this.transactionId = transactionId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+    public Double getAmount () {
+        return this.amount;
+    }
+
+    public Long getTime() {
+        return this.actionDate.toInstant().getEpochSecond();
     }
 
     public void setActionDate(Date actionDate) {
