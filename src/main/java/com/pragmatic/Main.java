@@ -19,27 +19,18 @@ public class Main {
         //      Викликаю юзер репозиторій, який парсить файл одразу і створює в ньому об'єкти юзера по cs
         UserRepository userRepo = new UserRepository();
         System.out.println(userRepo.getRepoList());
-
+        //INIT
         CurrencyRepository currencyRepo = new CurrencyRepository();
         userRepo.getUserById(1);
         AccountRepository accountRepo = new AccountRepository(userRepo);
+        TransactionRepository transRepo = new TransactionRepository();
+//
         userRepo.createUser("manual", "blabla", "pass");
-//        System.out.println(userRepo.getUserById(1));
-//        accountRepo.getAccountById(1).setBalance(2.0);
-//        AccountService.moneyTransfer(accountRepo.getAccountById(1), accountRepo.getAccountById(2), 2.0);
-//
-//        TransactionRepository transRepo = new TransactionRepository();
-//        System.out.println(transRepo.getRepoList());
-//
-//        System.out.println("Acc from");
-//        System.out.println(accountRepo.getAccountById(1));
-//        System.out.println("Acc to");
-//        System.out.println(accountRepo.getAccountById(2));
-//        System.out.println(transRepo.getRepoList());
-//
-//        System.out.println("Trying to get transactions by range of dates and acc id");
-//        System.out.println(transRepo.getAccountTransactionsByDateRange(1, 1710945474, 1714229665 ));
+        AccountService.moneyTransfer(accountRepo.getAccountById(3), accountRepo.getAccountById(2), accountRepo, transRepo , 2.0);
 
+//        transRepo.getAccountTransactionsByDateRange(3, 1714928448, ;
+        System.out.println("Trying to get transactions by range of dates and acc id");
+        System.out.println(transRepo.getAccountTransactionsByDateRange(1, 1710945474, 1715018242 ));
 
 
     }

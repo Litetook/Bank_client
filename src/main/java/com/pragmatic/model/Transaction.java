@@ -4,7 +4,7 @@ import java.time.Instant;
 import java.util.Date;
 
 public class Transaction  {
-    private Integer id = 0;
+    private Integer id;
     private Integer accountFromId;
     private Integer accountToId;
     private Double amount;
@@ -41,6 +41,8 @@ public class Transaction  {
 
     public Transaction() {
 //        empty for importing and setting using csv file
+        //TODO чи норм такі речі, в пустий конструктор таке класти?
+            this.actionDate = Date.from(Instant.now());
     }
 
     public Integer getId() {

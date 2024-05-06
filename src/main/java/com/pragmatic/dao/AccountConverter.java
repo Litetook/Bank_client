@@ -30,17 +30,18 @@ public class AccountConverter {
         StringBuilder string = new StringBuilder();
 //       HEADER
         string.append(String.join(",", csvSchema));
+//        System.out.printf("Header");
+//        System.out.println(string);
+
         if (accountList.size() > 0) {
             string.append("\n");
         }
         for (int i = 0; i <= accountList.size() -1; i++) {
             Account account = accountList.get(i);
-            string.append(String.join(",", account.getId().toString(),account.getUserId().toString(), account.getCurrencyId().toString(), account.getBalance().toString(), "\n"));
-
-
+            string.append(String.join(",", account.getId().toString(),account.getUserId().toString(), account.getCurrencyId().toString(), account.getBalance().toString()));
+            string.append("\n");
         }
         return  string.toString();
-//        IMPLEMENTATION WITHOUT LINE BREAK
-//        userList.forEach(user -> string.append(String.join(",", user.getId().toString(), user.getName(), user.getEmail(), user.getPassword())));
+
     }
     }

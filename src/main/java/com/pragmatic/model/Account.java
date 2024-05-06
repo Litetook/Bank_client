@@ -8,11 +8,11 @@ public class Account implements IModel {
     Double balance ;
 
 
-    public Account (Currency currency, Integer id, User user) {
+    public Account (Integer currencyId, Integer id, Integer userId) {
         this.id = id;
-        this.currencyId = currency.getId();
+        this.currencyId = currencyId;
         this.balance = 0.0;
-        this.userId = user.getId();
+        this.userId = userId;
     }
 
     public Account() {

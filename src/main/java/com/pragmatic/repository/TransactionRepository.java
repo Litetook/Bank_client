@@ -1,6 +1,8 @@
 package main.java.com.pragmatic.repository;
 
+import main.java.com.pragmatic.dao.AccountConverter;
 import main.java.com.pragmatic.dao.FileDataProvider;
+import main.java.com.pragmatic.dao.TransactionConverter;
 import main.java.com.pragmatic.dao.UserConverter;
 import main.java.com.pragmatic.model.Transaction;
 import main.java.com.pragmatic.model.User;
@@ -39,9 +41,28 @@ public class TransactionRepository implements IRepository{
         return this.transactions.values().stream().toList();
     }
 
-
     public Transaction getTransactionById(Integer transactionId) {
         return this.transactions.get(transactionId);
+    }
+
+    public Transaction createNewTransaction(Integer accountFromId, Integer accountToId, Double amount) throws IOException {
+        Transaction newTransaction = new Transaction();
+        newTransaction.setId(++this.lastId);
+        newTransaction.setAmount(amount);
+        newTransaction.setAccountFromId(accountFromId);
+        newTransaction.setAccountToId(accountToId);
+        transactions.put(this.lastId, newTransaction);
+        this.updateFile();
+        return  newTransaction;
+    }
+
+    @Override
+    public void updateFile() throws IOException {
+        String data = TransactionConverter.transactionFileDataCreator(this.getRepoList());
+        FileWriter writer = new FileWriter(this.file.getFileObj());
+        writer.write(data);
+        writer.close();
+        System.out.println(this.file.getFileObj().getName()  + " "+ "successfully updated");
     }
 
     public List<Transaction> getAccountTransactionsByDateRange(Integer accountId, Integer timestampFrom, Integer timeStampTo) {
@@ -55,7 +76,6 @@ public class TransactionRepository implements IRepository{
                 .filter(transaction -> (transaction.getActionDate().after(dateFromInstance)))
                 .filter(transaction -> (transaction.getActionDate().before(dateToInstance)))
                 .collect(Collectors.toList());
-
     }
 
 }

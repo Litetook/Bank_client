@@ -38,13 +38,14 @@ public class TransactionConverter {
         }
         for (int i = 0; i <= transactionList.size() -1; i++) {
             Transaction transaction = transactionList.get(i);
+            //System.out.println(transaction);
             string.append(String.join(",", transaction.getId().toString(),
                     transaction.getAccountFromId().toString(),
                     transaction.getAccountToId().toString(),
                     transaction.getAmount().toString(),
-                    transaction.getActionDate().toString(),
-                    "\n"));
-
+//                    TODO чи норм це написано? Бо мені теж не подобається
+                    String.valueOf(transaction.getActionDate().toInstant().toEpochMilli()/1000)));
+            string.append("\n");
 
         }
         return  string.toString();

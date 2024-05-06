@@ -38,12 +38,8 @@ public class UserConverter {
         for (int i = 0; i <= userList.size() -1; i++) {
             User user = userList.get(i);
             string.append(String.join(",", user.getId().toString(), user.getName(), user.getEmail(), user.getPassword(), "\n"));
-
-
         }
         return  string.toString();
-//        IMPLEMENTATION WITHOUT LINE BREAK
-//        userList.forEach(user -> string.append(String.join(",", user.getId().toString(), user.getName(), user.getEmail(), user.getPassword())));
     }
 
 

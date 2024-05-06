@@ -36,7 +36,5 @@ public class CurrencyConverter {
 
         }
         return  string.toString();
-//        IMPLEMENTATION WITHOUT LINE BREAK
-//        userList.forEach(user -> string.append(String.join(",", user.getId().toString(), user.getName(), user.getEmail(), user.getPassword())));
     }
 }

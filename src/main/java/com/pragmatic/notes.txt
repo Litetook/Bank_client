@@ -6,7 +6,28 @@
 Дописати репозиторії і оновлення файлу в них
 Продумати, які дії мені прописувати, що може змінювати в тих даних, які я ввожу
 
+Для чого робити новий екземпляр експешена.
+Які бувають ексепшени . Catchable / uncathable
 Перевод валют продумати, де його б брати
+
+•	A method that adds a user.
+UserRepo -> createUser
+•	A method that adds an account.
+AccountRepo -> createAccount
+•	A method that transfers funds from one account to another.
+AccountService -> MoneyTransfer. Дописав логування в аккаунт файл.
+•	A method that outputs a list of users to the console.
+UserRepo
+•	A method that outputs the data of a specific user to the console.
+User
+•	A method that displays the accounts of a specific user in the console.
+User
+•	A method that displays an account statement for a certain period.
+TODO перевірити чи існує і чи працює.
+
+•	All these methods should be covered by unit tests.
+
+
 
 1.	Java Syntax
 2.	Comparison of objects in java. Like: !=, ==, >, <, >=, <=, equals(), hashCode(), comparators.
