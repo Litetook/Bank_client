@@ -33,6 +33,8 @@ public class AccountRepository implements IRepository {
             userRepo.getUserById(account.getUserId()).addAccount(account);
         });
     }
+
+
     public List<Account> getRepoList() {
         return  this.accounts.values().stream().toList();
     }

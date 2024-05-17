@@ -26,7 +26,7 @@ public class Main {
         userRepo.createUser("manual", "blabla", "pass");
         AccountService accService = new AccountService(accountRepo, transRepo);
 
-        accService.moneyTransfer(accountRepo.getAccountById(3), accountRepo.getAccountById(2) ,2.0);
+        accService.moneyTransfer(accountRepo.getAccountById(2), accountRepo.getAccountById(3) ,2.0);
 
 //        transRepo.getAccountTransactionsByDateRange(3, 1714928448, ;
         System.out.println("Trying to get transactions by range of dates and acc id");
