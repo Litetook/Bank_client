@@ -1,5 +1,4 @@
 package com.pragmatic;
-//import main.java.com.pragmatic.model.User;
 
 
 import com.pragmatic.repository.AccountRepository;
