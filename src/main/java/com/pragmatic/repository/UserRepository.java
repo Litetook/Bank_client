@@ -8,6 +8,7 @@ import com.pragmatic.model.User;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class UserRepository implements IRepository {
     private static String tableImportName = "users.csv";
@@ -51,7 +52,7 @@ public class UserRepository implements IRepository {
         return newUser;
     }
     public List<User> getRepoList() {
-        return this.users.values().stream().toList();
+        return this.users.values().stream().collect(Collectors.toList());
     }
 
     public User getUserById(Integer userId) {

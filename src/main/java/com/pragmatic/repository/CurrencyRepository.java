@@ -5,6 +5,7 @@ import com.pragmatic.model.Currency;
 
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class CurrencyRepository {
     private static String tableImportName = "currency.csv";
@@ -32,7 +33,7 @@ public class CurrencyRepository {
     }
 
     public List<Currency> getRepoList() {
-        return this.currencies.values().stream().toList();
+        return this.currencies.values().stream().collect(Collectors.toList());
     }
 
     public Currency getCurrencyById(Integer id) {

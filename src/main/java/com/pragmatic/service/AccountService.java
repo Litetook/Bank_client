@@ -24,14 +24,13 @@ public class AccountService {
             accountFrom.setBalance(accountFrom.getBalance() - amount);
             accountTo.setBalance(accountTo.getBalance() + amount);
             Transaction transferTransaction = this.transactions.createNewTransaction(accountFrom.getId(), accountTo.getId(), amount);
-//          TODO тут також не подобається, що в мене оновлення файлу прописується відносно аккаунтів тут, а в самому методіd add new transaction
             this.accounts.updateFile();
             System.out.println("Success money transfer");
             return  transferTransaction;
         }
 
         else {
-            throw new RuntimeException("Error. Acc" + accountFrom.getId() + "from user " +  accountFrom.getUserId() + " does not have enough balance to make transaction");
+            throw new RuntimeException("Error. Acc" + accountFrom.getId() + " from user " +  accountFrom.getUserId() + " does not have enough balance to make transaction");
         }
 
 

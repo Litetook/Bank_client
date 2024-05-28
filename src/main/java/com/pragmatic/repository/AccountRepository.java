@@ -7,15 +7,17 @@ import com.pragmatic.model.Account;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AccountRepository implements IRepository {
     private static String tableImportName = "accounts.csv";
     private Integer lastId = 0;
     private Map<Integer, Account> accounts;
     private FileDataProvider file= new FileDataProvider(tableImportName);
-
+    private  UserRepository userRepo;
 
     public AccountRepository( UserRepository userRepo) {
+        this.userRepo = userRepo;
         this.accounts = new HashMap<>();
         List<Account> accountList = new FileDataProvider(tableImportName).initAccountData();
         accountList.forEach(account -> {
@@ -30,13 +32,13 @@ public class AccountRepository implements IRepository {
             }
 
 //            Пишу так, бо не для кожного юзера може бути акк, тому нам простіше прогнати акки по списку юзерів, чим навпаки.
-            userRepo.getUserById(account.getUserId()).addAccount(account);
+            this.userRepo.getUserById(account.getUserId()).addAccount(account);
         });
     }
 
 
     public List<Account> getRepoList() {
-        return  this.accounts.values().stream().toList();
+        return  this.accounts.values().stream().collect(Collectors.toList());
     }
 
     public Account getAccountById(Integer id) {
@@ -52,7 +54,7 @@ public class AccountRepository implements IRepository {
         System.out.println(this.file.getFileObj().getName()  + " "+ "successfully updated");
     }
 
-    public Account createAccount(Integer currencyId, Integer userId, UserRepository userRepo) throws IOException {
+    public Account createAccount(Integer currencyId, Integer userId) throws IOException {
         this.accounts.values().forEach(account -> {
             if (account.getUserId().equals(userId) & account.getCurrencyId().equals(currencyId)) {
                 throw new IllegalStateException("create new account issue: Account already exists. Userid:" + userId
@@ -62,7 +64,7 @@ public class AccountRepository implements IRepository {
         Integer id =  ++this.lastId;
         Account newAccount = new Account(currencyId, this.lastId, userId);
         this.accounts.put(id, newAccount);
-        userRepo.getUserById(userId).addAccount(newAccount);
+        this.userRepo.getUserById(userId).addAccount(newAccount);
         this.getRepoList().forEach(account -> System.out.println(account));
         this.updateFile();
 
