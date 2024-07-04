@@ -40,10 +40,19 @@ public class AccountServiceTest {
         Account accountTestTo = new Account();
 
         accountTestFrom.setBalance(20.0);
+        accountTestFrom.setId(1);
         accountTestTo.setBalance(0.0);
+        accountTestTo.setId(2);
 
-        assertEquals(20.0, accountTestFrom.getBalance());
-        AccountService accountServiceTest = new AccountService(accountsRepoTest, transactionsRepoTest);
+        Transaction transaction = new Transaction();
+        transaction.setId(1);
+        transaction.setAccountFromId(1);
+        transaction.setAccountToId(2);
+        transaction.setAmount(10.0);
+
+
+        Mockito.when(transactionsRepoTest.createNewTransaction(1,2,10.0)).thenReturn(transaction);
+//        assertEquals(20.0, accountTestFrom.getBalance());
 
 
         Transaction transactionTest = accountServiceTest.moneyTransfer(accountTestFrom, accountTestTo, 10.0);
@@ -51,6 +60,9 @@ public class AccountServiceTest {
         assertEquals(10.0, accountTestTo.getBalance());
         assertEquals(10.0, accountTestFrom.getBalance());
 
+        assertEquals(10.0, transactionTest.getAmount());
+        assertEquals(1, transactionTest.getAccountFromId());
+        assertEquals(2, transactionTest.getAccountToId());
 
         //       Транзакцію не писав, бо потрібно буде робити реальний об'єкт а не мок, і її.
         //        РОзібрався, що не можна витягувати і писати щось до мока. Тільки уявні якісь методи, і що вони мають ьвіддавати.

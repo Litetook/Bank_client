@@ -38,6 +38,6 @@ public class CalculatorTest {
         int result = calculator.subtract(5, 3);
 
         // Перевіряємо результат
-        assertEquals(3, result);
+        assertEquals(2, result);
 }
 }
