@@ -1,8 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.pragmatic.testing.CalculatorTest
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.001 s <<< FAILURE! - in com.pragmatic.testing.CalculatorTest
-com.pragmatic.testing.CalculatorTest.testSubtract()  Time elapsed: 0.001 s  <<< FAILURE!
-java.lang.NullPointerException: Cannot invoke "com.pragmatic.testing.Database.returnTest()" because "this.mockDatabase" is null
-	at com.pragmatic.testing.CalculatorTest.testSubtract(CalculatorTest.java:34)
-

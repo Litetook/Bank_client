@@ -11,7 +11,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class CalculatorTest {
+class CalculatorTest {
 
     @Mock
     private Database mockDatabase;
