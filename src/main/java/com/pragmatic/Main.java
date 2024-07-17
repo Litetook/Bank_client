@@ -9,9 +9,17 @@ import com.pragmatic.service.AccountService;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+@SpringBootApplication
+@RestController
 public class Main {
     public static void main(String[] args) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException {
+        SpringApplication.run(Main.class, args);
 
         //INIT
         //Викликаю юзер репозиторій, який парсить файл одразу і створює в ньому об'єкти юзера по cs
@@ -30,8 +38,10 @@ public class Main {
 ////        transRepo.getAccountTransactionsByDateRange(3, 1714928448, ;
 //        System.out.println("Trying to get transactions by range of dates and acc id");
 //        System.out.println(transRepo.getAccountTransactionsByDateRange(1, 1710945474, 1715018242 ));
-
-
+    }
+    @GetMapping("/hello")
+    public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
+        return String.format("Hello %s!", name);
     }
 }
 
