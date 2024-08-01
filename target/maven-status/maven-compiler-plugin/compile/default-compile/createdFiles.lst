@@ -18,7 +18,6 @@ com/pragmatic/repository/AccountRepository.class
 com/pragmatic/repository/TransactionRepository.class
 com/pragmatic/model/Account.class
 com/pragmatic/dao/TransactionConverter.class
-com/pragmatic/service/TransactionService.class
 com/pragmatic/repository/IFileUpdator.class
 com/pragmatic/dao/DataProvider.class
 com/pragmatic/dao/UserConverter.class

@@ -3,34 +3,37 @@ package com.pragmatic.repository;
 import com.pragmatic.dao.FileDataProvider;
 import com.pragmatic.dao.TransactionConverter;
 import com.pragmatic.model.Transaction;
+import org.springframework.stereotype.Repository;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
+@Repository
 public class TransactionRepository implements IRepository{
-    private static String tableImportName = "transactions.csv";
+//    private static String tableImportName = "transactions.csv";
     private Integer lastId = 0;
     private Map<Integer, Transaction> transactions;
-    private FileDataProvider file= new FileDataProvider(tableImportName);
+//    private FileDataProvider file= new FileDataProvider(tableImportName);
 
 
     public TransactionRepository() {
         this.transactions = new HashMap<>();
-        List<Transaction> transactionList = new FileDataProvider(tableImportName).initTransactionData();
 
-        transactionList.forEach( transaction -> {
-            if (!this.transactions.containsKey(transaction.getId())) {
-                this.transactions.put(transaction.getId(), transaction);
-                if (this.lastId < transaction.getId()) {
-                    this.lastId = transaction.getId();
-                }
-            }
-            else {
-                throw new IllegalStateException(transaction.getId() + "transactionid already exists in repo");
-            }
-
-        });
+//        List<Transaction> transactionList = new FileDataProvider(tableImportName).initTransactionData();
+//
+//        transactionList.forEach( transaction -> {
+//            if (!this.transactions.containsKey(transaction.getId())) {
+//                this.transactions.put(transaction.getId(), transaction);
+//                if (this.lastId < transaction.getId()) {
+//                    this.lastId = transaction.getId();
+//                }
+//            }
+//            else {
+//                throw new IllegalStateException(transaction.getId() + "transactionid already exists in repo");
+//            }
+//
+//        });
     }
 
     public List<Transaction> getRepoList() {
@@ -48,18 +51,17 @@ public class TransactionRepository implements IRepository{
         newTransaction.setAccountFromId(accountFromId);
         newTransaction.setAccountToId(accountToId);
         transactions.put(this.lastId, newTransaction);
-        this.updateFile();
+//        this.updateFile();
         return  newTransaction;
     }
 
-    @Override
-    public void updateFile() throws IOException {
-        String data = TransactionConverter.transactionFileDataCreator(this.getRepoList());
-        FileWriter writer = new FileWriter(this.file.getFileObj());
-        writer.write(data);
-        writer.close();
-        System.out.println(this.file.getFileObj().getName()  + " "+ "successfully updated");
-    }
+//    public void updateFile() throws IOException {
+//        String data = TransactionConverter.transactionFileDataCreator(this.getRepoList());
+//        FileWriter writer = new FileWriter(this.file.getFileObj());
+//        writer.write(data);
+//        writer.close();
+//        System.out.println(this.file.getFileObj().getName()  + " "+ "successfully updated");
+//    }
 
     public List<Transaction> getAccountTransactionsByDateRange(Integer accountId, Integer timestampFrom, Integer timeStampTo) {
         System.out.println("initiated method to find transaction by date range");

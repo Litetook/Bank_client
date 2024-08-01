@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.pragmatic</groupId>
-    <artifactId>demo</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>demo</name>
-    <description>Demo project for Spring Boot</description>
+    <artifactId>bank-client</artifactId>
+    <version>0.0.1-TEST</version>
+    <name>bank-client</name>
+    <description>Bank client demo project for Spring Boot</description>
     <url/>
     <licenses>
         <license/>
