@@ -7,13 +7,9 @@ import com.pragmatic.model.Currency;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class CurrencyRepository {
+public class CurrencyRepository implements ICurrencyRepository{
     private Integer lastid = 0;
     private Map<Integer, Currency> currencies;
-
-//    private FileDataProvider file= new FileDataProvider(tableImportName);
-//private static String tableImportName = "currency.csv";
-
 
 
     public CurrencyRepository() {
@@ -29,23 +25,9 @@ public class CurrencyRepository {
 
 
 
-//        List<Currency> currencyList = new FileDataProvider(tableImportName).initCurrencyData();
-//        currencyList.forEach(currency -> {
-//            if (!this.currencies.containsKey(currency.getId())) {
-//                this.currencies.put(currency.getId(), currency);
-//                if (this.lastid < currency.getId()) {
-//                    this.lastid = currency.getId();
-//                }
-//
-//            }
-//            else {
-//                throw new IllegalStateException(currency.getId() + "this currencyid exists in repo");
-//            }
-//
-//        });
     }
 
-    protected Currency createCurrency(String code) {
+    public Currency createCurrency(String code) {
         Currency newCurrency = new Currency();
         newCurrency.setId(this.lastid);
         ++this.lastid;

@@ -26,10 +26,7 @@ public class AccountConverter {
 
     public static String accountFileDataCreator(List<Account> accountList) {
         StringBuilder string = new StringBuilder();
-//       HEADER
         string.append(String.join(",", csvSchema));
-//        System.out.printf("Header");
-//        System.out.println(string);
 
         if (accountList.size() > 0) {
             string.append("\n");

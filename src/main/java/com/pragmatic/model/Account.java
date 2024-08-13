@@ -1,7 +1,7 @@
 package com.pragmatic.model;
 
 
-public class Account implements IModel {
+public class Account {
     Integer id;
     Integer userId;
     Integer currencyId;

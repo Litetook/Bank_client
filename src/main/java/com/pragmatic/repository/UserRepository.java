@@ -11,16 +11,11 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 @Repository
-public class UserRepository implements IRepository {
+public class UserRepository implements IUserRepository {
     private Integer lastId = 0;
     private Map<Integer, User> users;
 
-    //    private FileDataProvider file= new FileDataProvider(tableImportName);
-    //    private static String tableImportName = "users.csv";
-
-
-
-    public UserRepository() throws IOException {
+    public UserRepository() {
         this.users = new HashMap<>();
 
         String[][] users = {
@@ -38,29 +33,9 @@ public class UserRepository implements IRepository {
 
         this.users.put(lastId, createUser("Pedro", "pedro@gmail.com", "blabla1"));
 
-
-//      РЕМУВНУВ ІНІТ З ФАЙЛУ
-
-////        Init даних з файлу
-//        List<User> userList = this.file.initUserData();
-//        userList.forEach(user -> {
-////                   ID is correct
-//                    if ( this.users.containsKey(user.getId()) ) {
-////                        TODO verify this exception
-//                        throw new IllegalStateException(user.getId() + "this user id already exists in repo");
-//                    }
-//                    else {
-//                        this.users.put(user.getId(), user);
-//                        if  (lastId < user.getId()) {
-//                            lastId = user.getId();
-//                        }
-//                    }
-//                }
-//        );
-
     }
 
-    public User createUser(String name, String email, String password) throws IOException {
+    public User createUser(String name, String email, String password) {
         Integer userId = ++this.lastId;
         User newUser = new User();
         newUser.setName(name);
@@ -68,7 +43,6 @@ public class UserRepository implements IRepository {
         newUser.setEmail(email);
         newUser.setPassword(password);
         this.users.put(userId, newUser);
-//        this.updateFile();
         return newUser;
     }
     public List<User> getRepoList() {
@@ -78,14 +52,6 @@ public class UserRepository implements IRepository {
     public User getUserById(Integer userId) {
         return this.users.get(userId);
     }
-
-//    public void updateFile () throws IOException {
-//        String data = UserConverter.userFileDataCreator(this.getRepoList());
-//        FileWriter writer = new FileWriter(this.file.getFileObj());
-//        writer.write(data);
-//        writer.close();
-//        System.out.println(this.file.getFileObj().getName()  + " "+ "successfully updated");
-//    }
 
 
 }
