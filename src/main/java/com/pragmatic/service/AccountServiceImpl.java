@@ -6,30 +6,38 @@ import com.pragmatic.model.Account;
 import com.pragmatic.model.Transaction;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 
 @Service
 public class AccountServiceImpl implements AccountService {
 
-    AccountRepository accounts;
+    AccountRepository accountRepository;
     TransactionRepository transactions;
 
      AccountServiceImpl(AccountRepository accountRepo, TransactionRepository transactionRepo ) {
         this.transactions = transactionRepo;
-        this.accounts = accountRepo;
+        this.accountRepository = accountRepo;
     }
 
-//    TODO add currency converter
+    @Override
+    public Optional<Account> getAccountById(Integer id) {
+        return accountRepository.getAccountById(id);
+    }
 
+    @Override
     public String getAccount(Integer id) {
-         return  "test "+id;
+        return accountRepository.getAccountById(id).toString();
     }
 
-    public  Transaction moneyTransfer(Account accountFrom, Account accountTo, Double amount ) throws IOException {
+    public List<Account> getAllAccounts() {
+         return accountRepository.getRepoList();
+    }
+
+    public  Transaction moneyTransfer(Account accountFrom, Account accountTo, Double amount )  {
         if (accountFrom.getBalance() >= amount ) {
             accountFrom.setBalance(accountFrom.getBalance() - amount);
             accountTo.setBalance(accountTo.getBalance() + amount);
@@ -42,6 +50,10 @@ public class AccountServiceImpl implements AccountService {
             throw new RuntimeException("Error. Acc" + accountFrom.getId() + " from user " +  accountFrom.getUserId() + " does not have enough balance to make transaction");
         }
 
-
     }
+
+
+
 }
+
+

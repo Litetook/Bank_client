@@ -35,3 +35,13 @@ TODO перевірити чи існує і чи працює.
 4.	Exceptions (What kind of exceptions are used in java. Exception hierarchy)
 5.	Practical application of the principles of OOP. Inheritance, polymorphism and encapsulation
 6.	Input/Output stream – it is commonly used in Java. It can be called an interface between the foreign world and Java application.
+
+
+
+Не міг додати нормально депенденсі, не вантажилось, знайшов звідки йшло.
+Розібрати детальніше дебаггер як працює в ідеї
+що таке restcontoller advice
+коментарі на укр мові ( хоткі)
+
+Альтернатива для @Size анотації буде min та для
+

@@ -1,25 +1,22 @@
 package com.pragmatic.repository;
 
-import com.pragmatic.dao.AccountConverter;
-import com.pragmatic.dao.FileDataProvider;
 import com.pragmatic.model.Account;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Repository;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Repository
 public class AccountRepository implements IAccountRepository {
-    private Integer lastId = 0;
-    private Map<Integer, Account> accounts;
+    private AtomicInteger lastId = new AtomicInteger(0);;
+    private Map<Integer, Account> accountMap;
     private  UserRepository userRepo;
 
     public AccountRepository( UserRepository userRepo) throws IOException {
         this.userRepo = userRepo;
-        this.accounts = new HashMap<>();
+        this.accountMap = new HashMap<>();
 
         Integer[][] accounts = {
                 {1,1},
@@ -32,46 +29,40 @@ public class AccountRepository implements IAccountRepository {
 
 
         for (Integer[] i: accounts) {
-            this.accounts.put(this.lastId, createAccount(i[1], i[0]));
+            Account newAcc = createAccount(i[1], i[0]);
+
+            this.accountMap.put(newAcc.getId(), newAcc);
         }
 
     }
 
 
     public List<Account> getRepoList() {
-        return  this.accounts
+        return  this.accountMap
                 .values()
                 .stream()
                 .collect(Collectors.toList());
     }
 
-    public Account getAccountById(Integer id) {
-        return this.accounts.get(id);
+    public Optional<Account> getAccountById(Integer id) {
+        return Optional.ofNullable(this.accountMap.get(id));
     }
 
     public Account createAccount(Integer currencyId, Integer userId) {
-        this.accounts.values().forEach(account -> {
+        this.accountMap.values().forEach(account -> {
             if (account.getUserId().equals(userId) & account.getCurrencyId().equals(currencyId)) {
                 throw new IllegalStateException("create new account issue: Account already exists. Userid:" + userId
                         + " currencyId:" +currencyId );
             }
         });
-        Integer id =  ++this.lastId;
-        Account newAccount = new Account(currencyId, this.lastId, userId);
-        this.accounts.put(id, newAccount);
+        Integer id =  this.lastId.incrementAndGet();
+        Account newAccount = new Account(currencyId, id, userId);
+        this.accountMap.put(id, newAccount);
         this.userRepo.getUserById(userId).addAccount(newAccount);
         this.getRepoList().forEach(account -> System.out.println(account));
 
         return newAccount;
     }
 
-    @Override
-    public Account addAccount(Account newAccount) {
-        Integer id =  ++this.lastId;
-        this.accounts.put(id, newAccount);
-        newAccount.setId(id);
-        System.out.println("new acc created with id " + newAccount.getId());
 
-        return  newAccount;
-    }
 }
