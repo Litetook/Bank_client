@@ -1,5 +1,6 @@
 package com.pragmatic.controller;
 import com.pragmatic.controller.exception.CustomException;
+import com.pragmatic.controller.exception.CustomUrlBrokenTestException;
 import com.pragmatic.dto.AccountDto;
 import com.pragmatic.model.Account;
 import com.pragmatic.service.AccountServiceImpl;
@@ -10,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -37,7 +39,7 @@ public class Controller {
 
     @GetMapping(value = "/getAccountById", produces = MediaType.APPLICATION_JSON_VALUE)
     public  ResponseEntity<AccountDto> getAccountById(
-            @RequestParam(value = "id")
+            @RequestParam(value = "id", defaultValue = "id")
             @Min(1)
             @Max(Integer.MAX_VALUE)
             Integer id)  {
@@ -45,6 +47,12 @@ public class Controller {
         var account =  this.AccountServiceImpl.getAccountById(id).orElseThrow(()-> new CustomException("blabla"));
         AccountDto accountDto = new AccountDto(account.getId(), account.getUserId(), account.getCurrencyId(), account.getBalance());
        return new ResponseEntity<>(accountDto, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/getBadRequest", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> getBadRequest() throws CustomUrlBrokenTestException {
+        var apiObj = Optional.ofNullable(null).orElseThrow(()-> new CustomUrlBrokenTestException("controlller message"));
+        return new ResponseEntity<>(new Object(), HttpStatus.OK);
     }
 
 
@@ -56,6 +64,9 @@ public class Controller {
                 .collect(Collectors.toList());
         return  new ResponseEntity<>(AccountDtos, HttpStatus.OK);
     }
+
+
+
 
 
 //   Те що зовні - не в базу, мають бути різні об'єкти перед передачою. Наприклад дто, наприклад акк дто ( дата транас обж)
