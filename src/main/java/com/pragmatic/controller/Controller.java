@@ -3,9 +3,19 @@ import com.pragmatic.controller.exception.CustomException;
 import com.pragmatic.controller.exception.CustomUrlBrokenTestException;
 import com.pragmatic.dto.AccountDto;
 import com.pragmatic.model.Account;
+import com.pragmatic.model.Currency;
+import com.pragmatic.model.User;
+import com.pragmatic.repository.AccountRepository;
+import com.pragmatic.repository.CurrencyRepository;
 import com.pragmatic.service.AccountServiceImpl;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,19 +23,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 
 @RestController
-@EnableAutoConfiguration
+@Log4j2
+@AllArgsConstructor
 public class Controller {
-
-    final AccountServiceImpl AccountServiceImpl;
-
-//    сюди інжектити сервіси, не репозиторії
-//    в сервысы мын валыдацыю, а вже в ньому дьоргати репо
-    public Controller(AccountServiceImpl AccountServiceImpl) {
-        this.AccountServiceImpl = AccountServiceImpl;
-    }
+    @Autowired
+    private ApplicationContext appContext;
+    AccountServiceImpl AccountServiceImpl;
 
     @GetMapping("/hello")
     public String hello(@RequestParam(value = "name", defaultValue = "Teest") String name) {
@@ -34,6 +42,7 @@ public class Controller {
 
     @RequestMapping("/")
     public String home() {
+        log.info("Hello world called");
         return "Hello World " + AccountServiceImpl.getAccount(1);
     }
 
@@ -43,25 +52,28 @@ public class Controller {
             @Min(1)
             @Max(Integer.MAX_VALUE)
             Integer id)  {
-//        Неправильно обробляю валідацію.
         var account =  this.AccountServiceImpl.getAccountById(id).orElseThrow(()-> new CustomException("blabla"));
+        log.info("getaccbyid got accountid");
         AccountDto accountDto = new AccountDto(account.getId(), account.getUserId(), account.getCurrencyId(), account.getBalance());
-       return new ResponseEntity<>(accountDto, HttpStatus.OK);
+        log.info("getaccbyid reformatted acc to accdto to provide api response");
+        return new ResponseEntity<>(accountDto, HttpStatus.OK);
     }
 
     @GetMapping(value = "/getBadRequest", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> getBadRequest() throws CustomUrlBrokenTestException {
-        var apiObj = Optional.ofNullable(null).orElseThrow(()-> new CustomUrlBrokenTestException("controlller message"));
+        var apiObj = Optional.ofNullable(null).orElseThrow(()-> new CustomUrlBrokenTestException("controller message"));
         return new ResponseEntity<>(new Object(), HttpStatus.OK);
     }
 
-
     @GetMapping(value = "/getAllAccounts", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<AccountDto>> getAllAccounts() {
+        log.info("Receiving acc list from acc service");
         List<Account> accountList = this.AccountServiceImpl.getAllAccounts();
+        log.info("creating dto based on each acc info, to retun on api level");
         List<AccountDto> AccountDtos = accountList.stream()
                 .map(account -> new AccountDto(account.getId(), account.getUserId(), account.getCurrencyId(), account.getBalance()))
                 .collect(Collectors.toList());
+
         return  new ResponseEntity<>(AccountDtos, HttpStatus.OK);
     }
 

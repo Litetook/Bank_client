@@ -25,17 +25,15 @@ public class СontrollerExceptionHandler {
             HandlerMethodValidationException.class //помилки валідації в самому контроллері.
             })
     public ResponseEntity<ErrorMessage> validateError(Exception ex) {
+        log.error("method validation exception", ex.getMessage());
         ErrorMessage message  = new ErrorMessage("Custom validation error",
                 ex.getMessage(),
                 "");
         return new  ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
     }
-//    TODO як зробити так , щоб повертався бед реквест, на валідації. Це навчить обробляти певний вид виключень.
-    //    TODO Створити едпоінт болванку, який завжди буде кидати кастомний експешен,
-//     який я створю сам, і який оброблю в контроллер екс хендлер, і буде статус код 204.
-
     @ExceptionHandler(CustomUrlBrokenTestException.class)
     public ResponseEntity<ErrorMessage> brokenUrlValidate(Exception ex) {
+        log.error("custom exception for broken url only");
         ErrorMessage message = new ErrorMessage("broken url error",
                 ex.getMessage(),
                 "broken url description");
@@ -53,9 +51,4 @@ public class СontrollerExceptionHandler {
         log.error(message.toString());
         return new ResponseEntity<ErrorMessage>(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-
-
-
-
 }

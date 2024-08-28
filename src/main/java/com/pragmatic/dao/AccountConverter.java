@@ -18,7 +18,7 @@ public class AccountConverter {
 
         Account account = new Account();
         account.setId(Integer.valueOf(values[0]));
-        account.setUserid(Integer.valueOf(values[1]));
+        account.setUserId(Integer.valueOf(values[1]));
         account.setCurrencyId(Integer.valueOf(values[2]));
         account.setBalance(Double.valueOf(values[3]));
         return account;

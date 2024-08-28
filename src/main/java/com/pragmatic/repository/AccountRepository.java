@@ -8,7 +8,6 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-@Repository
 public class AccountRepository implements IAccountRepository {
     private AtomicInteger lastId = new AtomicInteger(0);;
     private Map<Integer, Account> accountMap;

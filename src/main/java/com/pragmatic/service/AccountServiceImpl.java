@@ -18,7 +18,7 @@ public class AccountServiceImpl implements AccountService {
     AccountRepository accountRepository;
     TransactionRepository transactions;
 
-     AccountServiceImpl(AccountRepository accountRepo, TransactionRepository transactionRepo ) {
+     public AccountServiceImpl(AccountRepository accountRepo, TransactionRepository transactionRepo) {
         this.transactions = transactionRepo;
         this.accountRepository = accountRepo;
     }
