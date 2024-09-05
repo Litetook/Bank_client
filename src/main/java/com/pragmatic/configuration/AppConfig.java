@@ -1,5 +1,6 @@
 package com.pragmatic.configuration;
 
+import com.pragmatic.model.Account;
 import com.pragmatic.model.Currency;
 import com.pragmatic.repository.AccountRepository;
 import com.pragmatic.repository.CurrencyRepository;
@@ -9,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+
 
 import java.io.IOException;
 
@@ -27,13 +29,15 @@ public class AppConfig {
     }
 
     @Bean
+    @Scope("prototype")
+    public Account account() {return new Account(); }
+
+
+    @Bean
     public UserRepository userRepository() {
         return new UserRepository();
     }
 
-    @Bean
-    public AccountRepository accountRepository(UserRepository userRepository) throws IOException {
-        return new AccountRepository(userRepository);
-    }
+
 
 }

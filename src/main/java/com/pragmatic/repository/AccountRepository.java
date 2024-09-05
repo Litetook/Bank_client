@@ -1,6 +1,8 @@
 package com.pragmatic.repository;
 
 import com.pragmatic.model.Account;
+import lombok.*;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -8,15 +10,19 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+@Repository
+@Log4j2
+@Getter @Setter
 public class AccountRepository implements IAccountRepository {
-    private AtomicInteger lastId = new AtomicInteger(0);;
-    private Map<Integer, Account> accountMap;
-    private  UserRepository userRepo;
+    private AtomicInteger lastId = new AtomicInteger(0);
+    private Map<Integer, Account> accountMap = new HashMap<>();
+    private UserRepository userRepo;
 
-    public AccountRepository( UserRepository userRepo) throws IOException {
+    public AccountRepository( UserRepository userRepo) {
         this.userRepo = userRepo;
-        this.accountMap = new HashMap<>();
+    }
 
+    private  void initAccounts() {
         Integer[][] accounts = {
                 {1,1},
                 {1,2},
@@ -32,15 +38,12 @@ public class AccountRepository implements IAccountRepository {
 
             this.accountMap.put(newAcc.getId(), newAcc);
         }
-
     }
 
 
     public List<Account> getRepoList() {
-        return  this.accountMap
-                .values()
-                .stream()
-                .collect(Collectors.toList());
+        return new ArrayList<>(this.accountMap
+                .values());
     }
 
     public Optional<Account> getAccountById(Integer id) {
@@ -49,7 +52,7 @@ public class AccountRepository implements IAccountRepository {
 
     public Account createAccount(Integer currencyId, Integer userId) {
         this.accountMap.values().forEach(account -> {
-            if (account.getUserId().equals(userId) & account.getCurrencyId().equals(currencyId)) {
+            if (account.getUserId() == userId & account.getCurrencyId() == currencyId ) {
                 throw new IllegalStateException("create new account issue: Account already exists. Userid:" + userId
                         + " currencyId:" +currencyId );
             }
@@ -58,10 +61,10 @@ public class AccountRepository implements IAccountRepository {
         Account newAccount = new Account(currencyId, id, userId);
         this.accountMap.put(id, newAccount);
         this.userRepo.getUserById(userId).addAccount(newAccount);
-        this.getRepoList().forEach(account -> System.out.println(account));
-
+        log.info(String.format("Accountid %d created", id));
         return newAccount;
     }
+
 
 
 }

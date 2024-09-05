@@ -33,7 +33,7 @@ public class AccountConverter {
         }
         for (int i = 0; i <= accountList.size() -1; i++) {
             Account account = accountList.get(i);
-            string.append(String.join(",", account.getId().toString(),account.getUserId().toString(), account.getCurrencyId().toString(), account.getBalance().toString()));
+            string.append(String.join(",", String.valueOf(account.getId()), String.valueOf(account.getUserId()), String.valueOf(account.getCurrencyId()), account.getBalance().toString()));
             string.append("\n");
         }
         return  string.toString();

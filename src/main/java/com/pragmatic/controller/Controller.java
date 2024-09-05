@@ -36,7 +36,7 @@ public class Controller {
     AccountServiceImpl AccountServiceImpl;
 
     @GetMapping("/hello")
-    public String hello(@RequestParam(value = "name", defaultValue = "Teest") String name) {
+    public String hello(@RequestParam(value = "name", defaultValue = "Test") String name) {
         return String.format("Hello %s!", name);
     }
 
