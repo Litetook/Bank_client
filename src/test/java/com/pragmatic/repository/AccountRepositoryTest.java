@@ -23,8 +23,8 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.any;
 
 @Log4j2
-@RunWith(MockitoJUnitRunner.class)
-//@ExtendWith(MockitoExtension.class)
+//@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 class AccountRepositoryTest {
     @Mock
     UserRepository userRepository;  // Імітація UserRepository
@@ -32,16 +32,13 @@ class AccountRepositoryTest {
     @InjectMocks
     AccountRepository accountRepository; // Автоматичне вприскування залежностей
 
-    @Before
+    @BeforeEach
     void setUp() {
         // Налаштування поведінки mock для userRepository
-        log.debug("BeforeEach setup started.");
-        log.debug("UserRepository: " + userRepository);
-        log.debug("AccountRepository: " + accountRepository);
-        User mockUser = new User();
-        Mockito.when(userRepository.getUserById(any(Integer.class))).thenReturn(mockUser);
-        log.debug("AccountRepository is: " + accountRepository);
+        Mockito.when(userRepository.getUserById(any(Integer.class))).thenReturn(new User());
         log.debug("Test setup is complete.");
+        System.out.println("Test setup is complete.");
+
     }
 
     @Test
@@ -62,19 +59,13 @@ class AccountRepositoryTest {
 
 
     @Test
-    void getRepoList() {} {
+    void getRepoList() {
         Account acc1 = accountRepository.createAccount(1,1);
         Account acc2 = accountRepository.createAccount(2,1);
         List<Account> accountList = Arrays.asList(acc1,acc2);
         Assertions.assertEquals(accountList, accountRepository.getRepoList());
     }
 
-    @Test //simple test just
-    void simpleTest() {
-        int x = 2;
-        int y = 23;
-        Assertions.assertEquals(25, x+y);
-    }
 
 
 
