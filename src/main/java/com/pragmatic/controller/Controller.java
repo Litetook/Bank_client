@@ -72,13 +72,13 @@ public class Controller {
     }
 
     @PostMapping(value = "/createAccount", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createAccount(@Validated @RequestBody AccountDto inputApiAccDto) throws ObjAlreadyExistsException {
-        Optional<Account> existingAcc =  accountServiceImpl.findAccountsByUserAndAccId(inputApiAccDto.getUserId(), inputApiAccDto.getCurrencyId());
+    public ResponseEntity<?> createAccount(@Validated @RequestBody AccountDto inputAPIaccountDTO) throws ObjAlreadyExistsException {
+        Optional<Account> existingAcc =  accountServiceImpl.findAccountsByUserAndAccId(inputAPIaccountDTO.getUserId(), inputAPIaccountDTO.getCurrencyId());
         if (existingAcc.isEmpty() ) {
-            return new  ResponseEntity<>(this.accountServiceImpl.createAccFromAccDto(inputApiAccDto), HttpStatus.CREATED);
+            return new  ResponseEntity<>(this.accountServiceImpl.createAccFromAccDto(inputAPIaccountDTO), HttpStatus.CREATED);
         }
         else {
-            throw new ObjAlreadyExistsException(String.format("account with userid %d and currencyId %d", inputApiAccDto.getUserId(), inputApiAccDto.getCurrencyId())) ;
+            throw new ObjAlreadyExistsException(String.format("account with userid %d and currencyId %d", inputAPIaccountDTO.getUserId(), inputAPIaccountDTO.getCurrencyId())) ;
         }
     }
 
