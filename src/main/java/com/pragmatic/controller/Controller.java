@@ -1,30 +1,23 @@
 package com.pragmatic.controller;
 import com.pragmatic.controller.exception.CustomException;
 import com.pragmatic.controller.exception.CustomUrlBrokenTestException;
+import com.pragmatic.controller.exception.ObjAlreadyExistsException;
 import com.pragmatic.dto.AccountDto;
 import com.pragmatic.model.Account;
-import com.pragmatic.model.Currency;
-import com.pragmatic.model.User;
-import com.pragmatic.repository.AccountRepository;
-import com.pragmatic.repository.CurrencyRepository;
 import com.pragmatic.service.AccountServiceImpl;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 
 
 @RestController
@@ -33,7 +26,7 @@ import org.apache.logging.log4j.LogManager;
 public class Controller {
     @Autowired
     private ApplicationContext appContext;
-    AccountServiceImpl AccountServiceImpl;
+    AccountServiceImpl accountServiceImpl;
 
     @GetMapping("/hello")
     public String hello(@RequestParam(value = "name", defaultValue = "Test") String name) {
@@ -43,7 +36,7 @@ public class Controller {
     @RequestMapping("/")
     public String home() {
         log.info("Hello world called");
-        return "Hello World " + AccountServiceImpl.getAccount(1);
+        return "Hello World " + accountServiceImpl.getAccount(1);
     }
 
     @GetMapping(value = "/getAccountById", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -52,9 +45,10 @@ public class Controller {
             @Min(1)
             @Max(Integer.MAX_VALUE)
             Integer id)  {
-        var account =  this.AccountServiceImpl.getAccountById(id).orElseThrow(()-> new CustomException("blabla"));
+        var account =  this.accountServiceImpl.getAccountById(id).orElseThrow(()->
+                new NullPointerException("There is no acc by requested data"));
         log.info("getaccbyid got accountid");
-        AccountDto accountDto = new AccountDto(account.getId(), account.getUserId(), account.getCurrencyId(), account.getBalance());
+        AccountDto accountDto = new AccountDto(account);
         log.info("getaccbyid reformatted acc to accdto to provide api response");
         return new ResponseEntity<>(accountDto, HttpStatus.OK);
     }
@@ -68,45 +62,24 @@ public class Controller {
     @GetMapping(value = "/getAllAccounts", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<AccountDto>> getAllAccounts() {
         log.info("Receiving acc list from acc service");
-        List<Account> accountList = this.AccountServiceImpl.getAllAccounts();
+        List<Account> accountList = this.accountServiceImpl.getAllAccounts();
         log.info("creating dto based on each acc info, to retun on api level");
         List<AccountDto> AccountDtos = accountList.stream()
-                .map(account -> new AccountDto(account.getId(), account.getUserId(), account.getCurrencyId(), account.getBalance()))
+                .map(account -> new AccountDto(account))
                 .collect(Collectors.toList());
 
         return  new ResponseEntity<>(AccountDtos, HttpStatus.OK);
     }
 
-
-
-
-
-//   Те що зовні - не в базу, мають бути різні об'єкти перед передачою. Наприклад дто, наприклад акк дто ( дата транас обж)
-//    Не завжди треба віддаватти всю інфу як в базі
-//    один на рівні моделі ( те що в базу)
-//    дто це те що віддаю наверх
-//
-//    TODO
-//    @PostMapping(path= "addAccount", consumes = "application/json", produces = "application/json" )
-//    public ResponseEntity<Account> addAccount(@RequestBody Account account) {
-
-//        тут віддати аккаунт дто
-//        окремо реквест, окремо резпонз
-//      request, response, і те що до бази.
-//        акк сервіс буде віддавати модель. її треба буде перегнати в дто
-//        створення - контроллер (валідація на рівні арі), сервіс (передаю сирі дані,
-//        валідація на те чи все ок з акком загалом,
-//        чи є, чи нема, пробувати кидати через ексепшени),
-//        далі репо. Почитати за екс зендлери, щоб створити для аккаунта свій
-//        гет - контроллер, сервіс, і репозиторій. Якщо по ід і помилки нема - то треба віддати помилку. Спробувати віддати ліст ( наприклад всіх користувачів)
-//        mvc описано спрінговий
-//        update можна спробувати
-
-
-
-//        Account newAccount = accountRepository.addAccount(account);
-//        return new ResponseEntity<>(newAccount, HttpStatus.CREATED);
-//    }
-
+    @PostMapping(value = "/createAccount", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> createAccount(@Validated @RequestBody AccountDto inputApiAccDto) throws ObjAlreadyExistsException {
+        Optional<Account> existingAcc =  accountServiceImpl.findAccountsByUserAndAccId(inputApiAccDto.getUserId(), inputApiAccDto.getCurrencyId());
+        if (existingAcc.isEmpty() ) {
+            return new  ResponseEntity<>(this.accountServiceImpl.createAccFromAccDto(inputApiAccDto), HttpStatus.CREATED);
+        }
+        else {
+            throw new ObjAlreadyExistsException(String.format("account with userid %d and currencyId %d", inputApiAccDto.getUserId(), inputApiAccDto.getCurrencyId())) ;
+        }
+    }
 
 }

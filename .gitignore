@@ -30,4 +30,6 @@ bin/
 
 .idea/
 
-target/
+logs/
+/target/
+*/target/**

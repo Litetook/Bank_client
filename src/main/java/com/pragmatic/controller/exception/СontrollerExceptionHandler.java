@@ -31,13 +31,33 @@ public class СontrollerExceptionHandler {
                 "");
         return new  ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(ObjAlreadyExistsException.class)
+    public ResponseEntity<ErrorMessage> objExists(Exception ex) {
+        log.warn("Error when adding to repository");
+        log.warn(ex.getMessage());
+        ErrorMessage message = new ErrorMessage("obj already exists",
+                ex.getMessage(),
+                "");
+
+        return  new ResponseEntity<>(message, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<ErrorMessage> nullValidation(NullPointerException ex) {
+        log.error("null exception");
+        ErrorMessage message = new ErrorMessage("data not found",
+                ex.getMessage(),
+                "");
+        return  new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(CustomUrlBrokenTestException.class)
     public ResponseEntity<ErrorMessage> brokenUrlValidate(Exception ex) {
         log.error("custom exception for broken url only");
         ErrorMessage message = new ErrorMessage("broken url error",
                 ex.getMessage(),
                 "broken url description");
-
         return  new ResponseEntity<>(message, HttpStatus.NO_CONTENT);
     }
 

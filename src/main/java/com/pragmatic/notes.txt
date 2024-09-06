@@ -75,4 +75,19 @@ https://topjava.ru/blog/back-to-basics-dependency-injection
 Ы пояснити чого воно не має працювати або неправильно працювало. Зробити так, щоб правильно працювало.
 Всюди де в мене аккаунти порівнюються.
 
+Розыбрати приклад, відносно помилки в тестах, що у мене були. Як це працює? Бо жпт каже що такий код просто не скомпілюється
+@Test
+    void getRepoList() {} {
+        Account acc1 = accountRepository.createAccount(1,1);
+        Account acc2 = accountRepository.createAccount(2,1);
+        List<Account> accountList = Arrays.asList(acc1,acc2);
+        Assertions.assertEquals(accountList, accountRepository.getRepoList());
+    }
+
+Перевірити чи ок написаний пост метод.
+ ? що означаэ аннотацыя @Validated всередині маппінга, в плані параметрів які він приймає на методі
+ Що таке былдер, як вони його використовують щоб створювати об'єкти, замість set {return this}
+
+
+
 

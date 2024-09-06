@@ -1,5 +1,6 @@
 package com.pragmatic.repository;
 
+import com.pragmatic.dto.AccountDto;
 import com.pragmatic.model.Account;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
@@ -52,7 +53,7 @@ public class AccountRepository implements IAccountRepository {
 
     public Account createAccount(Integer currencyId, Integer userId) {
         this.accountMap.values().forEach(account -> {
-            if (account.getUserId() == userId & account.getCurrencyId() == currencyId ) {
+            if (userId.equals(account.getUserId()) &&   currencyId.equals(account.getCurrencyId()) ) {
                 throw new IllegalStateException("create new account issue: Account already exists. Userid:" + userId
                         + " currencyId:" +currencyId );
             }
@@ -65,6 +66,18 @@ public class AccountRepository implements IAccountRepository {
         return newAccount;
     }
 
+    public Account createAccount(AccountDto accountDto) {
+        int id =this.lastId.incrementAndGet();
+        Account newAccount = new Account(
+                accountDto.getCurrencyId(),
+                id,
+                accountDto.getUserId()
+                );
+        log.info(String.format("acc is created from Dto. id is %d", id));
+        this.accountMap.put(id, newAccount);
+        this.userRepo.getUserById(accountDto.getUserId()).addAccount(newAccount);
+        return newAccount;
+    }
 
 
 }
