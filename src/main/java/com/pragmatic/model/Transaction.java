@@ -1,14 +1,23 @@
 package com.pragmatic.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
 import java.time.Instant;
 import java.util.Date;
 
+@Accessors(chain = true)
+@EqualsAndHashCode
 public class Transaction  {
+    @Setter @Getter
+    @EqualsAndHashCode.Exclude
     private Integer id;
-    private Integer accountFromId;
-    private Integer accountToId;
-    private Double amount;
-    private Date actionDate;
+    @Setter @Getter private Integer accountFromId;
+    @Setter @Getter private Integer accountToId;
+    @Setter @Getter private Double amount;
+    @Setter @Getter private Date actionDate;
 
 
     @Override
@@ -45,40 +54,7 @@ public class Transaction  {
             this.actionDate = Date.from(Instant.now());
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
 
-    public void setAmount(Double amount) {
-        this.amount = amount;
-    }
-    public Double getAmount () {
-        return this.amount;
-    }
-
-    public Long getTime() {
-        return this.actionDate.toInstant().getEpochSecond();
-    }
-
-    public void setActionDate(Date actionDate) {
-        this.actionDate = actionDate;
-    }
-
-    public void setAccountFromId(Integer accountFromId) {
-        this.accountFromId = accountFromId;
-    }
-
-    public void setAccountToId(Integer accountToId) {
-        this.accountToId = accountToId;
-    }
-
-    public Date getActionDate() {
-        return actionDate;
-    }
 }
 
