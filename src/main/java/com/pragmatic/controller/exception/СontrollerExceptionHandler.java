@@ -1,10 +1,8 @@
 package com.pragmatic.controller.exception;
 
 import lombok.extern.log4j.Log4j2;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -52,6 +50,13 @@ public class СontrollerExceptionHandler {
         return  new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<ErrorMessage> ForbiddenValidation(ResponseStatusException ex) {
+        log.error(ex.getStatusCode());
+        return  new ResponseEntity<>(ex.getStatusCode());
+    }
+
+
     @ExceptionHandler(CustomUrlBrokenTestException.class)
     public ResponseEntity<ErrorMessage> brokenUrlValidate(Exception ex) {
         log.error("custom exception for broken url only");
@@ -71,4 +76,6 @@ public class СontrollerExceptionHandler {
         log.error(message.toString());
         return new ResponseEntity<ErrorMessage>(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+
 }

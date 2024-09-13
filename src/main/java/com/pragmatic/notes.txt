@@ -78,10 +78,10 @@ https://topjava.ru/blog/back-to-basics-dependency-injection
 Розыбрати приклад, відносно помилки в тестах, що у мене були. Як це працює? Бо жпт каже що такий код просто не скомпілюється
 @Test
     void getRepoList() {} {
-        Account acc1 = accountRepository.createAccount(1,1);
-        Account acc2 = accountRepository.createAccount(2,1);
+        Account acc1 = accountRepositoryImpl.createAccount(1,1);
+        Account acc2 = accountRepositoryImpl.createAccount(2,1);
         List<Account> accountList = Arrays.asList(acc1,acc2);
-        Assertions.assertEquals(accountList, accountRepository.getRepoList());
+        Assertions.assertEquals(accountList, accountRepositoryImpl.getRepoList());
     }
 
 Перевірити чи ок написаний пост метод.
@@ -90,4 +90,14 @@ https://topjava.ru/blog/back-to-basics-dependency-injection
 
 
 
+коди помилок вивчити прямо, той список що Міша казав
+Докер
+Створити докер композ файл з базою даних постгрес
+Підключити до проєкту залежності мавен для роботи з постгресом
+Дві залежності постгрес драйвер ждбс та 	spring-boot-starter-data-jpa
 
+Моя задача щоб сервіс підключився до бд без помилок.
+docker compose тільки для постгреса.
+
+./idea.sh
+setxkbmap -layout "us,gr" -option "grp:alt_shift_toggle" &

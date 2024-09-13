@@ -1,7 +1,6 @@
 package com.pragmatic.controller.exception;
 
 import java.time.Instant;
-import java.util.Date;
 
 public class ErrorMessage {
     String status;
