@@ -68,7 +68,7 @@ public class СontrollerExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorMessage> globalExceptionHandler(Exception ex) {
-        log.error(ex.getMessage(), ex.getCause(),  ex.getStackTrace());
+        log.error(ex.getMessage(), ex);
         ErrorMessage message = new ErrorMessage(
                 HttpStatus.INTERNAL_SERVER_ERROR.toString(),
                 ex.getMessage(),

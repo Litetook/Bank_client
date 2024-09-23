@@ -16,7 +16,6 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
-import static com.pragmatic.sql.SqlQuery.PlaceholderUtils.replacePlaceholders;
 import static io.micrometer.common.util.StringUtils.isNotBlank;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -175,7 +174,7 @@ public class SqlQuery {
 
         public SqlQuery build() {
             isTrue(isNotBlank(query), "Query not specified");
-            String queryString = replacePlaceholders(query, enabledPlaceholders, customPlaceholdersValues);
+            String queryString = PlaceholderUtils.replacePlaceholders(query, enabledPlaceholders, customPlaceholdersValues);
 
             if (this.paging) {
                 isTrue(this.params.hasValue(LIMIT_PARAM) && this.params.hasValue(OFFSET_PARAM),
@@ -195,7 +194,7 @@ public class SqlQuery {
          */
         public SqlQuery buildCountQuery() {
             isTrue(isNotBlank(query), "Query not specified");
-            String queryString = replacePlaceholders(query, enabledPlaceholders, customPlaceholdersValues);
+            String queryString = PlaceholderUtils.replacePlaceholders(query, enabledPlaceholders, customPlaceholdersValues);
 
             String countQuery = COUNT_START + queryString + COUNT_FINISH;
             return new SqlQuery(countQuery, null, params);
@@ -204,7 +203,7 @@ public class SqlQuery {
 
     @Log4j2
     @UtilityClass
-    class PlaceholderUtils {
+    public static class PlaceholderUtils {
 
         private static final String VALUE_SEPARATOR = ":";
         private static final String PLACEHOLDER_PREFIX = "{{";
@@ -212,6 +211,10 @@ public class SqlQuery {
 
         private static final PropertyPlaceholderHelper PLACEHOLDER_HELPER =
                 new PropertyPlaceholderHelper(PLACEHOLDER_PREFIX, PLACEHOLDER_SUFFIX, VALUE_SEPARATOR, false);
+
+        static {
+            System.out.println("sdfsdfsdfdsf");
+        }
 
         public static String replacePlaceholders(String template, Set<String> enabledPlaceholders, Properties customPlaceholdersValues) {
             Assert.notNull(enabledPlaceholders, "'enabledPlaceholders' must not be null");
