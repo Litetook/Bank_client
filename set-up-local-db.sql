@@ -1,0 +1,7 @@
+-- CREATE USER postgres WITH PASSWORD postgres;
+-- CREATE SCHEMA springboot;
+-- GRANT ALL PRIVILEGES ON DATABASE postgres TO postgres;
+-- GRANT ALL ON SCHEMA springboot to postgres;
+-- GRANT USAGE, CREATE ON SCHEMA springboot TO postgres;
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA springboot TO postgres;
+-- GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA  springboot TO postgres;
