@@ -1,8 +1,12 @@
 package com.pragmatic.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import java.time.Instant;
@@ -10,26 +14,18 @@ import java.util.Date;
 
 @Accessors(chain = true)
 @EqualsAndHashCode
+@ToString
 public class Transaction  {
     @Setter @Getter
     @EqualsAndHashCode.Exclude
+    @Column(name="transactionid")
+
     private Integer id;
     @Setter @Getter private Integer accountFromId;
     @Setter @Getter private Integer accountToId;
     @Setter @Getter private Double amount;
     @Setter @Getter private Date actionDate;
 
-
-    @Override
-    public String toString() {
-        return "Transaction{" +
-                "transactionId=" + id +
-                ", accountFromId=" + accountFromId +
-                ", accountToId=" + accountToId +
-                ", amount=" + amount +
-                ", actionDate=" + actionDate +
-                '}';
-    }
 
     public Integer getAccountFromId() {
         return accountFromId;
@@ -49,8 +45,6 @@ public class Transaction  {
     }
 
     public Transaction() {
-//        empty for importing and setting using csv file
-        //TODO чи норм такі речі, в пустий конструктор таке класти?
             this.actionDate = Date.from(Instant.now());
     }
 

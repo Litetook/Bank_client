@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.pragmatic.model.Account;
 import com.pragmatic.model.Transaction;
 import com.pragmatic.repository.AccountRepositoryImpl;
-import com.pragmatic.repository.TransactionRepository;
+import com.pragmatic.repository.TransactionRepositoryImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,7 +21,7 @@ public class AccountServiceTest {
     private AccountRepositoryImpl accountsRepoTest;
 
     @Mock
-    private TransactionRepository transactionsRepoTest;
+    private TransactionRepositoryImpl transactionsRepoTest;
 
     @InjectMocks
     AccountServiceImpl accountServiceTest;

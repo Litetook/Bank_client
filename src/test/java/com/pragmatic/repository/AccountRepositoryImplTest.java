@@ -1,18 +1,13 @@
 package com.pragmatic.repository;
 
-import com.pragmatic.model.Account;
 import com.pragmatic.model.User;
 import lombok.extern.log4j.Log4j2;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 
@@ -21,15 +16,15 @@ import static org.mockito.ArgumentMatchers.any;
 @ExtendWith(MockitoExtension.class)
 class AccountRepositoryImplTest {
     @Mock
-    UserRepository userRepository;  // Імітація UserRepository
+    UserRepositoryImpl userRepositoryImpl;  // Імітація UserRepositoryImpl
 
     @InjectMocks
     AccountRepositoryImpl accountRepositoryImpl; // Автоматичне вприскування залежностей
 
     @BeforeEach
     void setUp() {
-        // Налаштування поведінки mock для userRepository
-        Mockito.when(userRepository.getUserById(any(Integer.class))).thenReturn(new User());
+        // Налаштування поведінки mock для userRepositoryImpl
+        Mockito.when(userRepositoryImpl.getUserById(any(Integer.class))).thenReturn(new User());
         log.debug("Test setup is complete.");
         System.out.println("Test setup is complete.");
 
@@ -38,7 +33,7 @@ class AccountRepositoryImplTest {
 //    @Test
 //    void createAccountTest() {
 //        log.debug("Testing createAccount method...");
-//        log.debug("User from repository: " + userRepository.getUserById(1));
+//        log.debug("User from repository: " + userRepositoryImpl.getUserById(1));
 //        Assertions.assertNotNull(accountRepositoryImpl, "AccountRepository should not be null");
 //        Assertions.assertNotNull(accountRepositoryImpl.createAccount(1, 1), "Created account should not be null");
 //    }

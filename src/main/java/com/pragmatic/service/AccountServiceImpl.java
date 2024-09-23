@@ -3,7 +3,7 @@ package com.pragmatic.service;
 import com.pragmatic.dto.AccountDto;
 import com.pragmatic.repository.AccountRepository;
 import com.pragmatic.repository.AccountRepositoryImpl;
-import com.pragmatic.repository.TransactionRepository;
+import com.pragmatic.repository.TransactionRepositoryImpl;
 import com.pragmatic.model.Account;
 import com.pragmatic.model.Transaction;
 
@@ -21,12 +21,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountServiceImpl implements AccountService {
     @Autowired
-    AccountRepository accountRepository;
+    AccountRepositoryImpl accountRepository;
 
     @Autowired
-    TransactionRepository transactions;
+    TransactionRepositoryImpl transactions;
 
-    public AccountServiceImpl(AccountRepository accountRepository, TransactionRepository transactionRepo) {
+    public AccountServiceImpl(AccountRepositoryImpl accountRepository, TransactionRepositoryImpl transactionRepo) {
         this.transactions = transactionRepo;
         this.accountRepository = accountRepository;
     }
@@ -37,16 +37,18 @@ public class AccountServiceImpl implements AccountService {
     }
 
 
-    public Iterable<Account> findAll() {
-        return accountRepository.findAll();
-    }
+//    public Iterable<Account> findAll() {
+//        return accountRepository.findAll();
+//    }
 
 //    TODO переробити бо це шляпа
     public AccountDto createAccFromDto (AccountDto inputDto){
-        Account newAccount = this.accountRepository.save(new Account(inputDto.getCurrencyId(), inputDto.getUserId() ));
-        return new AccountDto(newAccount);
+        Account builder = Account.builder().build();
+        builder.setUserId(inputDto.getUserId())
+                .setCurrencyId(inputDto.getCurrencyId())
+                .setBalance(inputDto.getBalance());
+        return new AccountDto(this.accountRepository.save(builder));
     }
-
 
 
 
@@ -63,14 +65,14 @@ public class AccountServiceImpl implements AccountService {
 
     }
 
-    @Override
-    public Account updateAccount(Account account, Integer id) {
-        //TODO
-         this.accountRepository.findById(id).orElseThrow(() -> new NullPointerException(String.format("there is no account with id %d", id)));
-
-
-        return new Account();
-    }
+//    @Override
+//    public Account updateAccount(Account account, Integer id) {
+//        //TODO
+//         this.accountRepository.findById(id).orElseThrow(() -> new NullPointerException(String.format("there is no account with id %d", id)));
+//
+//
+//         ;
+//    }
 
     @Override
     public void deleteAccount(Integer id) {
@@ -80,17 +82,17 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public List<Account> getAllAccounts() {
         List<Account> accountList = new ArrayList<>();
-        this.accountRepository.findAll().forEach(accountList::add);
+//        this.accountRepository.findAll().forEach(accountList::add);
         return accountList;
     }
 
 
-    public Optional<Account> findAccountsByUserAndAccId(Integer userId, Integer currencyId) {
-        return StreamSupport.stream(accountRepository.findAll().spliterator(), false)
-                .filter(account -> account.getUserId() == userId)
-                .filter(account -> account.getCurrencyId() == currencyId)
-                .findFirst();
-    }
+//    public Optional<Account> findAccountsByUserAndAccId(Integer userId, Integer currencyId) {
+//        return StreamSupport.stream(accountRepository.findAll().spliterator(), false)
+//                .filter(account -> account.getUserId() == userId)
+//                .filter(account -> account.getCurrencyId() == currencyId)
+//                .findFirst();
+//    }
 
 
 }

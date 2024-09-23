@@ -100,4 +100,25 @@ https://topjava.ru/blog/back-to-basics-dependency-injection
 docker compose тільки для постгреса.
 
 ./idea.sh
-setxkbmap -layout "us,gr" -option "grp:alt_shift_toggle" &
+setxkbmap -layout "us,ru,ua" -option "grp:alt_shift_toggle" &
+
+
+13.9.2024
+liquidbase прилыпити якось
+
+all tables migration + structure + repo + model review
+sequence generator add to liquibase
+
+references move to another query, not on create table stage.
+check how references work
+
+jdbc template check and make the same.
+
+
+dao для селекта з бази даних.
+під кожен репо - свій дао.
+задача - класти до бд, та виймати з бд.
+Питання : класти інзерт, та виймати селект по запиту, і зробити даошку для цього , використовуючи приклади?
+
+створюю через дто, а віддаю через account, який якраз і створюється тільки тоді, коли його потрібно з бази віддати.
+Репозиторій в цьмоу випадку це не репозиторій, а прослойка між базою та між джавою.

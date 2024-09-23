@@ -2,25 +2,40 @@ package com.pragmatic;
 
 
 import com.pragmatic.model.Currency;
+import com.pragmatic.model.User;
 import com.pragmatic.repository.*;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 
 
 @SpringBootApplication
+@NoArgsConstructor
+@EnableConfigurationProperties
 public class Main {
 
     public static void main(String[] args) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException {
 
         ApplicationContext appContext = SpringApplication.run(Main.class, args); //
 
-//        CurrencyRepository curRepo = (CurrencyRepository) appContext.getBean("currencyRepository");
-//        CurrencyRepository curRepo2 = (CurrencyRepository) appContext.getBean("currencyRepository");
+        UserRepository userRepository = (UserRepository)  appContext.getBean("userRepository");
+//        User user1 = new User()
+//                .setId(1)
+//                .setName("bla")
+//                .setEmail("bla")
+//                .setPassword("blabla");
+//        userRepository.save(user1);
+
+//        EXAMPLE HOW TO CREATE BEANS
+//        CurrencyRepositoryImpl curRepo = (CurrencyRepositoryImpl) appContext.getBean("currencyRepository");
+//        CurrencyRepositoryImpl curRepo2 = (CurrencyRepositoryImpl) appContext.getBean("currencyRepository");
 //        System.out.println("Verify singleton");
 //        System.out.println(curRepo2 == curRepo);
 
@@ -35,12 +50,12 @@ public class Main {
 
         //INIT
 //        //Викликаю юзер репозиторій, який парсить файл одразу і створює в ньому об'єкти юзера по cs
-//        UserRepository userRepo = new UserRepository();
+//        UserRepositoryImpl userRepo = new UserRepositoryImpl();
 //        System.out.println(userRepo.getRepoList());
-//        CurrencyRepository currencyRepo = new CurrencyRepository();
+//        CurrencyRepositoryImpl currencyRepo = new CurrencyRepositoryImpl();
 //        userRepo.getUserById(1);
 //        AccountRepository accountRepo = new AccountRepository(userRepo);
-//        TransactionRepository transRepo = new TransactionRepository();
+//        TransactionRepositoryImpl transRepo = new TransactionRepositoryImpl();
 //
 //        userRepo.createUser("manual", "blabla", "pass");
 //        AccountService accService = new AccountService(accountRepo, transRepo);
