@@ -1,0 +1,1 @@
+select * from accounts where userid= :userid and currencyid = :currencyid

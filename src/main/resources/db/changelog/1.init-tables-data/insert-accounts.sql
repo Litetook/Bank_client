@@ -1,6 +1,6 @@
 --liquibase formatted sql
 --changeset vitalii.tsomyk:accounts_table
---comment Initial changeset for accounts
+--comment insert accounts
 
 INSERT INTO accounts (accountid, userid, currencyid, balance)
 VALUES

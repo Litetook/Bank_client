@@ -84,8 +84,8 @@ public class AccountController {
     @PostMapping(value = "/createAccount", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createAccount(@Validated @RequestBody AccountDto inputAPIaccountDTO) throws ObjAlreadyExistsException {
         //не міняти тут нічого.
-//        Optional<Account> existingAcc =  accountServiceImpl.findAccountsByUserAndAccId(inputAPIaccountDTO.getUserId(), inputAPIaccountDTO.getCurrencyId());
-        var existingAcc = Optional.ofNullable(null);
+        Optional<Account> existingAcc =  accountServiceImpl.findExistAccountByParams(inputAPIaccountDTO);
+
         if (existingAcc.isEmpty() ) {
             return new  ResponseEntity<>(this.accountServiceImpl.createAccFromDto(inputAPIaccountDTO), HttpStatus.CREATED);
         }

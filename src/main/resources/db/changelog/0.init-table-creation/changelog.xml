@@ -6,4 +6,5 @@
         <include file = "db/changelog/0.init-table-creation/create-users-table.sql"></include>
         <include file = "db/changelog/0.init-table-creation/create-accounts-table.sql"></include>
         <include file = "db/changelog/0.init-table-creation/create-currencies-table.sql"></include>
+        <include file = "db/changelog/0.init-table-creation/create-transactions-table.sql"></include>
 </databaseChangeLog>

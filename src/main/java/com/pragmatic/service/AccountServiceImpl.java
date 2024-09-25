@@ -87,13 +87,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
 
-//    public Optional<Account> findAccountsByUserAndAccId(Integer userId, Integer currencyId) {
-//        return StreamSupport.stream(accountRepository.findAll().spliterator(), false)
-//                .filter(account -> account.getUserId() == userId)
-//                .filter(account -> account.getCurrencyId() == currencyId)
-//                .findFirst();
-//    }
-
+    public Optional<Account> findExistAccountByParams(AccountDto accountDto) {
+        return this.accountRepository.findExistAccountByParams(accountDto);
+    }
 
 }
 

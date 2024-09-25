@@ -1,6 +1,7 @@
 package com.pragmatic.repository;
 
 import com.pragmatic.dao.AccountRowMapper;
+import com.pragmatic.dto.AccountDto;
 import com.pragmatic.model.Account;
 import com.pragmatic.sql.SqlQuery;
 import lombok.extern.log4j.Log4j2;
@@ -32,6 +33,8 @@ public class AccountRepositoryImpl  extends NamedParameterJdbcDaoSupport {
     private static final String ACCOUNTID = "accountid";
 
     private final String createAccountSql;
+    private final String findAccountByIdSql;
+    private final String findExistingAccountByParamsSql;
 
     @Autowired
     private UserRepositoryImpl userRepo;
@@ -40,20 +43,28 @@ public class AccountRepositoryImpl  extends NamedParameterJdbcDaoSupport {
 
     public AccountRepositoryImpl(
             DataSource dataSource,
-            @Value("classpath:/db/sql/accountRepository/create.sql") Resource createAccountSqlResource
+            @Value("classpath:/db/sql/accountRepository/create.sql") Resource createAccountSqlResource,
+            @Value("classpath:/db/sql/accountRepository/findById.sql") Resource findAccountByIdSqlResource,
+            @Value("classpath:/db/sql/accountRepository/findExistingAccountByParams.sql") Resource findExistAccountByParamsResource
     ) throws IOException {
         this.createAccountSql = copyToString(
                 createAccountSqlResource.getInputStream(),
                 Charset.defaultCharset()
         );
+
+        this.findAccountByIdSql = copyToString(
+                findAccountByIdSqlResource.getInputStream(),
+                Charset.defaultCharset()
+        );
+        this.findExistingAccountByParamsSql = copyToString(
+                findExistAccountByParamsResource.getInputStream(),
+                Charset.defaultCharset()
+        );
+
         this.userRepo = userRepo;
         this.setDataSource(dataSource);
     }
 
-//    public List<Account> findAll() {
-//        String sql = "SELECT * from accounts";
-//        return jdbcTemplate.query(sql, new AccountRowMapper());
-//    }
 
     private Integer insert(SqlQuery sqlQuery) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -84,11 +95,27 @@ public class AccountRepositoryImpl  extends NamedParameterJdbcDaoSupport {
     }
 
     public Optional<Account> findById(Integer id){
-        String sql = "Select * from accounts where accountid = ?";
-//        НЕПОНЯТНО
-//        return Optional.ofNullable( jdbcTemplate.queryForObject(sql, new Object[]{id}, accountRowMapper));
-        return  Optional.ofNullable(null);
+        SqlQuery.Builder builder = SqlQuery.builder().query(findAccountByIdSql);
+        builder.param(ACCOUNTID, id);
+        return execAccountByIdQuery(builder.build());
+    }
 
+    public  Optional<Account> execAccountByIdQuery(SqlQuery sqlQuery) {
+        log.trace(sqlQuery.getQuery());
+
+        var accounts = Objects.requireNonNull(getNamedParameterJdbcTemplate())
+                .query(sqlQuery.getQuery(), sqlQuery.getParams(), accountRowMapper);
+        if (accounts.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(accounts.get(0));
+    }
+
+    public Optional<Account> findExistAccountByParams(AccountDto accountDto) {
+        SqlQuery.Builder builder = SqlQuery.builder().query(findExistingAccountByParamsSql);
+        builder.param(USERID, accountDto.getUserId());
+        builder.param(CURRENCYID, accountDto.getCurrencyId());
+        return execAccountByIdQuery(builder.build());
     }
 
 }

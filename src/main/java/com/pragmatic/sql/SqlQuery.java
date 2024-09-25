@@ -212,9 +212,7 @@ public class SqlQuery {
         private static final PropertyPlaceholderHelper PLACEHOLDER_HELPER =
                 new PropertyPlaceholderHelper(PLACEHOLDER_PREFIX, PLACEHOLDER_SUFFIX, VALUE_SEPARATOR, false);
 
-        static {
-            System.out.println("sdfsdfsdfdsf");
-        }
+
 
         public static String replacePlaceholders(String template, Set<String> enabledPlaceholders, Properties customPlaceholdersValues) {
             Assert.notNull(enabledPlaceholders, "'enabledPlaceholders' must not be null");
