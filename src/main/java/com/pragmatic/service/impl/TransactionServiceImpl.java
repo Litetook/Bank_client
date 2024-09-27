@@ -6,6 +6,7 @@ import com.pragmatic.model.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +16,8 @@ public class TransactionServiceImpl {
     TransactionDao transactionDao;
 
     public List<Transaction> findTransactionsByDateRange(TransactionsByRangeRequest request) {
-        return transactionDao.findTransactionsByDateRange(request.getAccountId(), request.getDateFrom(), request.getDateTo());
+        Date dateFrom = new Date(new Timestamp(request.getDateFrom()).getTime());
+        Date dateTo = new Date(new Timestamp(request.getDateTo()).getTime());
+        return transactionDao.findTransactionsByDateRange(request.getAccountId(), dateFrom, dateTo);
     }
 }

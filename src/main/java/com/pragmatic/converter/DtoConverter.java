@@ -31,7 +31,6 @@ public  class DtoConverter {
                 .userId(user.getId())
                 .email(user.getEmail())
                 .name(user.getName())
-                .password(user.getPassword())
                 .build();
     }
 

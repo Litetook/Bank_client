@@ -96,6 +96,7 @@ public class AccountDaoImpl extends NamedParameterJdbcDaoSupport {
         builder.param(USER_ID_PLACEHOLDER, account.getUserId());
         builder.param(CURRENCY_ID_PLACEHOLDER, account.getCurrencyId());
         builder.param(BALANCE_PLACEHOLDER, account.getBalance());
+
         Integer accountId = insert(builder.build());
         account.setId(accountId);
         return account;

@@ -7,7 +7,7 @@ import java.util.Date;
 @Setter @Getter @Builder
 @AllArgsConstructor
 public class TransactionsByRangeRequest {
-    private Date dateFrom;
-    private Date dateTo;
+    private Long dateFrom;
+    private Long dateTo;
     private Integer accountId;
 }

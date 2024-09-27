@@ -77,17 +77,20 @@ public class AccountServiceImpl implements AccountService {
             throw new ObjNotFoundException("destination account does not exist");
         }
 
-        if (optionalSourceAccount.get().getBalance() < amount) {
-            throw new MoneyTransferException("source acc balance is not enough to make transaction");
-        }
 
         Account destinationAccount = optionalDestinationAccount.get();
         Account sourceAccount = optionalSourceAccount.get();
+
+        if (sourceAccount.getBalance() < amount) { //TODO THINK WHY IT IS NOT CORRECT
+            throw new MoneyTransferException("source acc balance is not enough to make transaction");
+        }
+
 
         sourceAccount.setBalance(sourceAccount.getBalance() - amount);
         destinationAccount.setBalance(destinationAccount.getBalance() + amount);
 
         accountDao.updateBalance(sourceAccount.getBalance(), sourceAccount.getId());
+        //TODO WHAT IF ROWNUMBER 92 FALL WITH EXCEPTION. WHAT WILL BE SAVED TO DATABASE?
         accountDao.updateBalance(destinationAccount.getBalance(), destinationAccount.getId());
 
         return this.transactionDao.save(Transaction.builder()

@@ -26,7 +26,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,7 +42,7 @@ public class GeneralController {
     AccountService accountServiceImpl;
 
     @Autowired
-    UserService userServiceImpl;
+    UserService userService;
 
     @Autowired
     TransactionServiceImpl transactionService;
@@ -85,8 +84,8 @@ public class GeneralController {
     }
 
     @PostMapping(value = "/createUser", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDtoImpl> createUser(@Validated @RequestBody UserDtoImpl userDto) throws ObjAlreadyExistsException {
-        UserDtoImpl newUser = userServiceImpl.createUserFromDto(userDto);
+    public ResponseEntity<UserDtoImpl> createUser(@Validated @RequestBody UserDtoImpl userDto) throws ObjAlreadyExistsException { //TODO переробити на реквест запит.
+        UserDtoImpl newUser = userService.createUserFromDto(userDto);
         return new ResponseEntity<>(newUser, HttpStatus.OK);
     }
 
@@ -106,7 +105,7 @@ public class GeneralController {
 
     @GetMapping(value="/getAllUsers")
     public ResponseEntity<List<UserDtoImpl>> getAccountsByUserId() {
-        List<UserDtoImpl> userDtoList = userServiceImpl.findAll();
+        List<UserDtoImpl> userDtoList = userService.findAll();
         return new ResponseEntity<>(userDtoList, HttpStatus.OK);
     }
 
@@ -116,7 +115,7 @@ public class GeneralController {
             @RequestParam(value = "id", defaultValue = "id")
             Integer userId
             ) throws ObjNotFoundException {
-            UserDtoImpl userDto = userServiceImpl.findUserById(userId);
+            UserDtoImpl userDto = userService.findUserById(userId); //TODO з конвертера забрати пароль
 
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }

@@ -133,3 +133,8 @@ dao для селекта з бази даних.
 контроллер щоб виконував задачы, що поставлені на нього
 я створив акк і почав перекидати бабки і т.д.
 в скл по пошуку транзакцій поправити все, мапінг змінних, загалом по скл файлах переробити
+
+usebigdecimal for balance (currency calculation)
+speadminservice request access, check spoke tests how they are made ( check only for repositories). Try to use it in project
+Use spoke in spring boot app (google it)
+check todo
