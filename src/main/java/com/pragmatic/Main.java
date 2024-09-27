@@ -1,15 +1,12 @@
 package com.pragmatic;
 
 
-import com.pragmatic.model.Currency;
-import com.pragmatic.model.User;
-import com.pragmatic.repository.*;
+import com.pragmatic.dao.*;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -25,17 +22,17 @@ public class Main {
 
         ApplicationContext appContext = SpringApplication.run(Main.class, args); //
 
-        UserRepository userRepository = (UserRepository)  appContext.getBean("userRepository");
+//        UserDao userDao = (UserDao)  appContext.getBean("userDao");
 //        User user1 = new User()
 //                .setId(1)
 //                .setName("bla")
 //                .setEmail("bla")
 //                .setPassword("blabla");
-//        userRepository.save(user1);
+//        userDao.save(user1);
 
 //        EXAMPLE HOW TO CREATE BEANS
-//        CurrencyRepositoryImpl curRepo = (CurrencyRepositoryImpl) appContext.getBean("currencyRepository");
-//        CurrencyRepositoryImpl curRepo2 = (CurrencyRepositoryImpl) appContext.getBean("currencyRepository");
+//        CurrencyDaoImpl curRepo = (CurrencyDaoImpl) appContext.getBean("currencyRepository");
+//        CurrencyDaoImpl curRepo2 = (CurrencyDaoImpl) appContext.getBean("currencyRepository");
 //        System.out.println("Verify singleton");
 //        System.out.println(curRepo2 == curRepo);
 
@@ -46,16 +43,16 @@ public class Main {
 //        System.out.println(currency1==currency2);
 
 //        poverny anotation repository na accRepo pisla testiv
-//        AccountRepositoryImpl accountRepositoryImpl = (AccountRepositoryImpl) appContext.getBean(AccountRepositoryImpl.class);
+//        AccountDaoImpl accountRepositoryImpl = (AccountDaoImpl) appContext.getBean(AccountDaoImpl.class);
 
         //INIT
 //        //Викликаю юзер репозиторій, який парсить файл одразу і створює в ньому об'єкти юзера по cs
-//        UserRepositoryImpl userRepo = new UserRepositoryImpl();
+//        UserDaoImpl userRepo = new UserDaoImpl();
 //        System.out.println(userRepo.getRepoList());
-//        CurrencyRepositoryImpl currencyRepo = new CurrencyRepositoryImpl();
+//        CurrencyDaoImpl currencyRepo = new CurrencyDaoImpl();
 //        userRepo.getUserById(1);
-//        AccountRepository accountRepo = new AccountRepository(userRepo);
-//        TransactionRepositoryImpl transRepo = new TransactionRepositoryImpl();
+//        AccountDao accountRepo = new AccountDao(userRepo);
+//        TransactionDaoImpl transRepo = new TransactionDaoImpl();
 //
 //        userRepo.createUser("manual", "blabla", "pass");
 //        AccountService accService = new AccountService(accountRepo, transRepo);

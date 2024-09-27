@@ -2,7 +2,7 @@
 --changeset vitalii.tsomyk:accounts_table
 --comment insert accounts
 
-INSERT INTO accounts (accountid, userid, currencyid, balance)
+INSERT INTO accounts (account_id, user_id, currency_id, balance)
 VALUES
     (nextval('account_sequence'), 1, 1, 0.0),
     (nextval('account_sequence'), 2, 1, 0.0),

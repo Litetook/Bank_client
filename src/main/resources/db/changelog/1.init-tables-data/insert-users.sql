@@ -3,7 +3,7 @@
 --comment insert users
 
 
-INSERT INTO users (userid, name, email, password)
+INSERT INTO users (user_id, name, email, password)
 VALUES
     (nextval('user_sequence'), 'John Doe', 'johndoe@example.com', 'password123'),
     (nextval('user_sequence'), 'Jane Smith', 'janesmith@example.com', 'securePass!'),

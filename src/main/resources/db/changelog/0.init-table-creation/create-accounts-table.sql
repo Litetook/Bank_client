@@ -3,9 +3,9 @@
 --comment Initial changeset for accounts
 
 CREATE TABLE IF NOT EXISTS accounts (
-    accountid INTEGER PRIMARY KEY,
-    userid integer not null,
-    currencyid integer not null,
+    account_id INTEGER PRIMARY KEY,
+    user_id integer not null,
+    currency_id integer not null,
     balance decimal(10,2) not null
 );
 

@@ -3,7 +3,7 @@
 --comment Initial changeset for accounts
 
 CREATE TABLE IF NOT EXISTS currencies (
-    currencyid INTEGER PRIMARY KEY,
+    currency_id INTEGER PRIMARY KEY,
     symbol varchar(10) not null
 );
 

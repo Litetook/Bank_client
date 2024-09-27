@@ -1,0 +1,3 @@
+SELECT * FROM USERS
+WHERE NAME = :name
+AND EMAIL = :email;

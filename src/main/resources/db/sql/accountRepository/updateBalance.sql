@@ -1,0 +1,3 @@
+UPDATE ACCOUNTS
+SET BALANCE = :balance
+WHERE ACCOUNT_ID = :accountId

@@ -12,5 +12,5 @@ services:
     volumes:
       - ./set-up-local-db.sql:/docker-entrypoint-initdb.d/init-db.sql
 
-volumes:
-  postgres-data:
+#volumes:
+#  postgres-data:

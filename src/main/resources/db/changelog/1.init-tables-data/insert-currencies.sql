@@ -2,7 +2,7 @@
 --changeset vitalii.tsomyk:currencies_table
 --comment insert currencies
 
-INSERT INTO currencies (currencyid, symbol)
+INSERT INTO currencies (currency_id, symbol)
 VALUES
     (nextval('currency_sequence'), 'USD'),
     (nextval('currency_sequence'), 'IDR'),

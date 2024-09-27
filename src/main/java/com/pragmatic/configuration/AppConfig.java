@@ -1,17 +1,20 @@
 package com.pragmatic.configuration;
 
-import com.pragmatic.model.Currency;
-import com.pragmatic.repository.CurrencyRepositoryImpl;
+import com.pragmatic.converter.DtoConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 
 @Configuration
 public class AppConfig {
+    @Bean
+    public DtoConverter accountConverter() {
+        return  new DtoConverter();
+    }
+
 //    TEST CODE TO MANUAL BEAN DEFINITION
 //    @Bean
-//    public CurrencyRepositoryImpl currencyRepository() {
-//        return new CurrencyRepositoryImpl();
+//    public CurrencyDaoImpl currencyRepository() {
+//        return new CurrencyDaoImpl();
 //    }
 //
 //    @Bean
