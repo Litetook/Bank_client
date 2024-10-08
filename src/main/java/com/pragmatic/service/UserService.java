@@ -2,9 +2,7 @@ package com.pragmatic.service;
 
 import com.pragmatic.controller.exception.ObjAlreadyExistsException;
 import com.pragmatic.controller.exception.ObjNotFoundException;
-import com.pragmatic.dto.UserDto;
 import com.pragmatic.dto.impl.UserDtoImpl;
-import com.pragmatic.model.User;
 
 import java.util.List;
 

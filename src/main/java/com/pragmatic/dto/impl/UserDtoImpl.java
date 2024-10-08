@@ -1,6 +1,5 @@
 package com.pragmatic.dto.impl;
 
-import com.pragmatic.dto.UserDto;
 import lombok.*;
 
 @Getter  @Setter @ToString

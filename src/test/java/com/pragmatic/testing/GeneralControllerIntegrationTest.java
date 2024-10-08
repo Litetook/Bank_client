@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -48,7 +49,7 @@ class GeneralControllerIntegrationTest { //чому тут забирати па
                 .id(1)
                 .currencyId(1)
                 .userId(1)
-                .balance(0.0)
+                .balance(BigDecimal.valueOf(0.0))
                 .build();
     }
 

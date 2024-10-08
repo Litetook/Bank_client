@@ -1,0 +1,7 @@
+INSERT INTO users (user_id, name, email, password)
+VALUES
+    (nextval('user_sequence'), 'John Doe', 'johndoe@example.com', 'password123'),
+    (nextval('user_sequence'), 'Jane Smith', 'janesmith@example.com', 'securePass!'),
+    (nextval('user_sequence'), 'Alice Johnson', 'alicej@example.com', 'alice@2021'),
+    (nextval('user_sequence'), 'Bob Brown', 'bobbrown@example.com', 'bobPass456'),
+    (nextval('user_sequence'), 'Charlie White', 'charliew@example.com', 'charlie1234');

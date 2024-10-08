@@ -4,7 +4,10 @@ import com.pragmatic.dto.impl.AccountDtoImpl;
 import com.pragmatic.dto.impl.UserDtoImpl;
 import com.pragmatic.model.Account;
 import com.pragmatic.model.User;
+import org.springframework.stereotype.Component;
 
+
+@Component
 public  class DtoConverter {
 
     //ACCOUNT

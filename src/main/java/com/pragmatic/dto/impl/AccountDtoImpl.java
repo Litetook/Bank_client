@@ -3,6 +3,8 @@ package com.pragmatic.dto.impl;
 
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Getter @Setter @ToString
 @NoArgsConstructor
 @Builder
@@ -12,7 +14,7 @@ public class AccountDtoImpl {
     private Integer accountId;
     private Integer currencyId;
     private Integer userId;
-    private Double balance;
+    private BigDecimal balance;
 }
 
 

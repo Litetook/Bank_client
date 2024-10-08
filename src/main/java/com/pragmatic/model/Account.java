@@ -3,6 +3,7 @@ package com.pragmatic.model;
 import lombok.*;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Getter @Setter @ToString
@@ -13,7 +14,7 @@ public class Account {
     int id;
     int userId;
     int currencyId;
-    Double balance ;
+    BigDecimal balance ;
 
 
 

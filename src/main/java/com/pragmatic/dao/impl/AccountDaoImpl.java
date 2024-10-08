@@ -16,6 +16,7 @@ import org.springframework.util.Assert;
 
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Objects;
@@ -102,11 +103,11 @@ public class AccountDaoImpl extends NamedParameterJdbcDaoSupport {
         return account;
     }
 
-    private boolean execUpdateQuery(SqlQuery sqlQuery) {
+    private boolean execUpdateQuery(SqlQuery sqlQuery)  {
         return getNamedParameterJdbcTemplate().update(sqlQuery.getQuery(), sqlQuery.getParams()) > 0;
     }
 
-    public boolean updateBalance(Double balance, Integer accountId) {
+    public boolean updateBalance(BigDecimal balance, Integer accountId) {
         SqlQuery.Builder builder = SqlQuery.builder()
                 .query(updateBalanceSql)
                 .param(BALANCE_PLACEHOLDER, balance)
@@ -133,9 +134,8 @@ public class AccountDaoImpl extends NamedParameterJdbcDaoSupport {
 
     public List<Account> execAccountsQuery(SqlQuery sqlQuery) {
         log.trace(sqlQuery.getQuery());
-        var accounts = Objects.requireNonNull(getNamedParameterJdbcTemplate())
+        return Objects.requireNonNull(getNamedParameterJdbcTemplate())
                 .query(sqlQuery.getQuery(), sqlQuery.getParams(), accountRowMapper);
-        return accounts;
     }
 
     public Optional<Account> findExistAccountByParams(AccountDtoImpl accountDtoImpl) {

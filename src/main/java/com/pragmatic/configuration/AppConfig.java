@@ -6,10 +6,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AppConfig {
-    @Bean
-    public DtoConverter accountConverter() {
-        return  new DtoConverter();
-    }
+//    @Bean
+//    public DtoConverter accountConverter() {
+//        return  new DtoConverter();
+//    } ==> це заміняється на анотацію @Component
 
 //    TEST CODE TO MANUAL BEAN DEFINITION
 //    @Bean

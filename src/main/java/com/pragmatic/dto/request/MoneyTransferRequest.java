@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Setter
 @Getter
 @Builder
@@ -12,5 +14,5 @@ import lombok.Setter;
 public class MoneyTransferRequest {
     Integer sourceAccountId;
     Integer destinationAccountId;
-    Double amount;
+    BigDecimal amount;
 }

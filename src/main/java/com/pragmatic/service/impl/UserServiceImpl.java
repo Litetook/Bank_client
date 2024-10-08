@@ -4,7 +4,6 @@ import com.pragmatic.controller.exception.ObjAlreadyExistsException;
 import com.pragmatic.controller.exception.ObjNotFoundException;
 import com.pragmatic.converter.DtoConverter;
 import com.pragmatic.dao.UserDao;
-import com.pragmatic.dto.UserDto;
 import com.pragmatic.dto.impl.UserDtoImpl;
 import com.pragmatic.model.User;
 import com.pragmatic.service.UserService;

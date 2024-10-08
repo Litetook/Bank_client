@@ -136,5 +136,14 @@ dao для селекта з бази даних.
 
 usebigdecimal for balance (currency calculation)
 speadminservice request access, check spoke tests how they are made ( check only for repositories). Try to use it in project
-Use spoke in spring boot app (google it)
+Use spock in spring boot app (google it)
 check todo
+що буде вертатись на ексепшен ( кверя до бази)
+
+
+1.Чому нема датасорса на підключення до тестів. (що таке підняти контекст в рамках інт тестів розібрати)
+2. З профілями ясно. Не ясно як у нього створюються таблиці, де це робиться? (пошукати)
+3.Чому ждбс темплейт виходить нул.
+4. Чому коли імпортую інтерфейс даошки - теж нул.
+5/ контейнери
+розыбрати primary анотації

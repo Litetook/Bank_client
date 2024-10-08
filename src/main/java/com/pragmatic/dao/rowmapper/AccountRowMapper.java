@@ -13,7 +13,7 @@ public class AccountRowMapper  implements RowMapper<Account> {
         return Account.builder()
                 .id(rs.getInt("account_id"))
                 .userId(rs.getInt("user_id"))
-                .balance(rs.getDouble("balance"))
+                .balance(rs.getBigDecimal("balance"))
                 .currencyId(rs.getInt("currency_id"))
                 .build();
     }

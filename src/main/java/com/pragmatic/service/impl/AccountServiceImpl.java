@@ -11,6 +11,7 @@ import com.pragmatic.dto.request.MoneyTransferRequest;
 import com.pragmatic.model.Account;
 import com.pragmatic.model.Transaction;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,10 +20,12 @@ import com.pragmatic.service.AccountService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Log4j2
 @Service
+@Transactional
 public class AccountServiceImpl implements AccountService {
     @Autowired
     AccountDaoImpl accountDao;
@@ -59,7 +62,7 @@ public class AccountServiceImpl implements AccountService {
         }
         throw new ObjAlreadyExistsException(String.format("Account already exists with id %d", existingAccount.get().getId()));
     }
-
+@Transactional
     public Transaction moneyTransfer(MoneyTransferRequest moneyTransferRequest) throws ObjNotFoundException, MoneyTransferException {
 //        VERIFY IF EXISTS
 //        VERIFY BALANCE
@@ -69,7 +72,7 @@ public class AccountServiceImpl implements AccountService {
         //        VERIFY BALANCE
         Optional<Account> optionalSourceAccount = accountDao.findById(moneyTransferRequest.getSourceAccountId());
         Optional<Account> optionalDestinationAccount = accountDao.findById(moneyTransferRequest.getDestinationAccountId());
-        Double amount = moneyTransferRequest.getAmount();
+        BigDecimal amount = moneyTransferRequest.getAmount();
 
         if  ( optionalSourceAccount.isEmpty() ){
             throw new ObjNotFoundException("source account does not exist");
@@ -81,16 +84,16 @@ public class AccountServiceImpl implements AccountService {
         Account destinationAccount = optionalDestinationAccount.get();
         Account sourceAccount = optionalSourceAccount.get();
 
-        if (sourceAccount.getBalance() < amount) { //TODO THINK WHY IT IS NOT CORRECT
+        if (sourceAccount.getBalance().compareTo(amount) < 0)  {
             throw new MoneyTransferException("source acc balance is not enough to make transaction");
         }
 
 
-        sourceAccount.setBalance(sourceAccount.getBalance() - amount);
-        destinationAccount.setBalance(destinationAccount.getBalance() + amount);
-
+        sourceAccount.setBalance(sourceAccount.getBalance().subtract(amount));
+        destinationAccount.setBalance(destinationAccount.getBalance().add(amount));
         accountDao.updateBalance(sourceAccount.getBalance(), sourceAccount.getId());
         //TODO WHAT IF ROWNUMBER 92 FALL WITH EXCEPTION. WHAT WILL BE SAVED TO DATABASE?
+
         accountDao.updateBalance(destinationAccount.getBalance(), destinationAccount.getId());
 
         return this.transactionDao.save(Transaction.builder()

@@ -3,7 +3,6 @@ package com.pragmatic.dao.impl;
 
 import com.pragmatic.dao.UserDao;
 import com.pragmatic.dao.rowmapper.UserRowMapper;
-import com.pragmatic.dto.UserDto;
 import com.pragmatic.dto.impl.UserDtoImpl;
 import com.pragmatic.model.User;
 import com.pragmatic.sql.SqlQuery;
@@ -19,7 +18,6 @@ import org.springframework.util.Assert;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.Currency;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -125,6 +123,16 @@ public class UserDaoImpl extends NamedParameterJdbcDaoSupport implements UserDao
                 .build();
         return  execUserQuery(sqlQuery);
     }
+
+//    @Override
+//    public Optional<User> findByNameAndEmail(String name,  String email) {
+//        SqlQuery sqlQuery = SqlQuery.builder()
+//                .query(findUserByAttributesSql)
+//                .param(NAME_PLACEHOLDER, name)
+//                .param(EMAIL_PLACEHOLDER, email)
+//                .build();
+//        return  execUserQuery(sqlQuery);
+//    }
 
     @Override
     public List<User> findAll() {
