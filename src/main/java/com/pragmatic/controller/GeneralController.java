@@ -7,6 +7,7 @@ import com.pragmatic.dto.impl.AccountDtoImpl;
 import com.pragmatic.dto.impl.UserDtoImpl;
 import com.pragmatic.dto.request.MoneyTransferRequest;
 import com.pragmatic.dto.request.TransactionsByRangeRequest;
+import com.pragmatic.dto.request.UserCreateRequest;
 import com.pragmatic.model.Account;
 import com.pragmatic.model.Transaction;
 import com.pragmatic.service.AccountService;
@@ -84,8 +85,8 @@ public class GeneralController {
     }
 
     @PostMapping(value = "/createUser", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDtoImpl> createUser(@Validated @RequestBody UserDtoImpl userDto) throws ObjAlreadyExistsException { //TODO переробити на реквест запит.
-        UserDtoImpl newUser = userService.createUserFromDto(userDto);
+    public ResponseEntity<UserDtoImpl> createUser(@Validated @RequestBody UserCreateRequest userRequest) throws ObjAlreadyExistsException { //TODO переробити на реквест запит.
+        UserDtoImpl newUser = userService.createUserFromRequest(userRequest);
         return new ResponseEntity<>(newUser, HttpStatus.OK);
     }
 

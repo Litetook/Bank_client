@@ -88,7 +88,6 @@ public class UserDaoImpl extends NamedParameterJdbcDaoSupport implements UserDao
                 .param(NAME_PLACEHOLDER, user.getName())
                 .param(EMAIL_PLACEHOLDER, user.getEmail())
                 .param(PASSWORD_PLACEHOLDER, user.getPassword());
-
         Integer userId = insert(builder.build());
         user.setId(userId);
         return user;
@@ -96,7 +95,7 @@ public class UserDaoImpl extends NamedParameterJdbcDaoSupport implements UserDao
 
 
 
-    public Optional<User> execUserQuery(SqlQuery sqlQuery) {
+    public Optional<User> execUserQuery(SqlQuery sqlQuery) { //TODO PROTECTED OR PRIVATE
         log.trace(sqlQuery.getQuery());
         var users = Objects.requireNonNull(getNamedParameterJdbcTemplate())
                 .query(sqlQuery.getQuery(), sqlQuery.getParams(), userRowMapper);
@@ -115,17 +114,7 @@ public class UserDaoImpl extends NamedParameterJdbcDaoSupport implements UserDao
     }
 
     @Override
-    public Optional<User> findByAttributes(UserDtoImpl userDto) {
-        SqlQuery sqlQuery = SqlQuery.builder()
-                .query(findUserByAttributesSql)
-                .param(NAME_PLACEHOLDER, userDto.getName())
-                .param(EMAIL_PLACEHOLDER, userDto.getEmail())
-                .build();
-        return  execUserQuery(sqlQuery);
-    }
-
-    @Override
-    public Optional<User> findByNameAndEmail(String name,  String email) {
+    public Optional<User> findByNameAndEmail(String name, String email) {
         SqlQuery sqlQuery = SqlQuery.builder()
                 .query(findUserByAttributesSql)
                 .param(NAME_PLACEHOLDER, name)

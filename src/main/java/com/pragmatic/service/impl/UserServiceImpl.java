@@ -5,6 +5,7 @@ import com.pragmatic.controller.exception.ObjNotFoundException;
 import com.pragmatic.converter.DtoConverter;
 import com.pragmatic.dao.UserDao;
 import com.pragmatic.dto.impl.UserDtoImpl;
+import com.pragmatic.dto.request.UserCreateRequest;
 import com.pragmatic.model.User;
 import com.pragmatic.service.UserService;
 import lombok.extern.log4j.Log4j2;
@@ -32,10 +33,14 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserDtoImpl createUserFromDto(UserDtoImpl inputUserDto) throws ObjAlreadyExistsException {
-        Optional<User> existingUser = userDaoImpl.findByAttributes(inputUserDto);
+    public UserDtoImpl createUserFromRequest(UserCreateRequest userRequest) throws ObjAlreadyExistsException {
+        Optional<User> existingUser = userDaoImpl.findByNameAndEmail(userRequest.getName(), userRequest.getEmail()); //TODO переписати до примітивів
         if (existingUser.isEmpty()) {
-            User inputUser = dtoConverter.convertDtoToUser(inputUserDto);
+            User inputUser = User.builder()
+                    .name(userRequest.getName())
+                    .email(userRequest.getEmail())
+                    .password(userRequest.getPassword())
+                    .build();
             userDaoImpl.save(inputUser);
             return dtoConverter.convertUserToDto(inputUser);
         }
