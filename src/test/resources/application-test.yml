@@ -1,0 +1,22 @@
+# application.yml
+spring:
+  #  application:
+  #    name: template-app
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=public
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/changelog.xml
+  custom:
+    property1: value1
+    property2: value2
+
+liquibase:
+  main:
+    change-log: classpath:db/changelog/changelog.xml

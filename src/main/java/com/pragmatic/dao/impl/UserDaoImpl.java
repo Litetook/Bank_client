@@ -124,15 +124,15 @@ public class UserDaoImpl extends NamedParameterJdbcDaoSupport implements UserDao
         return  execUserQuery(sqlQuery);
     }
 
-//    @Override
-//    public Optional<User> findByNameAndEmail(String name,  String email) {
-//        SqlQuery sqlQuery = SqlQuery.builder()
-//                .query(findUserByAttributesSql)
-//                .param(NAME_PLACEHOLDER, name)
-//                .param(EMAIL_PLACEHOLDER, email)
-//                .build();
-//        return  execUserQuery(sqlQuery);
-//    }
+    @Override
+    public Optional<User> findByNameAndEmail(String name,  String email) {
+        SqlQuery sqlQuery = SqlQuery.builder()
+                .query(findUserByAttributesSql)
+                .param(NAME_PLACEHOLDER, name)
+                .param(EMAIL_PLACEHOLDER, email)
+                .build();
+        return  execUserQuery(sqlQuery);
+    }
 
     @Override
     public List<User> findAll() {

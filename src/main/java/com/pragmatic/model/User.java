@@ -1,6 +1,5 @@
 package com.pragmatic.model;
 
-import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.context.annotation.Scope;
