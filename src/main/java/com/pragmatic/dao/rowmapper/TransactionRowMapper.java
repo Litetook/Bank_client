@@ -11,9 +11,9 @@ public class TransactionRowMapper implements RowMapper<Transaction> {
     @Override
     public Transaction mapRow(ResultSet rs, int rowNum) throws SQLException {
         return Transaction.builder()
-                .transactionId(rs.getInt("transaction_id"))
-                .sourceAccountId(rs.getInt("source_account_id"))
-                .destinationAccountId(rs.getInt("destination_account_id"))
+                .transactionId(rs.getLong("transaction_id"))
+                .sourceAccountId(rs.getLong("source_account_id"))
+                .destinationAccountId(rs.getLong("destination_account_id"))
                 .amount(rs.getBigDecimal("amount"))
                 .actionDate(rs.getDate("action_date"))
                 .build();

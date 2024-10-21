@@ -1,0 +1,447 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > SqlQuery</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.pragmatic.sql</a>
+</div>
+
+<h1>Coverage Summary for Class: SqlQuery (com.pragmatic.sql)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SqlQuery</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (5/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (5/6)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">SqlQuery$Builder</td>
+<td class="coverageStat">
+  <span class="percent">
+    26.7%
+  </span>
+  <span class="absValue">
+    (4/15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    7.1%
+  </span>
+  <span class="absValue">
+    (1/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    28.8%
+  </span>
+  <span class="absValue">
+    (15/52)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">SqlQuery$PlaceholderUtils</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85.7%
+  </span>
+  <span class="absValue">
+    (6/7)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">SqlQuery$PlaceholderUtils$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (1/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    9.1%
+  </span>
+  <span class="absValue">
+    (1/11)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    44.4%
+  </span>
+  <span class="absValue">
+    (12/27)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    5%
+  </span>
+  <span class="absValue">
+    (1/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    35.5%
+  </span>
+  <span class="absValue">
+    (27/76)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.pragmatic.sql;
+&nbsp;
+&nbsp;import lombok.AccessLevel;
+&nbsp;import lombok.AllArgsConstructor;
+&nbsp;import lombok.Builder;
+&nbsp;import lombok.Getter;
+&nbsp;import lombok.experimental.UtilityClass;
+&nbsp;import lombok.extern.log4j.Log4j2;
+&nbsp;import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+&nbsp;import org.springframework.util.Assert;
+&nbsp;import org.springframework.util.CollectionUtils;
+&nbsp;import org.springframework.util.PropertyPlaceholderHelper;
+&nbsp;
+&nbsp;import java.util.Collection;
+&nbsp;import java.util.HashSet;
+&nbsp;import java.util.Properties;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;import static io.micrometer.common.util.StringUtils.isNotBlank;
+&nbsp;import static java.util.Objects.isNull;
+&nbsp;import static java.util.Objects.nonNull;
+&nbsp;import static org.springframework.util.Assert.isTrue;
+&nbsp;
+&nbsp;
+&nbsp;/**
+&nbsp; * A class that encapsulates common cases of working with SQL queries. Has a {@link Builder} for constructing the
+&nbsp; * corresponding query. Also, carries the parameters necessary for query invocation, as well as an additional
+&nbsp; * {@link #countQuery} for calculating total count for paged requests. Also it is possible to add parameterized parts to
+&nbsp; * the query in case certain inputs to it are optional (please note the syntax in the sample). Here is an example usage
+&nbsp; * of this class:
+&nbsp; * &lt;pre&gt;
+&nbsp; *     {@code
+&nbsp; *     SqlQuery.Builder builder = SqlQuery.builder()
+&nbsp; *      .query(&quot;SELECT * FROM data_source WHERE envId = :envId {{optionalParam: AND optionalField = :optionalParam}}&quot;);
+&nbsp; *     builder.param(&quot;envId&quot;, envId);
+&nbsp; *     builder.includePart(&quot;optionalParam&quot;, &quot;someValue&quot;);
+&nbsp; *     builder.limit(20);
+&nbsp; *     builder.offset(1);
+&nbsp; *     builder.paging(true);
+&nbsp; *     SqlQuery query = builder.build();
+&nbsp; *     }
+&nbsp; * &lt;/pre&gt;
+&nbsp; *
+&nbsp; * @author roman.vakulenko
+&nbsp; * @version 2.1 Created: 16.06.22
+&nbsp; */
+<b class="fc">&nbsp;@Log4j2</b>
+&nbsp;@Getter
+<b class="fc">&nbsp;@AllArgsConstructor(access = AccessLevel.PRIVATE)</b>
+<b class="pc">&nbsp;@Builder(builderClassName = &quot;Builder&quot;)</b>
+&nbsp;public class SqlQuery {
+&nbsp;
+&nbsp;    private static final String COUNT_START = &quot;SELECT COUNT(*) FROM (\n&quot;;
+&nbsp;    private static final String COUNT_FINISH = &quot;\n) AS inner_query&quot;;
+&nbsp;    private static final String LIMIT_PARAM = &quot;limit&quot;;
+&nbsp;    private static final String OFFSET_PARAM = &quot;offset&quot;;
+&nbsp;    private static final String PAGING = &quot;\nLIMIT :&quot; + LIMIT_PARAM + &quot; OFFSET :&quot; + OFFSET_PARAM;
+<b class="fc">&nbsp;    private final String query;</b>
+<b class="nc">&nbsp;    private final String countQuery;</b>
+<b class="fc">&nbsp;    private final MapSqlParameterSource params;</b>
+&nbsp;
+&nbsp;    public static class Builder {
+&nbsp;        private static final String NOT_NULL_MESSAGE = &quot;name argument must be not null&quot;;
+&nbsp;        private String query;
+<b class="fc">&nbsp;        private boolean paging = false;</b>
+<b class="fc">&nbsp;        private Set&lt;String&gt; enabledPlaceholders = new HashSet&lt;&gt;();</b>
+<b class="fc">&nbsp;        private Properties customPlaceholdersValues = new Properties();</b>
+<b class="fc">&nbsp;        private MapSqlParameterSource params = new MapSqlParameterSource();</b>
+&nbsp;
+<b class="fc">&nbsp;        Builder() {</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        /**
+&nbsp;         * Sets the actual SQL query (possibly with templates). Note that the query must not be blank. The syntax of the
+&nbsp;         * query itself is not verified by the builder.
+&nbsp;         *
+&nbsp;         * @param query the SQL query with parameters and optional parts as indicated by documentation
+&nbsp;         * @return the builder object
+&nbsp;         */
+&nbsp;        public Builder query(String query) {
+<b class="fc">&nbsp;            this.query = query;</b>
+<b class="fc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Builder param(String paramName, Object paramValue) {
+<b class="fc">&nbsp;            isTrue(isNotBlank(paramName), NOT_NULL_MESSAGE);</b>
+<b class="fc">&nbsp;            enabledPlaceholders.add(paramName);</b>
+<b class="fc">&nbsp;            this.params.addValue(paramName, paramValue);</b>
+<b class="fc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Builder optionalParam(String paramName, String paramValue) {
+<b class="nc">&nbsp;            isTrue(isNotBlank(paramName), NOT_NULL_MESSAGE);</b>
+<b class="nc">&nbsp;            if (nonNull(paramValue)) {</b>
+<b class="nc">&nbsp;                this.params.addValue(paramName, paramValue);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Builder optionalParam(String paramName, Collection&lt;?&gt; paramValue) {
+<b class="nc">&nbsp;            isTrue(isNotBlank(paramName), NOT_NULL_MESSAGE);</b>
+<b class="nc">&nbsp;            if (!CollectionUtils.isEmpty(paramValue)) {</b>
+<b class="nc">&nbsp;                this.params.addValue(paramName, paramValue);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Builder optionalParam(String paramName, Number paramValue) {
+<b class="nc">&nbsp;            isTrue(isNotBlank(paramName), NOT_NULL_MESSAGE);</b>
+<b class="nc">&nbsp;            if (nonNull(paramValue)) {</b>
+<b class="nc">&nbsp;                this.params.addValue(paramName, paramValue);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Builder optionalPart(String paramName, boolean include) {
+<b class="nc">&nbsp;            isTrue(isNotBlank(paramName), NOT_NULL_MESSAGE);</b>
+<b class="nc">&nbsp;            if (include) {</b>
+<b class="nc">&nbsp;                enabledPlaceholders.add(paramName);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Builder includePart(String paramName) {
+<b class="nc">&nbsp;            return optionalPart(paramName, true);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Builder includePartOrIsNull(String name, Object obj) {
+<b class="nc">&nbsp;            isTrue(isNotBlank(name), NOT_NULL_MESSAGE);</b>
+<b class="nc">&nbsp;            enabledPlaceholders.add(name);</b>
+<b class="nc">&nbsp;            if (isNull(obj)) {</b>
+<b class="nc">&nbsp;                customPlaceholdersValues.put(name, &quot;is null&quot;);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        /**
+&nbsp;         * Sets the limit of entries to be returned by the query. Note that for having a paged query, the {@link #paging}
+&nbsp;         * method has to be invoked.
+&nbsp;         *
+&nbsp;         * @param limit limit to be set
+&nbsp;         * @return the builder object
+&nbsp;         */
+&nbsp;        public Builder limit(int limit) {
+<b class="nc">&nbsp;            this.params.addValue(LIMIT_PARAM, limit);</b>
+<b class="nc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        /**
+&nbsp;         * Sets the offset for the entries to be returned by the query. Note that for having a paged query, the {@link #paging}
+&nbsp;         * method has to be invoked.
+&nbsp;         *
+&nbsp;         * @param offset offset to be set
+&nbsp;         * @return the builder object
+&nbsp;         */
+&nbsp;        public Builder offset(int offset) {
+<b class="nc">&nbsp;            this.params.addValue(OFFSET_PARAM, offset);</b>
+<b class="nc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        /**
+&nbsp;         * Indicates whether the query is supposed to be used for a paged request. This would result in the generation
+&nbsp;         * of a {@link #countQuery}, and the addition of `LIMIT` and `OFFSET` to the input query. Note that the usage of
+&nbsp;         * this method requires setting the {@link #limit} and {@link #offset}, otherwise the query generation will throw
+&nbsp;         * an exception.
+&nbsp;         *
+&nbsp;         * @return the builder object
+&nbsp;         */
+&nbsp;
+&nbsp;        public Builder paging() {
+<b class="nc">&nbsp;            this.paging = true;</b>
+<b class="nc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public SqlQuery build() {
+<b class="fc">&nbsp;            isTrue(isNotBlank(query), &quot;Query not specified&quot;);</b>
+<b class="fc">&nbsp;            String queryString = PlaceholderUtils.replacePlaceholders(query, enabledPlaceholders, customPlaceholdersValues);</b>
+&nbsp;
+<b class="pc">&nbsp;            if (this.paging) {</b>
+<b class="nc">&nbsp;                isTrue(this.params.hasValue(LIMIT_PARAM) &amp;&amp; this.params.hasValue(OFFSET_PARAM),</b>
+&nbsp;                        &quot;Paging parameters not specified&quot;);
+<b class="nc">&nbsp;                String countQuery = COUNT_START + queryString + COUNT_FINISH;</b>
+<b class="nc">&nbsp;                queryString += PAGING;</b>
+<b class="nc">&nbsp;                return new SqlQuery(queryString, countQuery, params);</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                return new SqlQuery(queryString, null, params);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+&nbsp;        /**
+&nbsp;         * Build count query from provided query.
+&nbsp;         *
+&nbsp;         * @return {@link SqlQuery}
+&nbsp;         */
+&nbsp;        public SqlQuery buildCountQuery() {
+<b class="nc">&nbsp;            isTrue(isNotBlank(query), &quot;Query not specified&quot;);</b>
+<b class="nc">&nbsp;            String queryString = PlaceholderUtils.replacePlaceholders(query, enabledPlaceholders, customPlaceholdersValues);</b>
+&nbsp;
+<b class="nc">&nbsp;            String countQuery = COUNT_START + queryString + COUNT_FINISH;</b>
+<b class="nc">&nbsp;            return new SqlQuery(countQuery, null, params);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    @Log4j2</b>
+&nbsp;    @UtilityClass
+<b class="nc">&nbsp;    public static class PlaceholderUtils {</b>
+&nbsp;
+&nbsp;        private static final String VALUE_SEPARATOR = &quot;:&quot;;
+&nbsp;        private static final String PLACEHOLDER_PREFIX = &quot;{{&quot;;
+&nbsp;        private static final String PLACEHOLDER_SUFFIX = &quot;}}&quot;;
+&nbsp;
+<b class="fc">&nbsp;        private static final PropertyPlaceholderHelper PLACEHOLDER_HELPER =</b>
+&nbsp;                new PropertyPlaceholderHelper(PLACEHOLDER_PREFIX, PLACEHOLDER_SUFFIX, VALUE_SEPARATOR, false);
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;        public static String replacePlaceholders(String template, Set&lt;String&gt; enabledPlaceholders, Properties customPlaceholdersValues) {
+<b class="fc">&nbsp;            Assert.notNull(enabledPlaceholders, &quot;&#39;enabledPlaceholders&#39; must not be null&quot;);</b>
+<b class="fc">&nbsp;            Assert.notNull(customPlaceholdersValues, &quot;&#39;customPlaceholdersValues&#39; must not be null&quot;);</b>
+<b class="fc">&nbsp;            PropertyPlaceholderHelper.PlaceholderResolver placeholderResolver = new PropertyPlaceholderHelper.PlaceholderResolver() {</b>
+&nbsp;                @Override
+&nbsp;                public String resolvePlaceholder(String placeholderName) {
+<b class="nc">&nbsp;                    if (isPlaceholderEnabled(placeholderName)) {</b>
+&nbsp;                        //get value or default if no custom value
+<b class="nc">&nbsp;                        return customPlaceholdersValues.getProperty(placeholderName);</b>
+&nbsp;                    } else {
+&nbsp;                        //clear unresolved placeholders
+<b class="nc">&nbsp;                        return &quot;&quot;;</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;
+&nbsp;                private boolean isPlaceholderEnabled(String placeholder) {
+<b class="nc">&nbsp;                    if (enabledPlaceholders.contains(placeholder)) {</b>
+<b class="nc">&nbsp;                        return true;</b>
+&nbsp;                    } else {
+<b class="nc">&nbsp;                        int separatorIndex = placeholder.indexOf(VALUE_SEPARATOR);</b>
+<b class="nc">&nbsp;                        if (separatorIndex != -1) {</b>
+<b class="nc">&nbsp;                            String placeholderKey = placeholder.trim().substring(0, separatorIndex);</b>
+<b class="nc">&nbsp;                            return enabledPlaceholders.contains(placeholderKey);</b>
+&nbsp;                        }
+&nbsp;                    }
+<b class="nc">&nbsp;                    return false;</b>
+&nbsp;                }
+&nbsp;
+&nbsp;            };
+&nbsp;
+<b class="fc">&nbsp;            return PLACEHOLDER_HELPER.replacePlaceholders(template, placeholderResolver);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-10-14 15:41</div>
+</div>
+</body>
+</html>

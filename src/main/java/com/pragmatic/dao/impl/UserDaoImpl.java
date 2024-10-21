@@ -3,7 +3,6 @@ package com.pragmatic.dao.impl;
 
 import com.pragmatic.dao.UserDao;
 import com.pragmatic.dao.rowmapper.UserRowMapper;
-import com.pragmatic.dto.impl.UserDtoImpl;
 import com.pragmatic.model.User;
 import com.pragmatic.sql.SqlQuery;
 import lombok.extern.log4j.Log4j2;
@@ -67,7 +66,7 @@ public class UserDaoImpl extends NamedParameterJdbcDaoSupport implements UserDao
         this.setDataSource(dataSource);
     }
 
-    private Integer insert(SqlQuery sqlQuery) {
+    private Long insert(SqlQuery sqlQuery) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int result = Objects.requireNonNull(getNamedParameterJdbcTemplate())
                 .update(
@@ -80,7 +79,7 @@ public class UserDaoImpl extends NamedParameterJdbcDaoSupport implements UserDao
         Assert.isTrue(result > 0, "Insert wasn't successful");
         Assert.notNull(keyHolder.getKey(), "Can't get id for the new record");
 
-        return keyHolder.getKey().intValue();
+        return keyHolder.getKey().longValue();
     }
 
     public User save(User user) {
@@ -88,14 +87,14 @@ public class UserDaoImpl extends NamedParameterJdbcDaoSupport implements UserDao
                 .param(NAME_PLACEHOLDER, user.getName())
                 .param(EMAIL_PLACEHOLDER, user.getEmail())
                 .param(PASSWORD_PLACEHOLDER, user.getPassword());
-        Integer userId = insert(builder.build());
+        Long userId = insert(builder.build());
         user.setId(userId);
         return user;
     }
 
 
 
-    public Optional<User> execUserQuery(SqlQuery sqlQuery) { //TODO PROTECTED OR PRIVATE
+    private Optional<User> execUserQuery(SqlQuery sqlQuery) {
         log.trace(sqlQuery.getQuery());
         var users = Objects.requireNonNull(getNamedParameterJdbcTemplate())
                 .query(sqlQuery.getQuery(), sqlQuery.getParams(), userRowMapper);
@@ -106,7 +105,9 @@ public class UserDaoImpl extends NamedParameterJdbcDaoSupport implements UserDao
     }
 
     @Override
-    public Optional<User> findById(Integer id) {
+    public Optional<User> findById(Long id) {
+        if (id == null) { throw  new IllegalArgumentException(); }
+        if (id < 1) { throw  new IllegalArgumentException(); }
         Builder builder = SqlQuery.builder()
                 .query(findUserByIdSql)
                 .param(USER_ID_PLACEHOLDER, id);
@@ -115,6 +116,7 @@ public class UserDaoImpl extends NamedParameterJdbcDaoSupport implements UserDao
 
     @Override
     public Optional<User> findByNameAndEmail(String name, String email) {
+        if (name == null || email == null) { throw  new IllegalArgumentException(); }
         SqlQuery sqlQuery = SqlQuery.builder()
                 .query(findUserByAttributesSql)
                 .param(NAME_PLACEHOLDER, name)

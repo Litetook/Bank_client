@@ -10,9 +10,9 @@ import java.util.Date;
 @ToString @Getter @Setter
 @Builder
 public class Transaction  {
-    private Integer transactionId;
-    private final Integer sourceAccountId;
-    private final Integer destinationAccountId;
+    private Long transactionId;
+    private final Long sourceAccountId;
+    private final Long destinationAccountId;
     private final BigDecimal amount;
     @Builder.Default
     private Date actionDate = Date.from(Instant.now());

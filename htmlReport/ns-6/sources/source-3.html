@@ -1,0 +1,280 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > TransactionDaoImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.pragmatic.dao.impl</a>
+</div>
+
+<h1>Coverage Summary for Class: TransactionDaoImpl (com.pragmatic.dao.impl)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TransactionDaoImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    22.2%
+  </span>
+  <span class="absValue">
+    (2/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    28.6%
+  </span>
+  <span class="absValue">
+    (16/56)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">TransactionDaoImpl$$SpringCGLIB$$0</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    22.2%
+  </span>
+  <span class="absValue">
+    (2/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    28.6%
+  </span>
+  <span class="absValue">
+    (16/56)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.pragmatic.dao.impl;
+&nbsp;
+&nbsp;import com.pragmatic.dao.TransactionDao;
+&nbsp;import com.pragmatic.dao.rowmapper.TransactionRowMapper;
+&nbsp;import com.pragmatic.model.Transaction;
+&nbsp;import com.pragmatic.sql.SqlQuery;
+&nbsp;import lombok.extern.log4j.Log4j2;
+&nbsp;import org.springframework.beans.factory.annotation.Value;
+&nbsp;import org.springframework.core.io.Resource;
+&nbsp;import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
+&nbsp;import org.springframework.jdbc.support.GeneratedKeyHolder;
+&nbsp;import org.springframework.jdbc.support.KeyHolder;
+&nbsp;import org.springframework.stereotype.Repository;
+&nbsp;
+&nbsp;import javax.sql.DataSource;
+&nbsp;import java.io.IOException;
+&nbsp;import java.nio.charset.Charset;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;import static org.springframework.util.StreamUtils.copyToString;
+&nbsp;
+<b class="fc">&nbsp;@Log4j2</b>
+&nbsp;@Repository
+&nbsp;public class TransactionDaoImpl  extends NamedParameterJdbcDaoSupport implements TransactionDao {
+&nbsp;    private static final String TRANSACTION_ID_PLACEHOLDER = &quot;transactionId&quot;;
+&nbsp;    private static final String SOURCE_ACCOUNT_ID_PLACEHOLDER = &quot;sourceAccountId&quot;;
+&nbsp;    private static final String DESTINATION_ACCOUNT_ID_PLACEHOLDER = &quot;destinationAccountId&quot;;
+&nbsp;    private static final String AMOUNT_PLACEHOLDER = &quot;amount&quot;;
+&nbsp;    private static final String ACTION_DATE_PLACEHOLDER = &quot;actionDate&quot;;
+&nbsp;//    CUSTOM FOR WHERE CONDITION TO FIND BY DATE
+&nbsp;    private static final String DATE_FROM_PLACEHOLDER = &quot;dateFrom&quot;;
+&nbsp;    private static final String DATE_TO_PLACEHOLDER = &quot;dateTo&quot;;
+&nbsp;    private static final String ACCOUNT_ID_PLACEHOLDER = &quot;accountId&quot;;
+&nbsp;
+&nbsp;    private final String findTransactionByIdSql;
+&nbsp;    private final String findTransactionsByDateRangeSql;
+&nbsp;    private final String findAllSql;
+&nbsp;    private final String createTransactionSql;
+&nbsp;
+<b class="fc">&nbsp;    TransactionRowMapper transactionRowMapper = new TransactionRowMapper();</b>
+&nbsp;
+&nbsp;    public TransactionDaoImpl (
+&nbsp;            DataSource dataSource,
+&nbsp;            @Value(&quot;classpath:/db/sql/transactionDao/findTransactionById.sql&quot;) Resource findTransactionByIdSqlResource,
+&nbsp;            @Value(&quot;classpath:/db/sql/transactionDao/findTransactionsByDateRange.sql&quot;) Resource findTransactionsByDateRangeSqlResource,
+&nbsp;            @Value(&quot;classpath:/db/sql/transactionDao/findAllTransactions.sql&quot;) Resource findAllSqlResource,
+&nbsp;            @Value(&quot;classpath:/db/sql/transactionDao/createTransaction.sql&quot;) Resource createTransactionSqlResource
+<b class="fc">&nbsp;            ) throws IOException {</b>
+<b class="fc">&nbsp;        this.setDataSource(dataSource);</b>
+<b class="fc">&nbsp;        this.createTransactionSql = copyToString(</b>
+<b class="fc">&nbsp;                createTransactionSqlResource.getInputStream(),</b>
+<b class="fc">&nbsp;                Charset.defaultCharset()</b>
+&nbsp;        );
+&nbsp;
+<b class="fc">&nbsp;        this.findTransactionByIdSql= copyToString(</b>
+<b class="fc">&nbsp;                findTransactionByIdSqlResource.getInputStream(),</b>
+<b class="fc">&nbsp;                Charset.defaultCharset()</b>
+&nbsp;        );
+&nbsp;
+<b class="fc">&nbsp;        this.findAllSql = copyToString(</b>
+<b class="fc">&nbsp;                findAllSqlResource.getInputStream(),</b>
+<b class="fc">&nbsp;                Charset.defaultCharset()</b>
+&nbsp;        );
+&nbsp;
+<b class="fc">&nbsp;        this.findTransactionsByDateRangeSql = copyToString(</b>
+<b class="fc">&nbsp;                findTransactionsByDateRangeSqlResource.getInputStream(),</b>
+<b class="fc">&nbsp;                Charset.defaultCharset()</b>
+&nbsp;        );
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    private Long insert(SqlQuery sqlQuery) {
+<b class="nc">&nbsp;        KeyHolder keyHolder = new GeneratedKeyHolder();</b>
+<b class="nc">&nbsp;        int result = Objects.requireNonNull(getNamedParameterJdbcTemplate())</b>
+<b class="nc">&nbsp;                .update(</b>
+<b class="nc">&nbsp;                        sqlQuery.getQuery(),</b>
+<b class="nc">&nbsp;                        sqlQuery.getParams(),</b>
+&nbsp;                        keyHolder,
+&nbsp;                        new String[]{TRANSACTION_ID_PLACEHOLDER}
+&nbsp;                );
+<b class="nc">&nbsp;        return  keyHolder.getKey().longValue();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Transaction save(Transaction transaction) {
+&nbsp;        SqlQuery sqlQuery = SqlQuery
+<b class="nc">&nbsp;                .builder()</b>
+<b class="nc">&nbsp;                .query(createTransactionSql)</b>
+<b class="nc">&nbsp;                .param(SOURCE_ACCOUNT_ID_PLACEHOLDER, transaction.getSourceAccountId())</b>
+<b class="nc">&nbsp;                .param(DESTINATION_ACCOUNT_ID_PLACEHOLDER, transaction.getDestinationAccountId())</b>
+<b class="nc">&nbsp;                .param(AMOUNT_PLACEHOLDER, transaction.getAmount())</b>
+<b class="nc">&nbsp;                .param(ACTION_DATE_PLACEHOLDER, transaction.getActionDate())</b>
+<b class="nc">&nbsp;                .build();</b>
+<b class="nc">&nbsp;        Long transactionId = insert(sqlQuery);</b>
+<b class="nc">&nbsp;        transaction.setTransactionId(transactionId);</b>
+<b class="nc">&nbsp;        return  transaction;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Optional&lt;Transaction&gt; execTransactionQuery(SqlQuery sqlQuery) {
+<b class="nc">&nbsp;        log.trace(sqlQuery);</b>
+&nbsp;
+<b class="nc">&nbsp;        var transactions = Objects.requireNonNull(getNamedParameterJdbcTemplate())</b>
+<b class="nc">&nbsp;                .query(sqlQuery.getQuery(), sqlQuery.getParams(), transactionRowMapper);</b>
+<b class="nc">&nbsp;        if (transactions.isEmpty()) {</b>
+<b class="nc">&nbsp;            return Optional.empty();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return Optional.of(transactions.getFirst());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private List&lt;Transaction&gt; execTransactionsQuery(SqlQuery sqlQuery) {
+<b class="nc">&nbsp;        return Objects.requireNonNull(getNamedParameterJdbcTemplate())</b>
+<b class="nc">&nbsp;                .query(sqlQuery.getQuery(), sqlQuery.getParams(), transactionRowMapper);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Optional&lt;Transaction&gt; findTransactionById(Long transactionId) {
+<b class="nc">&nbsp;        SqlQuery sqlQuery = SqlQuery.builder()</b>
+<b class="nc">&nbsp;                .query(findTransactionByIdSql)</b>
+<b class="nc">&nbsp;                .param(TRANSACTION_ID_PLACEHOLDER, transactionId)</b>
+<b class="nc">&nbsp;                .build();</b>
+<b class="nc">&nbsp;        return  execTransactionQuery(sqlQuery);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;Transaction&gt; findTransactionsByDateRange(Long accountId, Date dateFrom, Date dateTo) {
+<b class="nc">&nbsp;        SqlQuery sqlQuery = SqlQuery.builder()</b>
+<b class="nc">&nbsp;                .query(findTransactionsByDateRangeSql)</b>
+<b class="nc">&nbsp;                .param(DATE_TO_PLACEHOLDER, dateTo)</b>
+<b class="nc">&nbsp;                .param(DATE_FROM_PLACEHOLDER,dateFrom)</b>
+<b class="nc">&nbsp;                .param(ACCOUNT_ID_PLACEHOLDER, accountId)</b>
+<b class="nc">&nbsp;                .build();</b>
+<b class="nc">&nbsp;        return  execTransactionsQuery(sqlQuery);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;Transaction&gt; findAll() {
+<b class="nc">&nbsp;        SqlQuery sqlQuery = SqlQuery.builder()</b>
+<b class="nc">&nbsp;                .query(findAllSql)</b>
+<b class="nc">&nbsp;                .build();</b>
+<b class="nc">&nbsp;        return  execTransactionsQuery(sqlQuery);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-10-14 15:41</div>
+</div>
+</body>
+</html>

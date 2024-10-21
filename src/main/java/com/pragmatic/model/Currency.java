@@ -5,6 +5,6 @@ import lombok.*;
 @Getter  @Setter @ToString
 @Builder
 public class Currency  {
-    Integer id;
+    Long id;
     String symbol;
 }

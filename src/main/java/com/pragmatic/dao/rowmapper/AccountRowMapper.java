@@ -11,10 +11,10 @@ public class AccountRowMapper  implements RowMapper<Account> {
     @Override
     public Account mapRow(ResultSet rs, int rowNum) throws SQLException {
         return Account.builder()
-                .id(rs.getInt("account_id"))
-                .userId(rs.getInt("user_id"))
+                .id(rs.getLong("account_id"))
+                .userId(rs.getLong("user_id"))
                 .balance(rs.getBigDecimal("balance"))
-                .currencyId(rs.getInt("currency_id"))
+                .currencyId(rs.getLong("currency_id"))
                 .build();
     }
 

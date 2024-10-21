@@ -3,6 +3,7 @@ package com.pragmatic.controller.exception;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,12 +16,13 @@ import org.springframework.web.server.ResponseStatusException;
 @RestControllerAdvice
 @ResponseBody
 public class СontrollerExceptionHandler {
-
     @ExceptionHandler({
             HandlerMethodValidationException.class,
             MethodArgumentTypeMismatchException.class,
+            MethodArgumentNotValidException.class,
             MissingServletRequestParameterException.class, //обов'язкові параметри
-            HandlerMethodValidationException.class //помилки валідації в самому контроллері.
+            HandlerMethodValidationException.class,
+            IllegalArgumentException.class//помилки валідації в самому контроллері.
             })
     public ResponseEntity<ErrorMessage> validateError(Exception ex) {
         log.error("method validation exception", ex.getMessage());

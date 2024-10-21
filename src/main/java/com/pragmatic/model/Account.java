@@ -11,12 +11,10 @@ import java.util.Objects;
 @Builder
 @AllArgsConstructor
 public class Account {
-    int id;
-    int userId;
-    int currencyId;
+    long id;
+    long userId;
+    long currencyId;
     BigDecimal balance ;
-
-
 
 
     @Override

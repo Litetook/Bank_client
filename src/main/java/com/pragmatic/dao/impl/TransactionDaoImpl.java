@@ -32,10 +32,9 @@ public class TransactionDaoImpl  extends NamedParameterJdbcDaoSupport implements
     private static final String DATE_TO_PLACEHOLDER = "dateTo";
     private static final String ACCOUNT_ID_PLACEHOLDER = "accountId";
 
-
     private final String findTransactionByIdSql;
     private final String findTransactionsByDateRangeSql;
-    private final String findAllSql;
+    //private final String findAllSql;
     private final String createTransactionSql;
 
     TransactionRowMapper transactionRowMapper = new TransactionRowMapper();
@@ -44,9 +43,8 @@ public class TransactionDaoImpl  extends NamedParameterJdbcDaoSupport implements
             DataSource dataSource,
             @Value("classpath:/db/sql/transactionDao/findTransactionById.sql") Resource findTransactionByIdSqlResource,
             @Value("classpath:/db/sql/transactionDao/findTransactionsByDateRange.sql") Resource findTransactionsByDateRangeSqlResource,
-            @Value("classpath:/db/sql/transactionDao/findAllTransactions.sql") Resource findAllSqlResource,
+//            @Value("classpath:/db/sql/transactionDao/findAllTransactions.sql") Resource findAllSqlResource,
             @Value("classpath:/db/sql/transactionDao/createTransaction.sql") Resource createTransactionSqlResource
-
             ) throws IOException {
         this.setDataSource(dataSource);
         this.createTransactionSql = copyToString(
@@ -59,10 +57,10 @@ public class TransactionDaoImpl  extends NamedParameterJdbcDaoSupport implements
                 Charset.defaultCharset()
         );
 
-        this.findAllSql = copyToString(
-                findAllSqlResource.getInputStream(),
-                Charset.defaultCharset()
-        );
+//        this.findAllSql = copyToString(
+//                findAllSqlResource.getInputStream(),
+//                Charset.defaultCharset()
+//        );
 
         this.findTransactionsByDateRangeSql = copyToString(
                 findTransactionsByDateRangeSqlResource.getInputStream(),
@@ -71,8 +69,8 @@ public class TransactionDaoImpl  extends NamedParameterJdbcDaoSupport implements
 
     }
 
-    @Override
-    public Integer insert(SqlQuery sqlQuery) {
+
+    private Long insert(SqlQuery sqlQuery) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int result = Objects.requireNonNull(getNamedParameterJdbcTemplate())
                 .update(
@@ -81,7 +79,7 @@ public class TransactionDaoImpl  extends NamedParameterJdbcDaoSupport implements
                         keyHolder,
                         new String[]{TRANSACTION_ID_PLACEHOLDER}
                 );
-        return  keyHolder.getKey().intValue();
+        return  keyHolder.getKey().longValue();
     }
 
     @Override
@@ -94,12 +92,12 @@ public class TransactionDaoImpl  extends NamedParameterJdbcDaoSupport implements
                 .param(AMOUNT_PLACEHOLDER, transaction.getAmount())
                 .param(ACTION_DATE_PLACEHOLDER, transaction.getActionDate())
                 .build();
-        Integer transactionId = insert(sqlQuery);
+        Long transactionId = insert(sqlQuery);
         transaction.setTransactionId(transactionId);
         return  transaction;
     }
 
-    public Optional<Transaction> execTransactionQuery(SqlQuery sqlQuery) {
+    private Optional<Transaction> execTransactionQuery(SqlQuery sqlQuery) {
         log.trace(sqlQuery);
 
         var transactions = Objects.requireNonNull(getNamedParameterJdbcTemplate())
@@ -110,14 +108,16 @@ public class TransactionDaoImpl  extends NamedParameterJdbcDaoSupport implements
         return Optional.of(transactions.getFirst());
     }
 
-    public List<Transaction> execTransactionsQuery(SqlQuery sqlQuery) {
+    private List<Transaction> execTransactionsQuery(SqlQuery sqlQuery) {
         return Objects.requireNonNull(getNamedParameterJdbcTemplate())
                 .query(sqlQuery.getQuery(), sqlQuery.getParams(), transactionRowMapper);
     }
 
 
     @Override
-    public Optional<Transaction> findTransactionById(Integer transactionId) {
+    public Optional<Transaction> findTransactionById(Long transactionId) {
+        if (transactionId == null) {throw new IllegalArgumentException("transactionId cannot be null");}
+        if (transactionId <= 0) {throw new IllegalArgumentException("transactionId cannot be zero or less");}
         SqlQuery sqlQuery = SqlQuery.builder()
                 .query(findTransactionByIdSql)
                 .param(TRANSACTION_ID_PLACEHOLDER, transactionId)
@@ -126,7 +126,9 @@ public class TransactionDaoImpl  extends NamedParameterJdbcDaoSupport implements
     }
 
     @Override
-    public List<Transaction> findTransactionsByDateRange(Integer accountId, Date dateFrom, Date dateTo) {
+    public List<Transaction> findTransactionsByDateRange(Long accountId, Date dateFrom, Date dateTo) {
+        if (accountId == null || dateFrom == null || dateTo == null) {throw new IllegalArgumentException("arg can not be null");}
+        if (accountId<= 0) {throw new IllegalArgumentException("id can not be less than 0");}
         SqlQuery sqlQuery = SqlQuery.builder()
                 .query(findTransactionsByDateRangeSql)
                 .param(DATE_TO_PLACEHOLDER, dateTo)
@@ -137,13 +139,12 @@ public class TransactionDaoImpl  extends NamedParameterJdbcDaoSupport implements
     }
 
 
-
-    @Override
-    public List<Transaction> findAll() {
-        SqlQuery sqlQuery = SqlQuery.builder()
-                .query(findAllSql)
-                .build();
-        return  execTransactionsQuery(sqlQuery);
-    }
+//    @Override
+//    public List<Transaction> findAll() {
+//        SqlQuery sqlQuery = SqlQuery.builder()
+//                .query(findAllSql)
+//                .build();
+//        return  execTransactionsQuery(sqlQuery);
+//    }
 
 }

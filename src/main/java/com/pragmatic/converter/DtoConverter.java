@@ -1,7 +1,7 @@
 package com.pragmatic.converter;
 
-import com.pragmatic.dto.impl.AccountDtoImpl;
-import com.pragmatic.dto.impl.UserDtoImpl;
+import com.pragmatic.dto.AccountDto;
+import com.pragmatic.dto.UserDto;
 import com.pragmatic.model.Account;
 import com.pragmatic.model.User;
 import org.springframework.stereotype.Component;
@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 public  class DtoConverter {
 
     //ACCOUNT
-    public AccountDtoImpl convertAccountToDto(Account account) {
-        return  AccountDtoImpl.builder()
+    public AccountDto convertAccountToDto(Account account) {
+        return  AccountDto.builder()
                 .accountId(account.getId())
                 .currencyId(account.getCurrencyId())
                 .userId(account.getUserId())
@@ -20,28 +20,27 @@ public  class DtoConverter {
                 .build();
     }
 
-    public Account convertDtoToAccount(AccountDtoImpl accountDtoImpl) {
+    public Account convertDtoToAccount(AccountDto accountDto) {
         return  Account.builder()
-                .currencyId(accountDtoImpl.getCurrencyId())
-                .userId(accountDtoImpl.getUserId())
-                .balance(accountDtoImpl.getBalance())
+                .currencyId(accountDto.getCurrencyId())
+                .userId(accountDto.getUserId())
+                .balance(accountDto.getBalance())
                 .build();
     }
 
 //    USER
-    public UserDtoImpl convertUserToDto(User user) {
-        return UserDtoImpl.builder()
+    public UserDto convertUserToDto(User user) {
+        return UserDto.builder()
                 .userId(user.getId())
                 .email(user.getEmail())
                 .name(user.getName())
                 .build();
     }
 
-    public User convertDtoToUser(UserDtoImpl userDto) {
+    public User convertDtoToUser(UserDto userDto) {
         return User.builder()
                 .name(userDto.getName())
                 .email(userDto.getEmail())
-                .password(userDto.getPassword())
                 .build();
     }
 

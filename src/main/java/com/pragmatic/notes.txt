@@ -148,8 +148,132 @@ check todo
 5/ контейнери
 розыбрати primary анотації
 
-поправити скл груп
+поправити скл груп. чистити квері, і нуспішні тести так само промутити
 поправити прайвет для екзек квері
 допиисати тести для всіх дао
 зробити щоб груві тести пускались через мавен команду
 розібратись відносно ресурсів.
+
+треба пояснити цю частину
+ private boolean execUpdateQuery(SqlQuery sqlQuery)  {
+        return Objects.requireNonNull(getNamedParameterJdbcTemplate()).update(sqlQuery.getQuery(), sqlQuery.getParams()) > 0;
+    }
+
+
+ще це. Чому я не тестую на інші якісь речі, інші типи даних. що можуть влетіти
+1) Обмеження класу. Просто він і раніше не прийме даних, бо всі методи ріівня вище обробляють тільки дані, які відносяться до мого типу даних, заданих в класі.
+2) Сама ідея до коду
+ public boolean updateBalance(BigDecimal balance, Long accountId) {
+        if (!(accountId instanceof Long)) {
+            throw new IllegalArgumentException("AccountId must be of type Long");
+        }
+  Пише що такі перевірки надлишкові. Пропонує просто замінити на нулл.
+
+  на якому рівні валідація має відбуватись?  і до якого доходити.
+
+  ексепшен зі спрінга
+
+  format code ( cmd, option, l)\
+
+
+  наскільки детальною має бути умова ексепшена по стрінзі? Наприклад.
+  нулл, і пуста стрінга ок. А чи повинна бути перевірка на трім, далі порівняти її довжину і кинути ексепшен, якщо 0?
+  яке неуспішне флоу до сейва? Він або збереже або ні. І нічого інше туди не влетить окрім його класу.
+  як імпортувати статичні параметри легко, не вручну. На прикладі екзекушен метода.
+    блок ексепшенів з датою, як краще б зробити було
+    чому юзерімпл 98 відсотків, де помилка
+    загальне значення дто порівняно з реквестом. Вона юзається тільки щоб вертати дані до контроллера, щоб не повертати оригінальний клас?
+
+    !!різниця депенденсі менеджемент і депенденсіс. Як їх можна поєднувати?
+
+
+    Стрінгютілз.ізбланк, переевірка на нал і на пусту строку.
+    відносно імпорта - погратись з настройками в ідеї, як статику імпортувати.
+
+    покрити кейс 102 лінія по юзердао.
+
+
+    UserCreateRequest => UserCreateRequestDto переписати
+    успішні та неіспішні кейси на груві для контроллера.
+
+
+ ХІКАРІ ррозібрати. Спробувати налаштування примінити
+1.взнати по замовчуванню яка кількість конекшенів з базою даних в спрінгбут 3 та спрінгбут 2.
+2. Як змінити.
+3. Які практики по підбору кількості средпул конекшенів існують, який розмір оптимальний.
+4. це буде почитати про основні налаштування хікарі.
+
+https://dip-mazumder.medium.com/how-to-determine-java-thread-pool-size-a-comprehensive-guide-4f73a4758273#:~:text=Determining%20the%20Number%20of%20Threads%20for%20CPU%2DBound%20Tasks%3A&text=Let's%20say%20you%20have%208,other%20tasks%20and%20system%20processes.
+Pool size = ((Core count * (1 + (Wait time / Service time))))
+
+https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing#connections--core_count--2--effective_spindle_count
+
+connections = ((core_count * 2) + effective_spindle_count)
+
+defaults:
+sb3:
+Pool Size:
+spring.datasource.hikari.maximum-pool-size: By default, the maximum size of the connection pool is set to 10.
+2. Connection Timeout:
+
+spring.datasource.hikari.connection-timeout: By default, the timeout for acquiring a connection from the pool is set to 30 seconds.
+3. Idle Timeout:
+
+spring.datasource.hikari.idle-timeout: By default, the timeout for idle connections in the pool is set to 10 minutes.
+4. Connection Validation:
+
+spring.datasource.hikari.validation-timeout: By default, the timeout for connection validation is set to 5 seconds.
+spring.datasource.hikari.connection-test-query: By default, a simple SQL query is used to validate connections (SELECT 1).
+5. Other Settings:
+
+spring.datasource.hikari.minimum-idle: By default, the minimum number of idle connections in the pool is set to 10% of the maximum pool size.
+spring.datasource.hikari.max-lifetime: By default, the maximum lifetime of a connection in the pool is set to 30 minutes.
+spring.datasource.hikari.initialization-fail-timeout: By default, the maximum time in milliseconds that HikariCP will wait for a connection pool to initialize is set to 1 minute
+
+sp2: defaults
+allowPoolSuspension.............false
+autoCommit......................true
+catalog.........................none
+connectionInitSql...............none
+connectionTestQuery.............none
+connectionTimeout...............30000
+dataSource......................none
+dataSourceClassName.............none
+dataSourceJNDI..................none
+driverClassName................."com.mysql.cj.jdbc.Driver"
+exceptionOverrideClassName......none
+idleTimeout.....................600000
+jdbcUrl.........................jdbc:mysql://<server>:<port>/<db>
+maxLifetime.....................1800000
+maximumPoolSize.................10
+metricRegistry..................none
+minimumIdle.....................10
+
+
+
+
+@Configuration
+public class DataSourceConfig {
+
+    @Primary
+    @Bean("mainDataSource")
+    @ConfigurationProperties(prefix = "datasource.admin")
+    public HikariDataSource mainDataSource() {
+        return DataSourceBuilder.create().type(HikariDataSource.class).build();
+    }
+
+    @Bean("quartzDataSource")
+    @ConfigurationProperties(prefix = "datasource.quartz")
+    public HikariDataSource quartzDataSource() {
+        HikariDataSource ds = DataSourceBuilder.create().type(HikariDataSource.class).build();
+        ds.setPoolName("quartz");
+        return ds;
+    }
+
+    @Bean("eventJournalDataSource")
+    @ConfigurationProperties(prefix = "datasource.eventjournal")
+    public HikariDataSource eventJournalDataSource() {
+        HikariDataSource ds = DataSourceBuilder.create().type(HikariDataSource.class).build();
+        ds.setPoolName("eventJournal");
+        return ds;
+    }

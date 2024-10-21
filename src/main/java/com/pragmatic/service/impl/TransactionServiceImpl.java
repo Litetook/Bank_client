@@ -1,7 +1,7 @@
 package com.pragmatic.service.impl;
 
 import com.pragmatic.dao.TransactionDao;
-import com.pragmatic.dto.request.TransactionsByRangeRequest;
+import com.pragmatic.controller.dto.request.TransactionsByRangeRequest;
 import com.pragmatic.model.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

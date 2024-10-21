@@ -3,11 +3,11 @@ import com.pragmatic.controller.exception.CustomUrlBrokenTestException;
 import com.pragmatic.controller.exception.MoneyTransferException;
 import com.pragmatic.controller.exception.ObjAlreadyExistsException;
 import com.pragmatic.controller.exception.ObjNotFoundException;
-import com.pragmatic.dto.impl.AccountDtoImpl;
-import com.pragmatic.dto.impl.UserDtoImpl;
-import com.pragmatic.dto.request.MoneyTransferRequest;
-import com.pragmatic.dto.request.TransactionsByRangeRequest;
-import com.pragmatic.dto.request.UserCreateRequest;
+import com.pragmatic.dto.AccountDto;
+import com.pragmatic.dto.UserDto;
+import com.pragmatic.controller.dto.request.MoneyTransferRequest;
+import com.pragmatic.controller.dto.request.TransactionsByRangeRequest;
+import com.pragmatic.controller.dto.request.UserCreateRequest;
 import com.pragmatic.model.Account;
 import com.pragmatic.model.Transaction;
 import com.pragmatic.service.AccountService;
@@ -60,66 +60,68 @@ public class GeneralController {
         return "Hello World";
     }
 
-    @GetMapping(value = "/getAccountById", produces = MediaType.APPLICATION_JSON_VALUE)
-    public  ResponseEntity<AccountDtoImpl> getAccountById(
-            @RequestParam(value = "id", defaultValue = "id")
-            @Min(1)
-            @Max(Integer.MAX_VALUE)
-            Integer id) throws ObjNotFoundException {
-        return new ResponseEntity<>(accountServiceImpl.getAccountById(id), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/getBadRequest", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> getBadRequest() throws CustomUrlBrokenTestException {
-        var apiObj = Optional.ofNullable(null).orElseThrow(()-> new CustomUrlBrokenTestException("controller message"));
-        return new ResponseEntity<>(new Object(), HttpStatus.OK);
-    }
-
-
-    @GetMapping(value="/getAccountsByUserId")
-    public ResponseEntity<List<AccountDtoImpl>> getAccountsByUserId(
-            @RequestParam(value="userId", defaultValue = "userId")
-            Integer userId ) {
-                List<AccountDtoImpl> accountDtoList = accountServiceImpl.findAccountsByUserId(userId);
-                return new ResponseEntity<>(accountDtoList, HttpStatus.OK);
-    }
-
     @PostMapping(value = "/createUser", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDtoImpl> createUser(@Validated @RequestBody UserCreateRequest userRequest) throws ObjAlreadyExistsException { //TODO переробити на реквест запит.
-        UserDtoImpl newUser = userService.createUserFromRequest(userRequest);
+    public ResponseEntity<UserDto> createUser(@Validated @RequestBody UserCreateRequest userRequest) throws ObjAlreadyExistsException {
+        UserDto newUser = userService.createUserFromRequest(userRequest);
         return new ResponseEntity<>(newUser, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/createAccount", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createAccount(@Validated @RequestBody AccountDtoImpl inputAPIaccountDTOImpl) throws ObjAlreadyExistsException {
-        //не міняти тут нічого.
-        Optional<Account> existingAcc =  accountServiceImpl.findExistAccountByParams(inputAPIaccountDTOImpl);
-
-        if (existingAcc.isEmpty() ) {
-            return new  ResponseEntity<>(this.accountServiceImpl.createAccountFromDto(inputAPIaccountDTOImpl), HttpStatus.CREATED);
-        }
-        else {
-            throw new ObjAlreadyExistsException(String.format("account with userid %d and currencyId %d",
-                    inputAPIaccountDTOImpl.getUserId(), inputAPIaccountDTOImpl.getCurrencyId()));
-        }
-    }
-
-    @GetMapping(value="/getAllUsers")
-    public ResponseEntity<List<UserDtoImpl>> getAccountsByUserId() {
-        List<UserDtoImpl> userDtoList = userService.findAll();
-        return new ResponseEntity<>(userDtoList, HttpStatus.OK);
-    }
-
-
     @GetMapping(value = "/getUserById")
-    public ResponseEntity<UserDtoImpl> getUserById(
-            @RequestParam(value = "id", defaultValue = "id")
-            Integer userId
-            ) throws ObjNotFoundException {
-            UserDtoImpl userDto = userService.findUserById(userId); //TODO з конвертера забрати пароль
+    public ResponseEntity<UserDto> getUserById(
+            @RequestParam(value = "id")
+            @Min(1)
+            @NotNull
+            Long userId
+    ) throws ObjNotFoundException {
+        UserDto userDto = userService.findUserById(userId);
 
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
+
+    @GetMapping(value="/getAllUsers")
+    public ResponseEntity<List<UserDto>> getAccountsByUserId() {
+        List<UserDto> userDtoList = userService.findAll();
+        return new ResponseEntity<>(userDtoList, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/createAccount", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> createAccount(@Validated @RequestBody AccountDto inputAPIaccountDTO) throws ObjAlreadyExistsException {
+        //не міняти тут нічого.
+        Optional<Account> existingAcc =  accountServiceImpl.findExistAccountByParams(inputAPIaccountDTO.getCurrencyId(), inputAPIaccountDTO.getUserId());
+
+        if (existingAcc.isEmpty() ) {
+            return new  ResponseEntity<>(this.accountServiceImpl.createAccountFromDto(inputAPIaccountDTO), HttpStatus.CREATED);
+        }
+        else {
+            throw new ObjAlreadyExistsException(String.format("account with userid %d and currencyId %d",
+                    inputAPIaccountDTO.getUserId(), inputAPIaccountDTO.getCurrencyId()));
+        }
+    }
+
+    @GetMapping(value = "/getAccountById", produces = MediaType.APPLICATION_JSON_VALUE)
+    public  ResponseEntity<AccountDto> getAccountById(
+            @RequestParam(value = "id", defaultValue = "id")
+            @Min(1)
+            @Max(Long.MAX_VALUE)
+            Long id) throws ObjNotFoundException {
+        return new ResponseEntity<>(accountServiceImpl.getAccountById(id), HttpStatus.OK);
+    }
+
+//    @GetMapping(value = "/getBadRequest", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<Object> getBadRequest() throws CustomUrlBrokenTestException {
+//        var apiObj = Optional.ofNullable(null).orElseThrow(()-> new CustomUrlBrokenTestException("controller message"));
+//        return new ResponseEntity<>(new Object(), HttpStatus.OK);
+//    }
+
+
+    @GetMapping(value="/getAccountsByUserId")
+    public ResponseEntity<List<AccountDto>> getAccountsByUserId(
+            @RequestParam(value="userId", defaultValue = "userId")
+            Long userId ) {
+                List<AccountDto> accountDtoList = accountServiceImpl.findAccountsByUserId(userId);
+                return new ResponseEntity<>(accountDtoList, HttpStatus.OK);
+    }
+
 
     @PostMapping(value = "/getTransactionsByDateRange")
     public ResponseEntity<List<Transaction>> getTransactionsByDateRange(@Validated @RequestBody TransactionsByRangeRequest transactionDateRangeRequest) {

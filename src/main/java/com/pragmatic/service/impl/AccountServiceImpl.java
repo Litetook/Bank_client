@@ -5,9 +5,9 @@ import com.pragmatic.controller.exception.ObjAlreadyExistsException;
 import com.pragmatic.controller.exception.ObjNotFoundException;
 import com.pragmatic.converter.DtoConverter;
 import com.pragmatic.dao.impl.AccountDaoImpl;
-import com.pragmatic.dto.impl.AccountDtoImpl;
+import com.pragmatic.dto.AccountDto;
 import com.pragmatic.dao.impl.TransactionDaoImpl;
-import com.pragmatic.dto.request.MoneyTransferRequest;
+import com.pragmatic.controller.dto.request.MoneyTransferRequest;
 import com.pragmatic.model.Account;
 import com.pragmatic.model.Transaction;
 
@@ -43,8 +43,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
 
-    @Override
-    public AccountDtoImpl getAccountById(Integer id) throws ObjNotFoundException {
+
+    public AccountDto getAccountById(Long id) throws ObjNotFoundException {
         Optional<Account> optionalAccount =  accountDao.findById(id);
         if (optionalAccount.isEmpty()) {
             throw new ObjNotFoundException(String.format("There is no account with id %d", id));
@@ -52,9 +52,12 @@ public class AccountServiceImpl implements AccountService {
         return dtoConverter.convertAccountToDto(optionalAccount.get());
     }
 
+    //TODO CREATE ACC FROM REQUEST
+    public AccountDto createAccountFromDto(AccountDto inputAccountDto) throws ObjAlreadyExistsException {
+//        Optional<Account> existingAccount = accountDao.findExistAccountByParams(inputAccountDto);
+        Optional<Account> existingAccount = accountDao.findAccountByUserIdAndCurrencyId(
+                inputAccountDto.getUserId(), inputAccountDto.getCurrencyId());
 
-    public AccountDtoImpl createAccountFromDto(AccountDtoImpl inputAccountDto) throws ObjAlreadyExistsException {
-        Optional<Account> existingAccount = accountDao.findExistAccountByParams(inputAccountDto);
         if (existingAccount.isEmpty()) {
             Account inputAccount = dtoConverter.convertDtoToAccount(inputAccountDto);
             this.accountDao.save(inputAccount);
@@ -105,17 +108,18 @@ public class AccountServiceImpl implements AccountService {
     }
 
 
+
     @Override
-    public List<AccountDtoImpl> findAccountsByUserId(Integer userId) {
-        List<AccountDtoImpl> accountDtoList = new ArrayList<>();
+    public List<AccountDto> findAccountsByUserId(Long userId) {
+        List<AccountDto> accountDtoList = new ArrayList<>();
         accountDao.findAccountsByUserId(userId).forEach(account -> {
             accountDtoList.add(dtoConverter.convertAccountToDto(account));
         });
         return accountDtoList;
     }
     @Override
-    public Optional<Account> findExistAccountByParams(AccountDtoImpl accountDtoImpl) {
-        return this.accountDao.findExistAccountByParams(accountDtoImpl);
+    public Optional<Account> findExistAccountByParams(Long currencyId, Long userId) {
+        return this.accountDao.findAccountByUserIdAndCurrencyId(userId, currencyId);
     }
 
 }

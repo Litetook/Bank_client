@@ -1,0 +1,288 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GeneralController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.pragmatic.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: GeneralController (com.pragmatic.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GeneralController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    42.1%
+  </span>
+  <span class="absValue">
+    (8/19)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    25.8%
+  </span>
+  <span class="absValue">
+    (8/31)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.pragmatic.controller;
+&nbsp;import com.pragmatic.controller.exception.CustomUrlBrokenTestException;
+&nbsp;import com.pragmatic.controller.exception.MoneyTransferException;
+&nbsp;import com.pragmatic.controller.exception.ObjAlreadyExistsException;
+&nbsp;import com.pragmatic.controller.exception.ObjNotFoundException;
+&nbsp;import com.pragmatic.dto.AccountDto;
+&nbsp;import com.pragmatic.dto.UserDto;
+&nbsp;import com.pragmatic.request.MoneyTransferRequest;
+&nbsp;import com.pragmatic.request.TransactionsByRangeRequest;
+&nbsp;import com.pragmatic.request.UserCreateRequest;
+&nbsp;import com.pragmatic.model.Account;
+&nbsp;import com.pragmatic.model.Transaction;
+&nbsp;import com.pragmatic.service.AccountService;
+&nbsp;import com.pragmatic.service.UserService;
+&nbsp;import com.pragmatic.service.impl.TransactionServiceImpl;
+&nbsp;import jakarta.validation.constraints.*;
+&nbsp;import lombok.AllArgsConstructor;
+&nbsp;import lombok.extern.log4j.Log4j2;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.context.ApplicationContext;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.MediaType;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.validation.annotation.Validated;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;import org.springframework.web.server.ResponseStatusException;
+&nbsp;
+&nbsp;import java.net.URI;
+&nbsp;import java.net.URISyntaxException;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;
+&nbsp;
+&nbsp;@RestController
+<b class="fc">&nbsp;@Log4j2</b>
+<b class="fc">&nbsp;@AllArgsConstructor</b>
+&nbsp;public class GeneralController {
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private ApplicationContext appContext;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    AccountService accountServiceImpl;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    UserService userService;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    TransactionServiceImpl transactionService;
+&nbsp;
+&nbsp;
+&nbsp;    @GetMapping(&quot;/hello&quot;)
+&nbsp;    public String hello(@RequestParam(value = &quot;name&quot;, defaultValue = &quot;Test&quot;) String name) {
+<b class="fc">&nbsp;        return String.format(&quot;Hello %s!&quot;, name);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @RequestMapping(&quot;/&quot;)
+&nbsp;    public String home() {
+<b class="nc">&nbsp;        log.info(&quot;Hello world called&quot;);</b>
+<b class="nc">&nbsp;        return &quot;Hello World&quot;;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(value = &quot;/getAccountById&quot;, produces = MediaType.APPLICATION_JSON_VALUE)
+&nbsp;    public  ResponseEntity&lt;AccountDto&gt; getAccountById(
+&nbsp;            @RequestParam(value = &quot;id&quot;, defaultValue = &quot;id&quot;)
+&nbsp;            @Min(1)
+&nbsp;            @Max(Integer.MAX_VALUE)
+&nbsp;            Long id) throws ObjNotFoundException {
+<b class="nc">&nbsp;        return new ResponseEntity&lt;&gt;(accountServiceImpl.getAccountById(id), HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(value = &quot;/getBadRequest&quot;, produces = MediaType.APPLICATION_JSON_VALUE)
+&nbsp;    public ResponseEntity&lt;Object&gt; getBadRequest() throws CustomUrlBrokenTestException {
+<b class="fc">&nbsp;        var apiObj = Optional.ofNullable(null).orElseThrow(()-&gt; new CustomUrlBrokenTestException(&quot;controller message&quot;));</b>
+<b class="nc">&nbsp;        return new ResponseEntity&lt;&gt;(new Object(), HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @GetMapping(value=&quot;/getAccountsByUserId&quot;)
+&nbsp;    public ResponseEntity&lt;List&lt;AccountDto&gt;&gt; getAccountsByUserId(
+&nbsp;            @RequestParam(value=&quot;userId&quot;, defaultValue = &quot;userId&quot;)
+&nbsp;            Long userId ) {
+<b class="nc">&nbsp;                List&lt;AccountDto&gt; accountDtoList = accountServiceImpl.findAccountsByUserId(userId);</b>
+<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(accountDtoList, HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PostMapping(value = &quot;/createUser&quot;, consumes = &quot;application/json&quot;, produces = MediaType.APPLICATION_JSON_VALUE)
+&nbsp;    public ResponseEntity&lt;UserDto&gt; createUser(@Validated @RequestBody UserCreateRequest userRequest) throws ObjAlreadyExistsException { //TODO переробити на реквест запит.
+<b class="nc">&nbsp;        UserDto newUser = userService.createUserFromRequest(userRequest);</b>
+<b class="nc">&nbsp;        return new ResponseEntity&lt;&gt;(newUser, HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PostMapping(value = &quot;/createAccount&quot;, consumes = &quot;application/json&quot;, produces = MediaType.APPLICATION_JSON_VALUE)
+&nbsp;    public ResponseEntity&lt;?&gt; createAccount(@Validated @RequestBody AccountDto inputAPIaccountDTO) throws ObjAlreadyExistsException {
+&nbsp;        //не міняти тут нічого.
+<b class="nc">&nbsp;        Optional&lt;Account&gt; existingAcc =  accountServiceImpl.findExistAccountByParams(inputAPIaccountDTO.getCurrencyId(), inputAPIaccountDTO.getUserId());</b>
+&nbsp;
+<b class="nc">&nbsp;        if (existingAcc.isEmpty() ) {</b>
+<b class="nc">&nbsp;            return new  ResponseEntity&lt;&gt;(this.accountServiceImpl.createAccountFromDto(inputAPIaccountDTO), HttpStatus.CREATED);</b>
+&nbsp;        }
+&nbsp;        else {
+<b class="nc">&nbsp;            throw new ObjAlreadyExistsException(String.format(&quot;account with userid %d and currencyId %d&quot;,</b>
+<b class="nc">&nbsp;                    inputAPIaccountDTO.getUserId(), inputAPIaccountDTO.getCurrencyId()));</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(value=&quot;/getAllUsers&quot;)
+&nbsp;    public ResponseEntity&lt;List&lt;UserDto&gt;&gt; getAccountsByUserId() {
+<b class="nc">&nbsp;        List&lt;UserDto&gt; userDtoList = userService.findAll();</b>
+<b class="nc">&nbsp;        return new ResponseEntity&lt;&gt;(userDtoList, HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @GetMapping(value = &quot;/getUserById&quot;)
+&nbsp;    public ResponseEntity&lt;UserDto&gt; getUserById(
+&nbsp;            @RequestParam(value = &quot;id&quot;, defaultValue = &quot;id&quot;)
+&nbsp;            Integer userId
+&nbsp;            ) throws ObjNotFoundException {
+<b class="nc">&nbsp;            UserDto userDto = userService.findUserById(userId); //TODO з конвертера забрати пароль</b>
+&nbsp;
+<b class="nc">&nbsp;        return new ResponseEntity&lt;&gt;(userDto, HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PostMapping(value = &quot;/getTransactionsByDateRange&quot;)
+&nbsp;    public ResponseEntity&lt;List&lt;Transaction&gt;&gt; getTransactionsByDateRange(@Validated @RequestBody TransactionsByRangeRequest transactionDateRangeRequest) {
+<b class="nc">&nbsp;        List&lt;Transaction&gt; transactionList =  transactionService.findTransactionsByDateRange(transactionDateRangeRequest);</b>
+<b class="nc">&nbsp;        return new ResponseEntity&lt;&gt;(transactionList, HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @PostMapping(value =  &quot;/moneyTransfer&quot;)
+&nbsp;    public ResponseEntity&lt;Transaction&gt; moneyTransfer(@Validated @RequestBody MoneyTransferRequest moneyTransferRequest) throws ObjNotFoundException, MoneyTransferException {
+<b class="nc">&nbsp;        Transaction transaction = accountServiceImpl.moneyTransfer(moneyTransferRequest);</b>
+<b class="nc">&nbsp;        return new  ResponseEntity&lt;&gt;(transaction, HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(value = &quot;/getForbidden&quot;)
+&nbsp;    public void getForbidden() {
+<b class="fc">&nbsp;        throw new ResponseStatusException(HttpStatus.FORBIDDEN);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(value = &quot;/getNotFound&quot;)
+&nbsp;    public void getNotFound() {
+<b class="fc">&nbsp;        throw new ResponseStatusException(HttpStatus.NOT_FOUND);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(value = &quot;/getPermanentRedirect&quot;)
+&nbsp;    public ResponseEntity&lt;?&gt; getPermanentRedirect() throws URISyntaxException {
+<b class="fc">&nbsp;        return ResponseEntity.status(301).location(new URI(&quot;/&quot;)).build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(value = &quot;/getRedirect&quot;)
+&nbsp;    public ResponseEntity&lt;?&gt; getRedirect() throws URISyntaxException {
+<b class="fc">&nbsp;        return ResponseEntity.status(302).location(new URI(&quot;/&quot;)).build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //503 SERVICE_UNAVAILABLE
+&nbsp;    @GetMapping(value = &quot;/maintenance&quot;)
+&nbsp;    public ResponseEntity&lt;?&gt; maintenance() throws URISyntaxException {
+<b class="nc">&nbsp;        throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //401 UNAUTHORIZED
+&nbsp;    @GetMapping(value = &quot;/authorization&quot;)
+&nbsp;    public ResponseEntity&lt;?&gt; authorization() throws URISyntaxException {
+<b class="nc">&nbsp;        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //ще в тасці були: 500 - сервер еррор ,201 - в методі існує,
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-10-14 15:41</div>
+</div>
+</body>
+</html>

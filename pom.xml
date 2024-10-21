@@ -31,6 +31,11 @@
         <custom.property1>Value from pom.xml</custom.property1>
         <spock-core.version>2.4-M1-groovy-4.0</spock-core.version>
         <spock-spring.version>2.4-M1-groovy-4.0</spock-spring.version>
+        <rest-assured.version>5.3.0</rest-assured.version>
+        <spring-cloud.version>2022.0.1</spring-cloud.version>
+        <jsoup.version>1.15.4</jsoup.version>
+
+
 
     </properties>
     <dependencies>
@@ -118,6 +123,26 @@
             <version>${spock-spring.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>${rest-assured.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>${jsoup.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.11.0</version>
+            <scope>test</scope>
+        </dependency>
 
 
 
@@ -145,36 +170,36 @@
                 </executions>
                 <configuration>
                     <testSources>
-                    <testSource>
-                        <directory>${pom.basedir}/src/test/groovy</directory>
-                        <includes>
-                            <include>**/*.groovy</include>
-                        </includes>
-                    </testSource>
+                        <testSource>
+                            <directory>${pom.basedir}/src/test/groovy</directory>
+                            <includes>
+                                <include>**/*.groovy</include>
+                            </includes>
+                        </testSource>
                     </testSources>
                 </configuration>
             </plugin>
             <plugin>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <configuration>
-                <includes>
-                    <include>**/*Test</include>
-                    <include>**/*Spec</include>
-                </includes>
-<!--                <useModulePath>false</useModulePath>-->
-<!--                <useFile>false</useFile>-->
-<!--                <statelessTestsetReporter implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5Xml30StatelessReporter">-->
-<!--                    <disable>false</disable>-->
-<!--                    <version>3.0</version>-->
-<!--                    <usePhrasedFileName>false</usePhrasedFileName>-->
-<!--                    <usePhrasedTestSuiteClassName>true</usePhrasedTestSuiteClassName>-->
-<!--                    <usePhrasedTestCaseClassName>true</usePhrasedTestCaseClassName>-->
-<!--                    <usePhrasedTestCaseMethodName>true</usePhrasedTestCaseMethodName>-->
-<!--                </statelessTestsetReporter>-->
-            </configuration>
-        </plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>**/*Test</include>
+                        <include>**/*Spec</include>
+                    </includes>
+                    <!--                <useModulePath>false</useModulePath>-->
+                    <!--                <useFile>false</useFile>-->
+                    <!--                <statelessTestsetReporter implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5Xml30StatelessReporter">-->
+                    <!--                    <disable>false</disable>-->
+                    <!--                    <version>3.0</version>-->
+                    <!--                    <usePhrasedFileName>false</usePhrasedFileName>-->
+                    <!--                    <usePhrasedTestSuiteClassName>true</usePhrasedTestSuiteClassName>-->
+                    <!--                    <usePhrasedTestCaseClassName>true</usePhrasedTestCaseClassName>-->
+                    <!--                    <usePhrasedTestCaseMethodName>true</usePhrasedTestCaseMethodName>-->
+                    <!--                </statelessTestsetReporter>-->
+                </configuration>
+            </plugin>
 
-        <plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>

@@ -1,10 +1,10 @@
 package com.pragmatic.dao.impl;
 
+import com.pragmatic.dao.AccountDao;
 import com.pragmatic.dao.rowmapper.AccountRowMapper;
-import com.pragmatic.dto.impl.AccountDtoImpl;
+import com.pragmatic.dto.AccountDto;
 import com.pragmatic.model.Account;
 import com.pragmatic.sql.SqlQuery;
-import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.sql.DataSource;
@@ -26,7 +27,7 @@ import static org.springframework.util.StreamUtils.copyToString;
 
 @Log4j2
 @Repository
-public class AccountDaoImpl extends NamedParameterJdbcDaoSupport {
+public class AccountDaoImpl extends NamedParameterJdbcDaoSupport implements AccountDao {
     private static final String USER_ID_PLACEHOLDER = "userId";
     private static final String CURRENCY_ID_PLACEHOLDER = "currencyId";
     private static final String BALANCE_PLACEHOLDER = "balance";
@@ -104,10 +105,18 @@ public class AccountDaoImpl extends NamedParameterJdbcDaoSupport {
     }
 
     private boolean execUpdateQuery(SqlQuery sqlQuery)  {
-        return getNamedParameterJdbcTemplate().update(sqlQuery.getQuery(), sqlQuery.getParams()) > 0;
+        return Objects.requireNonNull(getNamedParameterJdbcTemplate()).update(sqlQuery.getQuery(), sqlQuery.getParams()) > 0;
     }
 
-    public boolean updateBalance(BigDecimal balance, Integer accountId) {
+    @Transactional
+    public boolean updateBalance(BigDecimal balance, Long accountId) {
+        if (balance == null || accountId == null) {
+            throw new IllegalArgumentException("Balance or accountId cannot be null");
+        }
+        if (balance.compareTo(BigDecimal.ZERO) < 0 || accountId < 0)  {
+            throw new IllegalArgumentException("Balance cannot be negative");
+        }
+
         SqlQuery.Builder builder = SqlQuery.builder()
                 .query(updateBalanceSql)
                 .param(BALANCE_PLACEHOLDER, balance)
@@ -115,13 +124,20 @@ public class AccountDaoImpl extends NamedParameterJdbcDaoSupport {
         return execUpdateQuery(builder.build());
     }
 
-    public Optional<Account> findById(Integer id){
+
+    public Optional<Account> findById(Long id){
+        if (id == null) {
+            throw new IllegalArgumentException("Id cannot be null");
+        }
+        if (id <= 0) {
+            throw new IllegalArgumentException("Id cannot be negative");
+        }
         SqlQuery.Builder builder = SqlQuery.builder().query(findAccountByIdSql);
         builder.param(ACCOUNT_ID_PLACEHOLDER, id);
         return execAccountByIdQuery(builder.build());
     }
 
-    public  Optional<Account> execAccountByIdQuery(SqlQuery sqlQuery) {
+    private Optional<Account> execAccountByIdQuery(SqlQuery sqlQuery) {
         log.trace(sqlQuery.getQuery());
 
         var accounts = Objects.requireNonNull(getNamedParameterJdbcTemplate())
@@ -132,26 +148,33 @@ public class AccountDaoImpl extends NamedParameterJdbcDaoSupport {
         return Optional.of(accounts.getFirst());
     }
 
-    public List<Account> execAccountsQuery(SqlQuery sqlQuery) {
+    private List<Account> execAccountsQuery(SqlQuery sqlQuery) {
         log.trace(sqlQuery.getQuery());
         return Objects.requireNonNull(getNamedParameterJdbcTemplate())
                 .query(sqlQuery.getQuery(), sqlQuery.getParams(), accountRowMapper);
     }
 
-    public Optional<Account> findExistAccountByParams(AccountDtoImpl accountDtoImpl) {
+
+    public Optional<Account> findAccountByUserIdAndCurrencyId(Long userId,  Long currencyId) {
+
+        if (userId == null || currencyId == null) { throw new IllegalArgumentException("UserId and currencyId cannot be null"); }
+        if (userId < 0 || currencyId < 0) {throw new IllegalArgumentException("UserId and currencyId cannot be negative");}
         SqlQuery.Builder builder = SqlQuery.builder().query(findExistingAccountByParamsSql);
-        builder.param(USER_ID_PLACEHOLDER, accountDtoImpl.getUserId());
-        builder.param(CURRENCY_ID_PLACEHOLDER, accountDtoImpl.getCurrencyId());
+        builder.param(USER_ID_PLACEHOLDER, userId);
+        builder.param(CURRENCY_ID_PLACEHOLDER, currencyId);
         return execAccountByIdQuery(builder.build());
     }
 
-    public List<Account> findAccountsByUserId(Integer userId) {
+
+
+
+    public List<Account> findAccountsByUserId(Long userId) {
+        if (userId == null) { throw new IllegalArgumentException("UserId cannot be null"); }
+        if (userId <= 0) {throw new IllegalArgumentException("UserId cannot be negative");}
         SqlQuery.Builder builder = SqlQuery.builder()
                 .query(findAccountsByUserIdSql)
                 .param(USER_ID_PLACEHOLDER, userId);
         return execAccountsQuery(builder.build());
     }
-
-
 
 }

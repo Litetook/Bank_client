@@ -12,7 +12,7 @@ import java.util.Set;
 @Setter @Getter @ToString @EqualsAndHashCode
 @Builder
 public class User {
-    private Integer id;
+    private Long id;
     private String name ;
     private String email;
     private String password;

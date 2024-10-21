@@ -1,0 +1,259 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > AccountServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.pragmatic.service.impl</a>
+</div>
+
+<h1>Coverage Summary for Class: AccountServiceImpl (com.pragmatic.service.impl)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AccountServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    25%
+  </span>
+  <span class="absValue">
+    (2/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    10%
+  </span>
+  <span class="absValue">
+    (4/40)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">AccountServiceImpl$$SpringCGLIB$$0</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    25%
+  </span>
+  <span class="absValue">
+    (2/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    10%
+  </span>
+  <span class="absValue">
+    (4/40)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.pragmatic.service.impl;
+&nbsp;
+&nbsp;import com.pragmatic.controller.exception.MoneyTransferException;
+&nbsp;import com.pragmatic.controller.exception.ObjAlreadyExistsException;
+&nbsp;import com.pragmatic.controller.exception.ObjNotFoundException;
+&nbsp;import com.pragmatic.converter.DtoConverter;
+&nbsp;import com.pragmatic.dao.impl.AccountDaoImpl;
+&nbsp;import com.pragmatic.dto.AccountDto;
+&nbsp;import com.pragmatic.dao.impl.TransactionDaoImpl;
+&nbsp;import com.pragmatic.request.MoneyTransferRequest;
+&nbsp;import com.pragmatic.model.Account;
+&nbsp;import com.pragmatic.model.Transaction;
+&nbsp;
+&nbsp;import java.math.BigDecimal;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;
+&nbsp;import com.pragmatic.service.AccountService;
+&nbsp;import lombok.extern.log4j.Log4j2;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.transaction.annotation.Transactional;
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;@Log4j2</b>
+&nbsp;@Service
+&nbsp;@Transactional
+&nbsp;public class AccountServiceImpl implements AccountService {
+&nbsp;    @Autowired
+&nbsp;    AccountDaoImpl accountDao;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    TransactionDaoImpl transactionDao;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    DtoConverter dtoConverter;
+&nbsp;
+&nbsp;    public AccountServiceImpl(AccountDaoImpl accountDao,
+<b class="fc">&nbsp;                              TransactionDaoImpl transactionDao) {</b>
+<b class="fc">&nbsp;        this.transactionDao = transactionDao;</b>
+<b class="fc">&nbsp;        this.accountDao = accountDao;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    public AccountDto getAccountById(Long id) throws ObjNotFoundException {
+<b class="nc">&nbsp;        Optional&lt;Account&gt; optionalAccount =  accountDao.findById(id);</b>
+<b class="nc">&nbsp;        if (optionalAccount.isEmpty()) {</b>
+<b class="nc">&nbsp;            throw new ObjNotFoundException(String.format(&quot;There is no account with id %d&quot;, id));</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return dtoConverter.convertAccountToDto(optionalAccount.get());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //TODO CREATE ACC FROM REQUEST
+&nbsp;    public AccountDto createAccountFromDto(AccountDto inputAccountDto) throws ObjAlreadyExistsException {
+&nbsp;//        Optional&lt;Account&gt; existingAccount = accountDao.findExistAccountByParams(inputAccountDto);
+<b class="nc">&nbsp;        Optional&lt;Account&gt; existingAccount = accountDao.findAccountByUserIdAndCurrencyId(</b>
+<b class="nc">&nbsp;                inputAccountDto.getUserId(), inputAccountDto.getCurrencyId());</b>
+&nbsp;
+<b class="nc">&nbsp;        if (existingAccount.isEmpty()) {</b>
+<b class="nc">&nbsp;            Account inputAccount = dtoConverter.convertDtoToAccount(inputAccountDto);</b>
+<b class="nc">&nbsp;            this.accountDao.save(inputAccount);</b>
+<b class="nc">&nbsp;            return dtoConverter.convertAccountToDto(inputAccount);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        throw new ObjAlreadyExistsException(String.format(&quot;Account already exists with id %d&quot;, existingAccount.get().getId()));</b>
+&nbsp;    }
+&nbsp;@Transactional
+&nbsp;    public Transaction moneyTransfer(MoneyTransferRequest moneyTransferRequest) throws ObjNotFoundException, MoneyTransferException {
+&nbsp;//        VERIFY IF EXISTS
+&nbsp;//        VERIFY BALANCE
+&nbsp;//        DO TRANSFER
+&nbsp;//        UPDATE BALANCES
+&nbsp;//        RETURN TRANSACTION
+&nbsp;        //        VERIFY BALANCE
+<b class="nc">&nbsp;        Optional&lt;Account&gt; optionalSourceAccount = accountDao.findById(moneyTransferRequest.getSourceAccountId());</b>
+<b class="nc">&nbsp;        Optional&lt;Account&gt; optionalDestinationAccount = accountDao.findById(moneyTransferRequest.getDestinationAccountId());</b>
+<b class="nc">&nbsp;        BigDecimal amount = moneyTransferRequest.getAmount();</b>
+&nbsp;
+<b class="nc">&nbsp;        if  ( optionalSourceAccount.isEmpty() ){</b>
+<b class="nc">&nbsp;            throw new ObjNotFoundException(&quot;source account does not exist&quot;);</b>
+<b class="nc">&nbsp;        } else if (optionalDestinationAccount.isEmpty()) {</b>
+<b class="nc">&nbsp;            throw new ObjNotFoundException(&quot;destination account does not exist&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        Account destinationAccount = optionalDestinationAccount.get();</b>
+<b class="nc">&nbsp;        Account sourceAccount = optionalSourceAccount.get();</b>
+&nbsp;
+<b class="nc">&nbsp;        if (sourceAccount.getBalance().compareTo(amount) &lt; 0)  {</b>
+<b class="nc">&nbsp;            throw new MoneyTransferException(&quot;source acc balance is not enough to make transaction&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        sourceAccount.setBalance(sourceAccount.getBalance().subtract(amount));</b>
+<b class="nc">&nbsp;        destinationAccount.setBalance(destinationAccount.getBalance().add(amount));</b>
+<b class="nc">&nbsp;        accountDao.updateBalance(sourceAccount.getBalance(), sourceAccount.getId());</b>
+&nbsp;        //TODO WHAT IF ROWNUMBER 92 FALL WITH EXCEPTION. WHAT WILL BE SAVED TO DATABASE?
+&nbsp;
+<b class="nc">&nbsp;        accountDao.updateBalance(destinationAccount.getBalance(), destinationAccount.getId());</b>
+&nbsp;
+<b class="nc">&nbsp;        return this.transactionDao.save(Transaction.builder()</b>
+<b class="nc">&nbsp;                .destinationAccountId(destinationAccount.getId())</b>
+<b class="nc">&nbsp;                .sourceAccountId(sourceAccount.getId())</b>
+<b class="nc">&nbsp;                .amount(amount)</b>
+<b class="nc">&nbsp;                .build()</b>
+&nbsp;        );
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;AccountDto&gt; findAccountsByUserId(Long userId) {
+<b class="nc">&nbsp;        List&lt;AccountDto&gt; accountDtoList = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        accountDao.findAccountsByUserId(userId).forEach(account -&gt; {</b>
+<b class="nc">&nbsp;            accountDtoList.add(dtoConverter.convertAccountToDto(account));</b>
+&nbsp;        });
+<b class="nc">&nbsp;        return accountDtoList;</b>
+&nbsp;    }
+&nbsp;    @Override
+&nbsp;    public Optional&lt;Account&gt; findExistAccountByParams(Long currencyId, Long userId) {
+<b class="nc">&nbsp;        return this.accountDao.findAccountByUserIdAndCurrencyId(userId, currencyId);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-10-14 15:41</div>
+</div>
+</body>
+</html>

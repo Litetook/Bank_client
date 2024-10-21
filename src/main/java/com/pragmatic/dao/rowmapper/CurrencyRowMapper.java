@@ -11,7 +11,7 @@ public class CurrencyRowMapper implements RowMapper<Currency> {
     @Override
     public Currency mapRow(ResultSet rs, int rowNum) throws SQLException {
         return Currency.builder()
-                .id(rs.getInt("currency_id"))
+                .id(rs.getLong("currency_id"))
                 .symbol(rs.getString("symbol"))
                 .build();
 
